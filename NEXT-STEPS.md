@@ -1,121 +1,142 @@
 # Etsy Edge — Next Steps
 
-## Pull and set up on your desktop
+## Where You Are
 
-```bash
-git clone https://github.com/0xLoqi/etsy-edge.git
-cd etsy-edge
-nvm install 22
-nvm use 22
-npm install
-npm run build
-```
+The extension is built and the full growth stack (site, blog, marketing content, outreach system) is ready. Here's what to do next, in order.
 
-## Load the extension in Chrome
+---
 
-1. Open Chrome, go to `chrome://extensions`
-2. Toggle **Developer mode** ON (top right)
-3. Click **Load unpacked**
-4. Navigate to the `etsy-edge/.output/chrome-mv3` folder and select it
-5. You should see "Etsy Edge" appear in your extensions list
+## Phase 1: Get the Extension Published
 
-## Configure the extension
+### 1. Set up API keys
+- **Etsy API**: https://www.etsy.com/developers/your-apps → Create app → copy Keystring
+- **OpenAI API**: https://platform.openai.com/api-keys → Create key → add $5 credits
 
-1. Click the Etsy Edge icon in the Chrome toolbar (puzzle piece icon → pin it)
-2. Enter your **Etsy API key** (see below how to get one)
-3. Click Save
-4. Go to any Etsy listing page — you should see the Tag Spy panel in the bottom-right
-
-## Get your API keys
-
-### Etsy API Key (required for all features)
-1. Go to https://www.etsy.com/developers/your-apps
-2. Create a new app (any name is fine)
-3. Copy the **Keystring** — that's your API key
-4. Paste it into the Etsy Edge popup settings
-
-### OpenAI API Key (required for AI suggestions — paid feature)
-1. Go to https://platform.openai.com/api-keys
-2. Create a new key
-3. Add some credits ($5 is plenty to start — AI suggestions cost fractions of a cent)
-4. Paste the key into Etsy Edge popup settings
-
-## Set up payments (before publishing)
-
+### 2. Set up payments
 1. Go to https://extensionpay.com
-2. Create an account
-3. Create a new extension called `etsy-edge`
-4. Set the price: $9.99/month
-5. Follow their setup instructions to link to Stripe
+2. Create an account, create extension called `etsy-edge`
+3. Set price: $9.99/month
+4. Follow their Stripe setup instructions
 
-## Publish to Chrome Web Store
-
+### 3. Publish to Chrome Web Store
 1. Pay the $5 developer fee at https://chrome.google.com/webstore/devconsole
-2. Convert SVG icons to PNG (Chrome Web Store requires PNG):
-   ```bash
-   npm install -D sharp-cli
-   npx sharp -i public/icons/icon-128.svg -o public/icons/icon-128.png
-   npx sharp -i public/icons/icon-48.svg -o public/icons/icon-48.png
-   ```
-3. Run `npm run zip` to create the submission ZIP
-4. Upload the ZIP from `.output/` to the Chrome Web Store developer console
-5. Fill in the listing details:
+2. Run `npm run zip` to create the submission ZIP
+3. Upload the ZIP from `.output/`
+4. Fill in listing details:
    - **Title:** Etsy Edge — SEO Tags & AI Optimization
    - **Summary:** See any Etsy listing's hidden tags. Optimize yours with AI.
    - **Category:** Shopping
    - **Language:** English
-6. Upload screenshots (take them with the extension running on real Etsy listings)
-7. Add the privacy policy URL (host `privacy-policy.html` on GitHub Pages or similar)
-8. Submit for review (takes 1-3 business days)
+5. Take screenshots of the extension on real Etsy listings (Tag Spy, SEO Score, AI Suggestions, Competitor Analysis)
+6. Set privacy policy URL to `https://0xloqi.github.io/etsy-edge/privacy-policy.html`
+7. Submit for review (1-3 business days)
 
-## Development workflow
+---
 
+## Phase 2: Deploy the Website
+
+### 1. Push to GitHub
 ```bash
-# Start dev mode with hot reload
-npm run dev
-
-# Build for production
-npm run build
-
-# Create ZIP for Chrome Web Store
-npm run zip
+git push origin main
 ```
 
-When running `npm run dev`, WXT opens a Chrome instance with the extension auto-loaded. Changes hot-reload automatically.
+### 2. Enable GitHub Pages
+1. Go to https://github.com/0xloqi/etsy-edge/settings/pages
+2. Source: **Deploy from a branch**
+3. Branch: **main**, folder: **/site** (not /docs, not root — select /site if available, otherwise see note below)
+4. Save
 
-## Distribution strategy (after publishing)
+> **Note:** GitHub Pages only offers root (`/`) or `/docs` as folder options. If `/site` isn't available, you have two options:
+> - Rename `site/` to `docs/` and select `/docs`
+> - Use a GitHub Actions workflow to deploy from `site/`
 
-1. **Reddit** — Post helpful SEO tips (not ads) in r/Etsy, r/EtsySellers, mention the tool naturally
-2. **Facebook groups** — Etsy seller groups are active and share tools
-3. **Product Hunt** — Good for initial visibility burst
-4. **SEO content** — Write blog posts: "How to optimize Etsy tags" with your extension as the solution
-5. **YouTube** — Short tutorial showing the extension in action
+### 3. Replace placeholders
+Once published, find-and-replace across all files:
+- `[your-email]` → your actual contact email
+- `href="#"` (Chrome Web Store CTAs) → actual Chrome Web Store URL
 
-## File structure reference
+```bash
+# Find all files with placeholders
+grep -r "\[your-email\]" site/ marketing/
+grep -r 'href="#"' site/
+```
+
+### 4. Verify the live site
+- Open https://0xloqi.github.io/etsy-edge/
+- Check all nav links work
+- Check blog articles load
+- Check privacy policy loads
+- Test on mobile
+
+---
+
+## Phase 3: Launch (Week 1)
+
+Follow the timeline in `marketing/README.md`. Here's the sequence:
+
+| Day | Action | File |
+|-----|--------|------|
+| Mon | Post value post to r/Etsy | `marketing/reddit/value-post-r-etsy.md` |
+| Tue | Post launch to r/EtsySellers | `marketing/reddit/launch-post-r-etsysellers.md` |
+| Tue | Post Twitter launch thread | `marketing/twitter/launch-thread.md` |
+| Wed | Launch on Product Hunt | `marketing/producthunt/launch-copy.md` |
+| Thu | Post builder story to r/smallbusiness | `marketing/reddit/builder-story-r-smallbusiness.md` |
+| Fri | Post in 2-3 Facebook groups | `marketing/facebook/group-post-template.md` |
+
+**Before launch day:**
+- [ ] Join 5-8 Facebook groups and engage for a week first (see `marketing/facebook/target-groups.md`)
+- [ ] Have 5-10 people ready to upvote Product Hunt on launch day
+- [ ] Record the YouTube demo video (see `marketing/youtube/demo-script.md`)
+
+---
+
+## Phase 4: Ongoing Growth (Week 2+)
+
+### Weekly routine (~30 min/day)
+- **Outreach**: 5 new contacts + 5 follow-ups per week (see `marketing/outreach/tracking/weekly-workflow.md`)
+- **Twitter**: 3-5 tweets/week from `marketing/twitter/ongoing-content.md`
+- **Reddit**: 1 helpful comment/day using `marketing/reddit/comment-templates.md`
+- **Facebook**: 1 group post per week
+
+### Monthly
+- Write 1 new blog post (add to `site/blog/` and update `sitemap.xml`)
+- Review Chrome Web Store analytics — which keywords drive installs?
+- Review outreach tracker — which channels produce reviews?
+- Double down on what's working, cut what isn't
+
+---
+
+## File Structure Reference
 
 ```
 etsy-edge/
-├── src/
-│   ├── entrypoints/
-│   │   ├── background.ts          # Service worker — API calls, payment checks
-│   │   ├── content.tsx             # Injected on Etsy listing pages
-│   │   └── popup/                  # Extension popup (settings)
-│   ├── components/
-│   │   ├── TagSpyPanel.tsx         # Main panel with tabs
-│   │   ├── SeoScoreCard.tsx        # SEO grade display
-│   │   └── UpgradePrompt.tsx       # Paywall prompt
-│   ├── lib/
-│   │   ├── etsy-api.ts            # Etsy API v3 client
-│   │   ├── ai-suggestions.ts      # OpenAI integration
-│   │   ├── seo-scorer.ts          # SEO scoring algorithm
-│   │   ├── storage.ts             # Chrome storage wrapper
-│   │   ├── payment.ts             # ExtensionPay integration
-│   │   └── extractors.ts          # DOM data extraction
-│   ├── hooks/
-│   │   └── usePaidStatus.ts       # React hook for payment status
-│   └── types/                     # TypeScript types
-├── public/icons/                  # Extension icons
-├── privacy-policy.html            # Privacy policy for Chrome Web Store
-├── wxt.config.ts                  # WXT configuration
-└── PLAN.md                        # Full build plan and architecture
+├── src/                              # Extension source code
+├── site/                             # Marketing website (GitHub Pages)
+│   ├── index.html                    # Landing page
+│   ├── privacy-policy.html           # Privacy policy
+│   ├── robots.txt & sitemap.xml      # SEO infra
+│   ├── assets/style.css              # Shared styles
+│   └── blog/                         # 7 SEO articles + index
+├── marketing/                        # Launch content & outreach
+│   ├── README.md                     # Launch timeline & checklist
+│   ├── reddit/                       # 3 posts + comment templates
+│   ├── producthunt/                  # Launch copy + hunter outreach
+│   ├── facebook/                     # Post templates + group list
+│   ├── twitter/                      # Launch thread + 20 content ideas
+│   ├── youtube/                      # Demo script + Shorts script
+│   └── outreach/                     # Email templates, guides, tracker
+├── public/icons/                     # Extension icons (SVG + PNG)
+├── README.md                         # Project README
+├── PLAN.md                           # Original build plan
+├── NEXT-STEPS.md                     # ← You are here
+├── wxt.config.ts                     # WXT configuration
+└── package.json
+```
+
+## Development Workflow
+
+```bash
+npm run dev      # Dev mode with hot reload
+npm run build    # Production build
+npm run zip      # Chrome Web Store ZIP
 ```
