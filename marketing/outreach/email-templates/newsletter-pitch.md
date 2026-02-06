@@ -33,7 +33,7 @@ Thanks for the great newsletter.
 
 [YOUR NAME]
 
-Extension: https://0xloqi.github.io/etsy-edge/
+Extension: https://etsyedge.app/
 
 ## Personalization Checklist
 

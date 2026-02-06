@@ -28,7 +28,7 @@ The extension is built and the full growth stack (site, blog, marketing content,
    - **Category:** Shopping
    - **Language:** English
 5. Take screenshots of the extension on real Etsy listings (Tag Spy, SEO Score, AI Suggestions, Competitor Analysis)
-6. Set privacy policy URL to `https://0xloqi.github.io/etsy-edge/privacy-policy.html`
+6. Set privacy policy URL to `https://etsyedge.app/privacy-policy.html`
 7. Submit for review (1-3 business days)
 
 ---
@@ -62,7 +62,7 @@ grep -r 'href="#"' site/
 ```
 
 ### 4. Verify the live site
-- Open https://0xloqi.github.io/etsy-edge/
+- Open https://etsyedge.app/
 - Check all nav links work
 - Check blog articles load
 - Check privacy policy loads

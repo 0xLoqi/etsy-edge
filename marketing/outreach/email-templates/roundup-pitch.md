@@ -33,7 +33,7 @@ I recently launched Etsy Edge, a Chrome extension that I think would be a strong
 - Pricing details
 - Comparison notes vs. other tools if helpful
 
-Here's the extension page: https://0xloqi.github.io/etsy-edge/
+Here's the extension page: https://etsyedge.app/
 
 I'd also be happy to give you free Pro access so you can try it firsthand before deciding.
 

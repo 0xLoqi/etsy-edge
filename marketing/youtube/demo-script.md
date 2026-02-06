@@ -9,7 +9,7 @@
 Learn how to see the hidden tags on any Etsy listing using Etsy Edge, a free Chrome extension. In this video I'll show you how Tag Spy works, how to use competitor tags to improve your own listings, and how the AI tag suggestion feature generates optimized tags for your shop.
 
 🔗 Install Etsy Edge (free): [Chrome Web Store link]
-🔗 Website: https://0xloqi.github.io/etsy-edge/
+🔗 Website: https://etsyedge.app/
 
 ## Tags
 etsy tags, etsy seo, etsy tag tool, how to see etsy tags, etsy competitor analysis, etsy listing optimization, etsy seo tips 2026, etsy edge

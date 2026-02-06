@@ -29,7 +29,7 @@ Thanks for your time, and keep up the great content.
 
 [YOUR NAME]
 
-P.S. Here's the extension if you want to take a look first: https://0xloqi.github.io/etsy-edge/
+P.S. Here's the extension if you want to take a look first: https://etsyedge.app/
 
 ## Personalization Checklist
 

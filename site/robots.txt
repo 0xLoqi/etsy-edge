@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://0xloqi.github.io/etsy-edge/sitemap.xml
+Sitemap: https://etsyedge.app/sitemap.xml

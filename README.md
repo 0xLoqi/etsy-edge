@@ -2,7 +2,7 @@
 
 Chrome extension that reveals hidden Etsy tags, provides AI-powered tag suggestions, and competitor analysis for Etsy sellers.
 
-**[Install from Chrome Web Store](#)** | **[Website](https://0xloqi.github.io/etsy-edge/)**
+**[Install from Chrome Web Store](#)** | **[Website](https://etsyedge.app/)**
 
 ## What It Does
 
@@ -81,7 +81,7 @@ marketing/               # Launch content and outreach
 
 ## Privacy
 
-Etsy Edge does not collect, store, or transmit personal data. All processing happens locally in your browser. See our [Privacy Policy](https://0xloqi.github.io/etsy-edge/privacy-policy.html).
+Etsy Edge does not collect, store, or transmit personal data. All processing happens locally in your browser. See our [Privacy Policy](https://etsyedge.app/privacy-policy.html).
 
 ## License
 

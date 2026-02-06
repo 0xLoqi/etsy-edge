@@ -37,7 +37,7 @@ Would you be interested in checking it out? I can send a Pro code right away.
 
 [YOUR NAME]
 
-P.S. Extension page: https://0xloqi.github.io/etsy-edge/
+P.S. Extension page: https://etsyedge.app/
 
 ## Personalization Checklist
 
