@@ -12,10 +12,10 @@ export default defineConfig({
     permissions: ["storage", "activeTab"],
     host_permissions: ["https://*.etsy.com/*"],
     icons: {
-      "16": "icons/icon-16.svg",
-      "32": "icons/icon-32.svg",
-      "48": "icons/icon-48.svg",
-      "128": "icons/icon-128.svg",
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png",
     },
   },
   vite: () => ({

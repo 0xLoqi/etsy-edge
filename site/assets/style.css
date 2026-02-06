@@ -1,0 +1,46 @@
+/* Etsy Edge — Shared Styles */
+
+/* Smooth scrolling for anchor links */
+html { scroll-behavior: smooth; }
+
+/* Custom orange accent matching extension brand */
+.text-brand { color: #ea580c; }
+.bg-brand { background-color: #ea580c; }
+.bg-brand-hover:hover { background-color: #c2410c; }
+.border-brand { border-color: #ea580c; }
+.ring-brand:focus { --tw-ring-color: #ea580c; }
+
+/* Hero gradient */
+.hero-gradient {
+  background: linear-gradient(135deg, #fff7ed 0%, #fff 50%, #f0fdf4 100%);
+}
+
+/* FAQ toggle */
+details summary { cursor: pointer; }
+details summary::-webkit-details-marker { display: none; }
+details summary::marker { display: none; }
+details[open] .faq-chevron { transform: rotate(180deg); }
+.faq-chevron { transition: transform 0.2s ease; }
+
+/* Blog article styles */
+.prose h2 { margin-top: 2rem; margin-bottom: 0.75rem; font-size: 1.5rem; font-weight: 700; color: #111827; }
+.prose h3 { margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 1.25rem; font-weight: 600; color: #1f2937; }
+.prose p { margin-bottom: 1rem; line-height: 1.75; color: #374151; }
+.prose ul, .prose ol { margin-bottom: 1rem; padding-left: 1.5rem; color: #374151; }
+.prose li { margin-bottom: 0.5rem; line-height: 1.75; }
+.prose ul li { list-style-type: disc; }
+.prose ol li { list-style-type: decimal; }
+.prose strong { font-weight: 700; color: #111827; }
+.prose a { color: #ea580c; text-decoration: underline; }
+.prose a:hover { color: #c2410c; }
+.prose blockquote { border-left: 4px solid #ea580c; padding-left: 1rem; margin: 1.5rem 0; color: #6b7280; font-style: italic; }
+.prose code { background: #f3f4f6; padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.875rem; }
+.prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+.prose th, .prose td { padding: 0.75rem 1rem; border: 1px solid #e5e7eb; text-align: left; }
+.prose th { background: #f9fafb; font-weight: 600; }
+
+/* Comparison table highlight */
+.highlight-row { background-color: #fff7ed; }
+
+/* Sticky nav shadow on scroll */
+.nav-scrolled { box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
