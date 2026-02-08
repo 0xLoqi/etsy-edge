@@ -51,119 +51,1065 @@
   }
   </script>
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="assets/style.css">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏷️</text></svg>">
+
+  <style>
+    :root {
+      --terracotta: #c2613a;
+      --terracotta-dark: #a34f2e;
+      --terracotta-light: #f4e4dc;
+      --cream: #faf6f1;
+      --cream-dark: #f0ebe4;
+      --sage: #7a9e7e;
+      --sage-light: #e8f0e9;
+      --charcoal: #2d2a26;
+      --warm-gray: #6b6560;
+      --warm-gray-light: #9c9690;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--cream);
+      color: var(--charcoal);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    /* Nav */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(250, 246, 241, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(45, 42, 38, 0.08);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 1.35rem;
+      color: var(--charcoal);
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--terracotta);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      transform: rotate(-3deg);
+      box-shadow: 0 2px 8px rgba(194, 97, 58, 0.25);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      font-size: 0.95rem;
+      color: var(--warm-gray);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--charcoal);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--terracotta);
+      color: white;
+      box-shadow: 0 4px 14px rgba(194, 97, 58, 0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+
+    .btn-primary:hover {
+      background: var(--terracotta-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(194, 97, 58, 0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--charcoal);
+      border: 2px solid var(--charcoal);
+    }
+
+    .btn-secondary:hover {
+      background: var(--charcoal);
+      color: var(--cream);
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      padding: 100px 24px 140px;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      top: -200px;
+      right: -300px;
+      width: 900px;
+      height: 900px;
+      background: radial-gradient(circle, var(--terracotta-light) 0%, transparent 70%);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .hero-bg-2 {
+      position: absolute;
+      bottom: -400px;
+      left: -200px;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, var(--sage-light) 0%, transparent 70%);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: white;
+      border: 1px solid rgba(45, 42, 38, 0.1);
+      border-radius: 100px;
+      font-size: 0.85rem;
+      color: var(--warm-gray);
+      margin-bottom: 32px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+
+    .hero-badge-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--sage);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.1); }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.75rem, 6vw, 4.5rem);
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--terracotta);
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: var(--warm-gray);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+    }
+
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .hero-note {
+      font-size: 0.9rem;
+      color: var(--warm-gray-light);
+    }
+
+    /* Floating tags decoration */
+    .floating-tags {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .floating-tag {
+      position: absolute;
+      padding: 8px 16px;
+      background: white;
+      border: 1px solid rgba(45, 42, 38, 0.08);
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: var(--warm-gray);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      animation: float 6s ease-in-out infinite;
+      white-space: nowrap;
+    }
+
+    .floating-tag::before {
+      content: '';
+      position: absolute;
+      left: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 12px;
+      height: 12px;
+      background: var(--terracotta-light);
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+
+    .floating-tag:nth-child(1) { top: 15%; left: 8%; animation-delay: 0s; }
+    .floating-tag:nth-child(2) { top: 25%; right: 12%; animation-delay: 1s; }
+    .floating-tag:nth-child(3) { top: 60%; left: 5%; animation-delay: 2s; }
+    .floating-tag:nth-child(4) { top: 70%; right: 8%; animation-delay: 0.5s; }
+    .floating-tag:nth-child(5) { top: 40%; left: 3%; animation-delay: 1.5s; }
+    .floating-tag:nth-child(6) { top: 85%; right: 15%; animation-delay: 2.5s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(2deg); }
+    }
+
+    /* Social Proof */
+    .social-proof {
+      padding: 60px 24px;
+      background: white;
+      border-top: 1px solid rgba(45, 42, 38, 0.06);
+      border-bottom: 1px solid rgba(45, 42, 38, 0.06);
+    }
+
+    .social-proof-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .social-proof-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--warm-gray-light);
+      margin-bottom: 28px;
+    }
+
+    .proof-items {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+    }
+
+    .proof-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+      color: var(--warm-gray);
+    }
+
+    .proof-check {
+      width: 24px;
+      height: 24px;
+      background: var(--sage-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .proof-check svg {
+      width: 14px;
+      height: 14px;
+      color: var(--sage);
+    }
+
+    /* Features */
+    .features {
+      padding: 120px 24px;
+    }
+
+    .features-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+
+    .section-header h2 {
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      margin-bottom: 16px;
+    }
+
+    .section-header p {
+      font-size: 1.15rem;
+      color: var(--warm-gray);
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+    }
+
+    .feature-card {
+      background: white;
+      border: 1px solid rgba(45, 42, 38, 0.08);
+      border-radius: 20px;
+      padding: 40px;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    }
+
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      background: var(--terracotta-light);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 24px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.35rem;
+      margin-bottom: 12px;
+    }
+
+    .feature-card p {
+      color: var(--warm-gray);
+      margin-bottom: 16px;
+      line-height: 1.7;
+    }
+
+    .feature-hint {
+      font-size: 0.9rem;
+      font-style: italic;
+      color: var(--warm-gray-light);
+      margin-bottom: 20px;
+    }
+
+    .feature-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .badge-free {
+      background: var(--sage-light);
+      color: var(--sage);
+    }
+
+    .badge-pro {
+      background: var(--terracotta-light);
+      color: var(--terracotta);
+    }
+
+    /* SEO Score card - wider */
+    .feature-card-wide {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 40px;
+      align-items: center;
+      background: linear-gradient(135deg, white 0%, var(--cream) 100%);
+    }
+
+    @media (max-width: 640px) {
+      .feature-card-wide {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* How It Works */
+    .how-it-works {
+      padding: 120px 24px;
+      background: white;
+    }
+
+    .how-it-works-inner {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    .step {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+    }
+
+    .step-number {
+      width: 52px;
+      height: 52px;
+      background: var(--terracotta);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+      box-shadow: 0 4px 14px rgba(194, 97, 58, 0.3);
+    }
+
+    .step-content h3 {
+      font-size: 1.25rem;
+      margin-bottom: 8px;
+    }
+
+    .step-content p {
+      color: var(--warm-gray);
+      line-height: 1.7;
+    }
+
+    /* Pricing */
+    .pricing {
+      padding: 120px 24px;
+      background: linear-gradient(180deg, var(--cream) 0%, white 100%);
+    }
+
+    .pricing-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .pricing-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+      max-width: 700px;
+      margin: 0 auto 80px;
+    }
+
+    .pricing-card {
+      background: white;
+      border: 1px solid rgba(45, 42, 38, 0.1);
+      border-radius: 24px;
+      padding: 48px 40px;
+      position: relative;
+    }
+
+    .pricing-card.featured {
+      border: 2px solid var(--terracotta);
+    }
+
+    .pricing-card.featured::before {
+      content: 'Most Popular';
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--terracotta);
+      color: white;
+      padding: 6px 20px;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .pricing-card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+    }
+
+    .pricing-amount {
+      font-family: 'Fraunces', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 32px;
+    }
+
+    .pricing-amount span {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--warm-gray-light);
+    }
+
+    .pricing-card.featured .pricing-amount {
+      color: var(--terracotta);
+    }
+
+    .pricing-features {
+      list-style: none;
+      margin-bottom: 32px;
+    }
+
+    .pricing-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+      color: var(--warm-gray);
+    }
+
+    .pricing-features svg {
+      width: 20px;
+      height: 20px;
+      color: var(--sage);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .pricing-card .btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* Comparison Table */
+    .comparison {
+      margin-top: 40px;
+    }
+
+    .comparison h3 {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 32px;
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 18px 20px;
+      text-align: left;
+      border-bottom: 1px solid rgba(45, 42, 38, 0.06);
+    }
+
+    .comparison-table thead th {
+      background: var(--cream);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .comparison-table thead th:nth-child(2) {
+      color: var(--terracotta);
+    }
+
+    .comparison-table tbody tr:nth-child(odd) {
+      background: rgba(250, 246, 241, 0.5);
+    }
+
+    .comparison-table tbody td:first-child {
+      font-weight: 500;
+    }
+
+    .comparison-table .highlight {
+      color: var(--sage);
+      font-weight: 600;
+    }
+
+    .comparison-table .ours {
+      color: var(--terracotta);
+      font-weight: 600;
+    }
+
+    /* FAQ */
+    .faq {
+      padding: 120px 24px;
+      background: white;
+    }
+
+    .faq-inner {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .faq-item {
+      background: var(--cream);
+      border: 1px solid rgba(45, 42, 38, 0.06);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .faq-item summary {
+      padding: 24px 28px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item summary::marker {
+      display: none;
+    }
+
+    .faq-chevron {
+      width: 24px;
+      height: 24px;
+      transition: transform 0.25s ease;
+      color: var(--warm-gray-light);
+    }
+
+    .faq-item[open] .faq-chevron {
+      transform: rotate(180deg);
+    }
+
+    .faq-answer {
+      padding: 0 28px 24px;
+      color: var(--warm-gray);
+      line-height: 1.7;
+    }
+
+    .faq-answer a {
+      color: var(--terracotta);
+    }
+
+    /* Final CTA */
+    .final-cta {
+      padding: 120px 24px;
+      background: var(--charcoal);
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(194, 97, 58, 0.15) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .final-cta-inner {
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .final-cta h2 {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    .final-cta p {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 40px;
+      line-height: 1.7;
+    }
+
+    .final-cta .btn-primary {
+      background: var(--terracotta);
+      box-shadow: 0 4px 20px rgba(194, 97, 58, 0.4);
+    }
+
+    .final-cta .btn-primary:hover {
+      background: #d46a42;
+    }
+
+    /* Footer */
+    footer {
+      padding: 60px 24px;
+      background: var(--charcoal);
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: white;
+      text-decoration: none;
+    }
+
+    .footer-logo .logo-icon {
+      width: 32px;
+      height: 32px;
+      font-size: 0.95rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px;
+    }
+
+    .footer-links a {
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: white;
+    }
+
+    .footer-disclaimer {
+      width: 100%;
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* Mobile nav toggle */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    .mobile-menu-btn svg {
+      width: 28px;
+      height: 28px;
+      color: var(--charcoal);
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .nav-inner .btn {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .hero {
+        padding: 60px 20px 80px;
+      }
+
+      .floating-tags {
+        display: none;
+      }
+
+      .features {
+        padding: 80px 20px;
+      }
+
+      .section-header {
+        margin-bottom: 48px;
+      }
+
+      .feature-card {
+        padding: 32px;
+      }
+
+      .how-it-works,
+      .pricing,
+      .faq {
+        padding: 80px 20px;
+      }
+
+      .step {
+        gap: 20px;
+      }
+
+      .step-number {
+        width: 44px;
+        height: 44px;
+        font-size: 1.1rem;
+      }
+
+      .pricing-card {
+        padding: 36px 28px;
+      }
+
+      .final-cta {
+        padding: 80px 20px;
+      }
+
+      .comparison-table {
+        font-size: 0.85rem;
+      }
+
+      .comparison-table th,
+      .comparison-table td {
+        padding: 12px 10px;
+      }
+    }
+
+    /* Animation on scroll */
+    .animate-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .animate-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
 </head>
-<body class="bg-white text-gray-900 antialiased">
+<body>
 
   <!-- Nav -->
-  <nav id="nav" class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-100">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
-      <a href="/" class="flex items-center gap-2 font-bold text-xl">
-        <span>🏷️</span>
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <span class="logo-icon">🏷️</span>
         <span>Etsy Edge</span>
       </a>
-      <div class="hidden sm:flex items-center gap-8 text-sm text-gray-600">
-        <a href="#features" class="hover:text-gray-900">Features</a>
-        <a href="#pricing" class="hover:text-gray-900">Pricing</a>
-        <a href="#faq" class="hover:text-gray-900">FAQ</a>
-        <a href="blog/index.html" class="hover:text-gray-900">Blog</a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+        <a href="blog/index.html">Blog</a>
       </div>
-      <a href="#" class="bg-brand hover:bg-orange-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-        Add to Chrome — Free
-      </a>
+      <a href="#" class="btn btn-primary">Add to Chrome — Free</a>
+      <button class="mobile-menu-btn" aria-label="Menu">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
     </div>
   </nav>
 
   <!-- Hero -->
-  <section class="hero-gradient py-20 sm:py-28">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900 leading-tight">
-        Rank Higher on Etsy Search.<br>
-        <span class="text-brand">Stop Guessing at Tags.</span>
-      </h1>
-      <p class="mt-6 text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
-        See exactly what tags top sellers use. Get AI-powered suggestions tailored to your listings. Know what's working in your niche — and use it to get more traffic.
-      </p>
-      <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a href="#" class="bg-brand hover:bg-orange-700 text-white px-8 py-3.5 rounded-xl text-lg font-semibold transition-colors shadow-lg shadow-orange-200">
-          Get More Traffic — Free →
-        </a>
-        <a href="#features" class="text-gray-600 hover:text-gray-900 px-6 py-3.5 text-lg font-medium">
-          See how it works ↓
-        </a>
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-bg-2"></div>
+
+    <div class="floating-tags" aria-hidden="true">
+      <span class="floating-tag">handmade jewelry</span>
+      <span class="floating-tag">vintage decor</span>
+      <span class="floating-tag">personalized gifts</span>
+      <span class="floating-tag">wedding favors</span>
+      <span class="floating-tag">boho style</span>
+      <span class="floating-tag">custom portrait</span>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        Free Chrome extension
       </div>
-      <p class="mt-4 text-sm text-gray-400">Free Chrome extension. No account needed. Tag Spy is free forever.</p>
+
+      <h1>Stop guessing at tags.<br><em>See what's working.</em></h1>
+
+      <p class="hero-subtitle">
+        Reveal the hidden tags on any Etsy listing. Get AI-powered suggestions tailored to your shop. Finally know why some listings rank and others don't.
+      </p>
+
+      <div class="hero-ctas">
+        <a href="#" class="btn btn-primary">Get More Traffic — Free →</a>
+        <a href="#features" class="btn btn-secondary">See how it works</a>
+      </div>
+
+      <p class="hero-note">No account needed. Tag Spy is free forever.</p>
     </div>
   </section>
 
   <!-- Social Proof -->
-  <section class="py-12 border-b border-gray-100">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-      <p class="text-sm text-gray-400 uppercase tracking-wider font-medium">Built for Etsy sellers who are tired of guessing</p>
-      <div class="mt-6 flex flex-wrap items-center justify-center gap-8 text-gray-500 text-sm">
-        <div class="flex items-center gap-2">
-          <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+  <section class="social-proof">
+    <div class="social-proof-inner">
+      <p class="social-proof-title">Built for Etsy sellers who are done guessing</p>
+      <div class="proof-items">
+        <div class="proof-item">
+          <span class="proof-check">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+          </span>
           <span>Know your niche in minutes</span>
         </div>
-        <div class="flex items-center gap-2">
-          <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-          <span>Optimize listings with confidence</span>
+        <div class="proof-item">
+          <span class="proof-check">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+          </span>
+          <span>Optimize with confidence</span>
         </div>
-        <div class="flex items-center gap-2">
-          <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-          <span>Outrank competitors on Etsy search</span>
+        <div class="proof-item">
+          <span class="proof-check">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+          </span>
+          <span>Outrank competitors</span>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Features -->
-  <section id="features" class="py-20 sm:py-24">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl sm:text-4xl font-bold">Everything you need to rank higher on Etsy</h2>
-        <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Three tools that work together to help you find the right tags, optimize your listings, and outrank competitors.</p>
+  <section id="features" class="features">
+    <div class="features-inner">
+      <div class="section-header animate-in">
+        <h2>Everything you need to rank higher</h2>
+        <p>Three tools that work together to help you find the right tags, optimize your listings, and outrank competitors.</p>
       </div>
 
-      <div class="grid md:grid-cols-3 gap-8">
-        <!-- Tag Spy -->
-        <div class="bg-white border border-gray-200 rounded-2xl p-8 hover:shadow-lg transition-shadow">
-          <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center text-2xl mb-6">🔍</div>
-          <h3 class="text-xl font-bold mb-3">Tag Spy</h3>
-          <p class="text-gray-600 mb-4">See the hidden tags on any Etsy listing. Browse a competitor's page, and all 13 tags appear in a clean overlay panel.</p>
-          <p class="text-sm text-gray-500 mb-4 italic">Reverse-engineer what's already ranking in your niche.</p>
-          <span class="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-1 rounded-full">Free Forever</span>
+      <div class="features-grid">
+        <div class="feature-card animate-in">
+          <div class="feature-icon">🔍</div>
+          <h3>Tag Spy</h3>
+          <p>See the hidden tags on any Etsy listing. Browse a competitor's page, and all 13 tags appear in a clean overlay panel.</p>
+          <p class="feature-hint">Reverse-engineer what's already ranking in your niche.</p>
+          <span class="feature-badge badge-free">Free Forever</span>
         </div>
 
-        <!-- AI Suggestions -->
-        <div class="bg-white border border-gray-200 rounded-2xl p-8 hover:shadow-lg transition-shadow">
-          <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center text-2xl mb-6">🤖</div>
-          <h3 class="text-xl font-bold mb-3">AI Tag Suggestions</h3>
-          <p class="text-gray-600 mb-4">Get 13 optimized tags generated by AI, tailored to your specific listing. Each tag includes reasoning so you learn as you optimize.</p>
-          <p class="text-sm text-gray-500 mb-4 italic">Go from blank tag fields to fully optimized in 30 seconds.</p>
-          <span class="inline-block bg-orange-100 text-orange-800 text-xs font-semibold px-2.5 py-1 rounded-full">Pro</span>
+        <div class="feature-card animate-in">
+          <div class="feature-icon">🤖</div>
+          <h3>AI Tag Suggestions</h3>
+          <p>Get 13 optimized tags generated by AI, tailored to your specific listing. Each tag includes reasoning so you learn as you optimize.</p>
+          <p class="feature-hint">Go from blank tag fields to fully optimized in 30 seconds.</p>
+          <span class="feature-badge badge-pro">Pro</span>
         </div>
 
-        <!-- Competitor Analysis -->
-        <div class="bg-white border border-gray-200 rounded-2xl p-8 hover:shadow-lg transition-shadow">
-          <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center text-2xl mb-6">📊</div>
-          <h3 class="text-xl font-bold mb-3">Competitor Analysis</h3>
-          <p class="text-gray-600 mb-4">See which tags the top 20 listings use for any keyword. Know exactly what's working in your niche with frequency percentages.</p>
-          <p class="text-sm text-gray-500 mb-4 italic">Stop wondering why competitors rank above you.</p>
-          <span class="inline-block bg-orange-100 text-orange-800 text-xs font-semibold px-2.5 py-1 rounded-full">Pro</span>
+        <div class="feature-card animate-in">
+          <div class="feature-icon">📊</div>
+          <h3>Competitor Analysis</h3>
+          <p>See which tags the top 20 listings use for any keyword. Know exactly what's working in your niche with frequency percentages.</p>
+          <p class="feature-hint">Stop wondering why competitors rank above you.</p>
+          <span class="feature-badge badge-pro">Pro</span>
         </div>
-      </div>
 
-      <!-- SEO Score -->
-      <div class="mt-12 bg-gray-50 border border-gray-200 rounded-2xl p-8 sm:p-12">
-        <div class="flex flex-col md:flex-row items-start gap-8">
-          <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center text-2xl shrink-0">📝</div>
+        <div class="feature-card feature-card-wide animate-in">
+          <div class="feature-icon">📝</div>
           <div>
-            <h3 class="text-xl font-bold mb-3">SEO Score</h3>
-            <p class="text-gray-600 mb-4">Every listing gets an instant A-F grade based on tag count, title length, keyword placement, description length, and tag diversity. <strong>Know exactly what to fix first</strong> — no more guessing which listing needs work.</p>
-            <span class="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-1 rounded-full">Free Forever</span>
+            <h3>SEO Score</h3>
+            <p>Every listing gets an instant A–F grade based on tag count, title length, keyword placement, description length, and tag diversity. <strong>Know exactly what to fix first</strong> — no more guessing which listing needs work.</p>
+            <span class="feature-badge badge-free">Free Forever</span>
           </div>
         </div>
       </div>
@@ -171,153 +1117,149 @@
   </section>
 
   <!-- How It Works -->
-  <section class="py-20 sm:py-24 bg-gray-50">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6">
-      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-16">How it works</h2>
-      <div class="space-y-12">
-        <div class="flex items-start gap-6">
-          <div class="w-10 h-10 bg-brand text-white rounded-full flex items-center justify-center font-bold shrink-0">1</div>
-          <div>
-            <h3 class="text-lg font-bold">Install the extension</h3>
-            <p class="text-gray-600 mt-1">Add Etsy Edge from the Chrome Web Store. Takes 10 seconds, no account needed.</p>
+  <section class="how-it-works">
+    <div class="how-it-works-inner">
+      <div class="section-header animate-in">
+        <h2>How it works</h2>
+      </div>
+
+      <div class="steps">
+        <div class="step animate-in">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Install the extension</h3>
+            <p>Add Etsy Edge from the Chrome Web Store. Takes 10 seconds, no account needed.</p>
           </div>
         </div>
-        <div class="flex items-start gap-6">
-          <div class="w-10 h-10 bg-brand text-white rounded-full flex items-center justify-center font-bold shrink-0">2</div>
-          <div>
-            <h3 class="text-lg font-bold">Browse any Etsy listing</h3>
-            <p class="text-gray-600 mt-1">Visit any listing page on Etsy. The Tag Spy panel appears automatically in the bottom-right corner.</p>
+
+        <div class="step animate-in">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Browse any Etsy listing</h3>
+            <p>Visit any listing page on Etsy. The Tag Spy panel appears automatically in the bottom-right corner.</p>
           </div>
         </div>
-        <div class="flex items-start gap-6">
-          <div class="w-10 h-10 bg-brand text-white rounded-full flex items-center justify-center font-bold shrink-0">3</div>
-          <div>
-            <h3 class="text-lg font-bold">See tags, scores, and suggestions</h3>
-            <p class="text-gray-600 mt-1">Instantly see hidden tags, get your SEO grade, and (with Pro) get AI-generated tag recommendations.</p>
+
+        <div class="step animate-in">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>See tags, scores, and suggestions</h3>
+            <p>Instantly see hidden tags, get your SEO grade, and (with Pro) get AI-generated tag recommendations.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Pricing Comparison -->
-  <section id="pricing" class="py-20 sm:py-24">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl sm:text-4xl font-bold">Simple pricing. No surprises.</h2>
-        <p class="mt-4 text-lg text-gray-600">Tag Spy is free forever. Upgrade only if you want AI suggestions and competitor data.</p>
+  <!-- Pricing -->
+  <section id="pricing" class="pricing">
+    <div class="pricing-inner">
+      <div class="section-header animate-in">
+        <h2>Simple pricing. No surprises.</h2>
+        <p>Tag Spy is free forever. Upgrade only if you want AI suggestions and competitor data.</p>
       </div>
 
-      <!-- Plans -->
-      <div class="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto mb-20">
-        <!-- Free -->
-        <div class="border border-gray-200 rounded-2xl p-8">
-          <h3 class="text-lg font-bold">Free</h3>
-          <p class="mt-2 text-4xl font-extrabold">$0<span class="text-lg text-gray-400 font-normal">/mo</span></p>
-          <ul class="mt-6 space-y-3 text-gray-600">
-            <li class="flex items-start gap-2">
-              <svg class="w-5 h-5 text-green-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+      <div class="pricing-cards">
+        <div class="pricing-card animate-in">
+          <h3>Free</h3>
+          <p class="pricing-amount">$0<span>/mo</span></p>
+          <ul class="pricing-features">
+            <li>
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
               Tag Spy on any listing
             </li>
-            <li class="flex items-start gap-2">
-              <svg class="w-5 h-5 text-green-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-              Basic SEO Score (A-F)
+            <li>
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+              Basic SEO Score (A–F)
             </li>
-            <li class="flex items-start gap-2">
-              <svg class="w-5 h-5 text-green-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            <li>
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
               Works on every Etsy listing
             </li>
           </ul>
-          <a href="#" class="mt-8 block text-center border-2 border-gray-300 hover:border-gray-400 text-gray-700 px-6 py-3 rounded-xl font-semibold transition-colors">
-            Add to Chrome
-          </a>
+          <a href="#" class="btn btn-secondary">Add to Chrome</a>
         </div>
 
-        <!-- Pro -->
-        <div class="border-2 border-brand rounded-2xl p-8 relative">
-          <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand text-white text-xs font-bold px-3 py-1 rounded-full">MOST POPULAR</div>
-          <h3 class="text-lg font-bold">Pro</h3>
-          <p class="mt-2 text-4xl font-extrabold text-brand">$9.99<span class="text-lg text-gray-400 font-normal">/mo</span></p>
-          <ul class="mt-6 space-y-3 text-gray-600">
-            <li class="flex items-start gap-2">
-              <svg class="w-5 h-5 text-green-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+        <div class="pricing-card featured animate-in">
+          <h3>Pro</h3>
+          <p class="pricing-amount">$9.99<span>/mo</span></p>
+          <ul class="pricing-features">
+            <li>
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
               Everything in Free
             </li>
-            <li class="flex items-start gap-2">
-              <svg class="w-5 h-5 text-green-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            <li>
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
               AI Tag Suggestions (13 optimized tags)
             </li>
-            <li class="flex items-start gap-2">
-              <svg class="w-5 h-5 text-green-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-              Competitor Tag Analysis (top 20 listings)
+            <li>
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+              Competitor Tag Analysis (top 20)
             </li>
-            <li class="flex items-start gap-2">
-              <svg class="w-5 h-5 text-green-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            <li>
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
               Detailed SEO breakdown with tips
             </li>
           </ul>
-          <a href="#" class="mt-8 block text-center bg-brand hover:bg-orange-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors shadow-lg shadow-orange-200">
-            Start Pro — $9.99/mo
-          </a>
+          <a href="#" class="btn btn-primary">Start Pro — $9.99/mo</a>
         </div>
       </div>
 
-      <!-- Comparison Table -->
-      <div class="mt-8">
-        <h3 class="text-2xl font-bold text-center mb-8">How Etsy Edge compares</h3>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm">
+      <div class="comparison animate-in">
+        <h3>How Etsy Edge compares</h3>
+        <div style="overflow-x: auto;">
+          <table class="comparison-table">
             <thead>
-              <tr class="border-b-2 border-gray-200">
-                <th class="py-3 px-4 font-semibold text-gray-500">Feature</th>
-                <th class="py-3 px-4 font-bold text-brand">Etsy Edge</th>
-                <th class="py-3 px-4 font-semibold text-gray-500">eRank</th>
-                <th class="py-3 px-4 font-semibold text-gray-500">Marmalead</th>
-                <th class="py-3 px-4 font-semibold text-gray-500">Alura</th>
+              <tr>
+                <th>Feature</th>
+                <th>Etsy Edge</th>
+                <th>eRank</th>
+                <th>Marmalead</th>
+                <th>Alura</th>
               </tr>
             </thead>
-            <tbody class="text-gray-600">
-              <tr class="border-b border-gray-100 highlight-row">
-                <td class="py-3 px-4 font-medium">See any listing's tags</td>
-                <td class="py-3 px-4 font-bold text-green-600">Free</td>
-                <td class="py-3 px-4">Paid</td>
-                <td class="py-3 px-4">Paid</td>
-                <td class="py-3 px-4">Paid</td>
-              </tr>
-              <tr class="border-b border-gray-100">
-                <td class="py-3 px-4 font-medium">AI tag suggestions</td>
-                <td class="py-3 px-4 font-bold text-green-600">$9.99/mo</td>
-                <td class="py-3 px-4">—</td>
-                <td class="py-3 px-4">$19/mo</td>
-                <td class="py-3 px-4">—</td>
-              </tr>
-              <tr class="border-b border-gray-100 highlight-row">
-                <td class="py-3 px-4 font-medium">Competitor tag analysis</td>
-                <td class="py-3 px-4 font-bold text-green-600">$9.99/mo</td>
-                <td class="py-3 px-4">$9.99/mo</td>
-                <td class="py-3 px-4">$19/mo</td>
-                <td class="py-3 px-4">$19.99/mo</td>
-              </tr>
-              <tr class="border-b border-gray-100">
-                <td class="py-3 px-4 font-medium">SEO score</td>
-                <td class="py-3 px-4 font-bold text-green-600">Free</td>
-                <td class="py-3 px-4">Free</td>
-                <td class="py-3 px-4">Paid</td>
-                <td class="py-3 px-4">Paid</td>
-              </tr>
-              <tr class="border-b border-gray-100 highlight-row">
-                <td class="py-3 px-4 font-medium">Works inline on Etsy</td>
-                <td class="py-3 px-4 font-bold text-green-600">Yes</td>
-                <td class="py-3 px-4">Separate site</td>
-                <td class="py-3 px-4">Separate site</td>
-                <td class="py-3 px-4">Extension</td>
+            <tbody>
+              <tr>
+                <td>See any listing's tags</td>
+                <td class="ours">Free</td>
+                <td>Paid</td>
+                <td>Paid</td>
+                <td>Paid</td>
               </tr>
               <tr>
-                <td class="py-3 px-4 font-medium">Price (full features)</td>
-                <td class="py-3 px-4 font-bold text-brand">$9.99/mo</td>
-                <td class="py-3 px-4">$9.99/mo</td>
-                <td class="py-3 px-4">$19/mo</td>
-                <td class="py-3 px-4">$19.99/mo</td>
+                <td>AI tag suggestions</td>
+                <td class="ours">$9.99/mo</td>
+                <td>—</td>
+                <td>$19/mo</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>Competitor tag analysis</td>
+                <td class="ours">$9.99/mo</td>
+                <td>$9.99/mo</td>
+                <td>$19/mo</td>
+                <td>$19.99/mo</td>
+              </tr>
+              <tr>
+                <td>SEO score</td>
+                <td class="ours">Free</td>
+                <td>Free</td>
+                <td>Paid</td>
+                <td>Paid</td>
+              </tr>
+              <tr>
+                <td>Works inline on Etsy</td>
+                <td class="highlight">Yes</td>
+                <td>Separate site</td>
+                <td>Separate site</td>
+                <td>Extension</td>
+              </tr>
+              <tr>
+                <td>Price (full features)</td>
+                <td class="ours">$9.99/mo</td>
+                <td>$9.99/mo</td>
+                <td>$19/mo</td>
+                <td>$19.99/mo</td>
               </tr>
             </tbody>
           </table>
@@ -327,100 +1269,132 @@
   </section>
 
   <!-- FAQ -->
-  <section id="faq" class="py-20 sm:py-24 bg-gray-50">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6">
-      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12">Frequently asked questions</h2>
-      <div class="space-y-4">
+  <section id="faq" class="faq">
+    <div class="faq-inner">
+      <div class="section-header animate-in">
+        <h2>Frequently asked questions</h2>
+      </div>
 
-        <details class="bg-white border border-gray-200 rounded-xl p-6 group">
-          <summary class="flex items-center justify-between font-semibold text-gray-900">
+      <div class="faq-list">
+        <details class="faq-item animate-in">
+          <summary>
             Is Tag Spy really free?
-            <svg class="w-5 h-5 text-gray-400 faq-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            <svg class="faq-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
           </summary>
-          <p class="mt-3 text-gray-600">Yes, 100% free with no limits. You can see the tags on any Etsy listing without paying anything or even creating an account. Tag Spy and the basic SEO score will be free forever.</p>
+          <div class="faq-answer">
+            <p>Yes, 100% free with no limits. You can see the tags on any Etsy listing without paying anything or even creating an account. Tag Spy and the basic SEO score will be free forever.</p>
+          </div>
         </details>
 
-        <details class="bg-white border border-gray-200 rounded-xl p-6 group">
-          <summary class="flex items-center justify-between font-semibold text-gray-900">
+        <details class="faq-item animate-in">
+          <summary>
             How does Etsy Edge see the tags?
-            <svg class="w-5 h-5 text-gray-400 faq-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            <svg class="faq-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
           </summary>
-          <p class="mt-3 text-gray-600">Etsy includes listing tags in the page's structured data (JSON-LD) and through the Etsy Open API. This is publicly available data — we just surface it in a convenient overlay while you browse.</p>
+          <div class="faq-answer">
+            <p>Etsy includes listing tags in the page's structured data (JSON-LD) and through the Etsy Open API. This is publicly available data — we just surface it in a convenient overlay while you browse.</p>
+          </div>
         </details>
 
-        <details class="bg-white border border-gray-200 rounded-xl p-6 group">
-          <summary class="flex items-center justify-between font-semibold text-gray-900">
+        <details class="faq-item animate-in">
+          <summary>
             Does it work on all Etsy listings?
-            <svg class="w-5 h-5 text-gray-400 faq-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            <svg class="faq-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
           </summary>
-          <p class="mt-3 text-gray-600">Yes. Etsy Edge works on every public Etsy listing page. Just navigate to any listing and the panel appears automatically in the bottom-right corner.</p>
+          <div class="faq-answer">
+            <p>Yes. Etsy Edge works on every public Etsy listing page. Just navigate to any listing and the panel appears automatically in the bottom-right corner.</p>
+          </div>
         </details>
 
-        <details class="bg-white border border-gray-200 rounded-xl p-6 group">
-          <summary class="flex items-center justify-between font-semibold text-gray-900">
+        <details class="faq-item animate-in">
+          <summary>
             How are AI tag suggestions generated?
-            <svg class="w-5 h-5 text-gray-400 faq-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            <svg class="faq-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
           </summary>
-          <p class="mt-3 text-gray-600">AI suggestions use GPT-4o-mini, trained on Etsy SEO best practices. It analyzes your listing's title, description, and what top competitors are using, then generates 13 optimized tags with reasoning for each one.</p>
+          <div class="faq-answer">
+            <p>AI suggestions use GPT-4o-mini, trained on Etsy SEO best practices. It analyzes your listing's title, description, and what top competitors are using, then generates 13 optimized tags with reasoning for each one.</p>
+          </div>
         </details>
 
-        <details class="bg-white border border-gray-200 rounded-xl p-6 group">
-          <summary class="flex items-center justify-between font-semibold text-gray-900">
+        <details class="faq-item animate-in">
+          <summary>
             Is my data safe?
-            <svg class="w-5 h-5 text-gray-400 faq-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            <svg class="faq-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
           </summary>
-          <p class="mt-3 text-gray-600">Yes. All data is processed locally in your browser. We don't collect, store, or transmit personal data. API calls go directly from your browser to Etsy and OpenAI — we have no server in between. Read our <a href="privacy-policy.html" class="text-brand underline">privacy policy</a> for details.</p>
+          <div class="faq-answer">
+            <p>Yes. We don't collect, store, or log any personal data. API calls are routed through our secure backend server (Cloudflare Workers) so you never need to manage API keys — but no request data is stored or logged on our end. Cached results stay local in your browser. Read our <a href="privacy-policy.html">privacy policy</a> for details.</p>
+          </div>
         </details>
 
-        <details class="bg-white border border-gray-200 rounded-xl p-6 group">
-          <summary class="flex items-center justify-between font-semibold text-gray-900">
+        <details class="faq-item animate-in">
+          <summary>
             Can I cancel Pro anytime?
-            <svg class="w-5 h-5 text-gray-400 faq-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            <svg class="faq-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
           </summary>
-          <p class="mt-3 text-gray-600">Yes, cancel anytime with one click. No long-term contracts. Your Pro features stay active until the end of your billing period, and Tag Spy remains free forever.</p>
+          <div class="faq-answer">
+            <p>Yes, cancel anytime with one click. No long-term contracts. Your Pro features stay active until the end of your billing period, and Tag Spy remains free forever.</p>
+          </div>
         </details>
 
-        <details class="bg-white border border-gray-200 rounded-xl p-6 group">
-          <summary class="flex items-center justify-between font-semibold text-gray-900">
+        <details class="faq-item animate-in">
+          <summary>
             Why not just use eRank or Marmalead?
-            <svg class="w-5 h-5 text-gray-400 faq-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            <svg class="faq-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
           </summary>
-          <p class="mt-3 text-gray-600">Those are great tools, but they require you to leave Etsy and use a separate dashboard. Etsy Edge works right on the listing page — no context switching. Plus, Tag Spy is free (eRank charges for tag viewing), and our AI suggestions are unique to Etsy Edge.</p>
+          <div class="faq-answer">
+            <p>Those are great tools, but they require you to leave Etsy and use a separate dashboard. Etsy Edge works right on the listing page — no context switching. Plus, Tag Spy is free (eRank charges for tag viewing), and our AI suggestions are unique to Etsy Edge.</p>
+          </div>
         </details>
-
       </div>
     </div>
   </section>
 
   <!-- Final CTA -->
-  <section class="py-20 sm:py-24">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-      <h2 class="text-3xl sm:text-4xl font-bold">Your competitors are already optimizing their tags.</h2>
-      <p class="mt-4 text-lg text-gray-600">Every day you're not optimizing, you're losing traffic to sellers who are. Etsy Edge makes it effortless — install, browse, and start climbing search results.</p>
-      <a href="#" class="mt-8 inline-block bg-brand hover:bg-orange-700 text-white px-10 py-4 rounded-xl text-lg font-semibold transition-colors shadow-lg shadow-orange-200">
-        Get More Traffic — Free →
-      </a>
+  <section class="final-cta">
+    <div class="final-cta-inner animate-in">
+      <h2>Your competitors are already optimizing their tags.</h2>
+      <p>Every day you're not optimizing, you're losing traffic to sellers who are. Etsy Edge makes it effortless — install, browse, and start climbing search results.</p>
+      <a href="#" class="btn btn-primary">Get More Traffic — Free →</a>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="border-t border-gray-200 py-12">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
-        <div class="flex items-center gap-2 font-bold text-lg">
-          <span>🏷️</span>
-          <span>Etsy Edge</span>
-        </div>
-        <div class="flex flex-wrap items-center gap-6 text-sm text-gray-500">
-          <a href="blog/index.html" class="hover:text-gray-700">Blog</a>
-          <a href="privacy-policy.html" class="hover:text-gray-700">Privacy Policy</a>
-          <a href="https://github.com/0xloqi/etsy-edge" class="hover:text-gray-700">GitHub</a>
-          <a href="mailto:[your-email]" class="hover:text-gray-700">Contact</a>
-        </div>
+  <footer>
+    <div class="footer-inner">
+      <a href="/" class="footer-logo">
+        <span class="logo-icon">🏷️</span>
+        <span>Etsy Edge</span>
+      </a>
+      <div class="footer-links">
+        <a href="blog/index.html">Blog</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="https://github.com/0xloqi/etsy-edge">GitHub</a>
+        <a href="mailto:hello@etsyedge.app">Contact</a>
       </div>
-      <p class="mt-8 text-center text-xs text-gray-400">Etsy Edge is not affiliated with or endorsed by Etsy, Inc. "Etsy" is a trademark of Etsy, Inc.</p>
+      <p class="footer-disclaimer">Etsy Edge is not affiliated with or endorsed by Etsy, Inc. "Etsy" is a trademark of Etsy, Inc.</p>
     </div>
   </footer>
+
+  <script>
+    // Scroll animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, index * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.animate-in').forEach(el => observer.observe(el));
+  </script>
 
 </body>
 </html>
