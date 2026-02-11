@@ -1,13 +1,7 @@
 export interface SeoScore {
   grade: "A" | "B" | "C" | "D" | "F";
   score: number; // 0-100
-  breakdown: {
-    tagCount: { score: number; max: number; detail: string };
-    titleLength: { score: number; max: number; detail: string };
-    titleKeywords: { score: number; max: number; detail: string };
-    descriptionLength: { score: number; max: number; detail: string };
-    tagDiversity: { score: number; max: number; detail: string };
-  };
+  breakdown: Record<string, { score: number; max: number; detail: string }>;
   recommendations: string[];
 }
 

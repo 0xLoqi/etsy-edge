@@ -430,8 +430,20 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
               </div>
             ) : competitorTags.length > 0 ? (
               <div>
-                <div style={{ fontSize: "12px", color: "#6b7280", marginBottom: "10px" }}>
-                  Most common tags across {listingsAnalyzed} visited listing{listingsAnalyzed !== 1 ? "s" : ""}:
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "12px",
+                  }}
+                >
+                  <span style={{ fontWeight: 600, fontSize: "13px", color: "#374151" }}>
+                    Top search terms
+                  </span>
+                  <span style={{ fontSize: "12px", color: "#9ca3af" }}>
+                    from {listingsAnalyzed} listing{listingsAnalyzed !== 1 ? "s" : ""}
+                  </span>
                 </div>
                 {competitorTags.slice(0, 20).map((t, i) => (
                   <div
@@ -440,26 +452,39 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
                       display: "flex",
                       alignItems: "center",
                       gap: "8px",
-                      padding: "6px 0",
+                      padding: "5px 0",
                       borderBottom: "1px solid #f3f4f6",
                     }}
                   >
-                    <div
+                    <span
                       style={{
-                        width: `${Math.max(t.percentage, 8)}%`,
-                        height: "20px",
-                        background: i < 5 ? "#fed7aa" : "#f3f4f6",
-                        borderRadius: "4px",
-                        minWidth: "30px",
-                        display: "flex",
-                        alignItems: "center",
-                        paddingLeft: "6px",
                         fontSize: "11px",
                         fontWeight: 600,
                         color: i < 5 ? "#9a3412" : "#6b7280",
+                        minWidth: "32px",
+                        textAlign: "right",
                       }}
                     >
                       {t.percentage}%
+                    </span>
+                    <div
+                      style={{
+                        flex: 1,
+                        height: "6px",
+                        background: "#f3f4f6",
+                        borderRadius: "3px",
+                        overflow: "hidden",
+                        maxWidth: "60px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: `${t.percentage}%`,
+                          height: "100%",
+                          background: i < 5 ? "#ea580c" : "#d1d5db",
+                          borderRadius: "3px",
+                        }}
+                      />
                     </div>
                     <button
                       onClick={() => navigator.clipboard.writeText(t.tag)}
@@ -470,6 +495,7 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
                         fontSize: "13px",
                         color: "#374151",
                         padding: 0,
+                        textAlign: "left",
                       }}
                       title="Click to copy"
                     >
@@ -477,30 +503,61 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
                     </button>
                   </div>
                 ))}
-                <div style={{ fontSize: "11px", color: "#9ca3af", marginTop: "8px" }}>
-                  Visit more competitor listings to improve analysis.
-                </div>
+                <button
+                  onClick={loadCompetitorTags}
+                  style={{
+                    width: "100%",
+                    marginTop: "10px",
+                    padding: "6px",
+                    background: "none",
+                    border: "1px solid #e5e7eb",
+                    borderRadius: "6px",
+                    fontSize: "12px",
+                    cursor: "pointer",
+                    color: "#9ca3af",
+                  }}
+                >
+                  Refresh
+                </button>
               </div>
             ) : (
-              <div style={{ textAlign: "center", padding: "20px" }}>
-                <div style={{ fontSize: "13px", color: "#6b7280", marginBottom: "12px" }}>
-                  Browse competitor listings to build your analysis.
-                  Etsy Edge automatically captures tags from every listing you visit.
+              <div style={{ padding: "16px 0" }}>
+                <div
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    color: "#374151",
+                    marginBottom: "8px",
+                  }}
+                >
+                  How it works
+                </div>
+                <div style={{ fontSize: "13px", color: "#6b7280", lineHeight: "1.5" }}>
+                  <div style={{ marginBottom: "8px" }}>
+                    <strong style={{ color: "#374151" }}>1.</strong> Browse competitor listings in your niche
+                  </div>
+                  <div style={{ marginBottom: "8px" }}>
+                    <strong style={{ color: "#374151" }}>2.</strong> Etsy Edge captures search data from each page you visit
+                  </div>
+                  <div style={{ marginBottom: "12px" }}>
+                    <strong style={{ color: "#374151" }}>3.</strong> Come back here to see which search terms appear most
+                  </div>
                 </div>
                 <button
                   onClick={loadCompetitorTags}
                   style={{
+                    width: "100%",
                     background: "#ea580c",
                     color: "white",
                     border: "none",
                     borderRadius: "6px",
-                    padding: "10px 20px",
+                    padding: "10px",
                     fontSize: "13px",
                     fontWeight: 600,
                     cursor: "pointer",
                   }}
                 >
-                  Check Visited Listings
+                  Check for data ({relatedSearches.length > 0 ? "this listing counted" : "none yet"})
                 </button>
               </div>
             )}

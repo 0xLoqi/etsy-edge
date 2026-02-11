@@ -30,7 +30,7 @@ export default defineContentScript({
     const seoScore = scoreListing({
       title: pageData?.title || "",
       description: pageData?.description || "",
-      tags: topSearches,
+      relatedSearches,
     });
 
     // Create shadow root UI container

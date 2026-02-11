@@ -47,6 +47,7 @@ export default function SeoScoreCard({ score }: Props) {
               fontSize: "20px",
               color: colors.text,
               border: `2px solid ${colors.border}`,
+              flexShrink: 0,
             }}
           >
             {score.grade}
@@ -63,29 +64,65 @@ export default function SeoScoreCard({ score }: Props) {
       </div>
 
       {/* Breakdown */}
-      <div style={{ padding: "10px 14px", fontSize: "12px" }}>
-        {Object.entries(score.breakdown).map(([key, val]) => (
-          <div
-            key={key}
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              padding: "4px 0",
-              borderBottom: "1px solid #f3f4f6",
-            }}
-          >
-            <span style={{ color: "#6b7280" }}>{val.detail}</span>
-            <span
+      <div style={{ padding: "8px 14px", fontSize: "12px" }}>
+        {Object.entries(score.breakdown).map(([key, val]) => {
+          const pct = Math.round((val.score / val.max) * 100);
+          const barColor =
+            pct >= 70 ? "#16a34a" : pct >= 40 ? "#ca8a04" : "#dc2626";
+
+          return (
+            <div
+              key={key}
               style={{
-                fontWeight: 600,
-                color: val.score >= val.max * 0.7 ? "#16a34a" : val.score >= val.max * 0.4 ? "#ca8a04" : "#dc2626",
+                padding: "6px 0",
+                borderBottom: "1px solid #f3f4f6",
               }}
             >
-              {val.score}/{val.max}
-            </span>
-          </div>
-        ))}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "4px",
+                }}
+              >
+                <span style={{ color: "#6b7280", lineHeight: "1.3" }}>
+                  {val.detail}
+                </span>
+                <span
+                  style={{
+                    fontWeight: 600,
+                    color: barColor,
+                    flexShrink: 0,
+                    marginLeft: "12px",
+                    fontSize: "11px",
+                  }}
+                >
+                  {val.score}/{val.max}
+                </span>
+              </div>
+              {/* Progress bar */}
+              <div
+                style={{
+                  height: "4px",
+                  background: "#f3f4f6",
+                  borderRadius: "2px",
+                  overflow: "hidden",
+                }}
+              >
+                <div
+                  style={{
+                    width: `${pct}%`,
+                    height: "100%",
+                    background: barColor,
+                    borderRadius: "2px",
+                    transition: "width 0.3s",
+                  }}
+                />
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Recommendations */}
@@ -105,7 +142,7 @@ export default function SeoScoreCard({ score }: Props) {
               marginBottom: "6px",
             }}
           >
-            Recommendations
+            Tips
           </div>
           {score.recommendations.map((rec, i) => (
             <div
@@ -113,8 +150,8 @@ export default function SeoScoreCard({ score }: Props) {
               style={{
                 fontSize: "12px",
                 color: "#6b7280",
-                padding: "3px 0",
-                lineHeight: "1.4",
+                padding: "4px 0",
+                lineHeight: "1.5",
               }}
             >
               &bull; {rec}
