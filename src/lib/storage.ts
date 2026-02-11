@@ -8,8 +8,16 @@ const showSeoScore = storage.defineItem<boolean>("local:showSeoScore", {
   fallback: true,
 });
 
-// Cache of scraped tags from every visited listing
-const tagCache = storage.defineItem<Record<string, { tags: string[]; title: string; timestamp: number }>>(
+interface VisitedListing {
+  tags: string[];
+  title: string;
+  /** Primary category from breadcrumbs (e.g. "Candles & Holders") */
+  category: string;
+  timestamp: number;
+}
+
+// Cache of scraped data from every visited listing
+const tagCache = storage.defineItem<Record<string, VisitedListing>>(
   "local:tagCache",
   { fallback: {} }
 );
@@ -27,10 +35,15 @@ export const appStorage = {
     return null;
   },
 
-  /** Save scraped tags from a visited listing. */
-  async saveVisitedListing(listingId: string, tags: string[], title: string): Promise<void> {
+  /** Save scraped data from a visited listing. */
+  async saveVisitedListing(
+    listingId: string,
+    tags: string[],
+    title: string,
+    category: string
+  ): Promise<void> {
     const cache = await tagCache.getValue();
-    cache[listingId] = { tags, title, timestamp: Date.now() };
+    cache[listingId] = { tags, title, category, timestamp: Date.now() };
     // Evict oldest if over limit
     const keys = Object.keys(cache);
     if (keys.length > MAX_CACHE_ENTRIES) {
@@ -42,13 +55,32 @@ export const appStorage = {
     await tagCache.setValue(cache);
   },
 
-  /** Get aggregated tag frequency across all visited listings (excluding a given listing). */
+  /**
+   * Get aggregated search term frequency from visited listings in the same category.
+   * Falls back to all listings if no same-category matches found.
+   */
   async getCompetitorTagAnalysis(
-    excludeListingId: string
-  ): Promise<{ tag: string; count: number; percentage: number; listings: number }[]> {
+    excludeListingId: string,
+    currentCategory: string
+  ): Promise<{
+    tags: { tag: string; count: number; percentage: number }[];
+    listingsAnalyzed: number;
+    categoryMatch: boolean;
+  }> {
     const cache = await tagCache.getValue();
-    const entries = Object.entries(cache).filter(([id]) => id !== excludeListingId);
-    if (entries.length === 0) return [];
+    const allEntries = Object.entries(cache).filter(([id]) => id !== excludeListingId);
+    if (allEntries.length === 0) {
+      return { tags: [], listingsAnalyzed: 0, categoryMatch: false };
+    }
+
+    // Try same-category first
+    const categoryNorm = currentCategory.toLowerCase().trim();
+    const sameCat = categoryNorm
+      ? allEntries.filter(([, e]) => e.category.toLowerCase().trim() === categoryNorm)
+      : [];
+
+    const entries = sameCat.length >= 2 ? sameCat : allEntries;
+    const categoryMatch = sameCat.length >= 2 && categoryNorm.length > 0;
 
     const tagCounts: Record<string, number> = {};
     for (const [, entry] of entries) {
@@ -59,19 +91,14 @@ export const appStorage = {
     }
 
     const total = entries.length;
-    return Object.entries(tagCounts)
+    const tags = Object.entries(tagCounts)
       .map(([tag, count]) => ({
         tag,
         count,
         percentage: Math.round((count / total) * 100),
-        listings: total,
       }))
       .sort((a, b) => b.count - a.count);
-  },
 
-  /** Get count of visited listings (excluding a given one). */
-  async getVisitedCount(excludeListingId: string): Promise<number> {
-    const cache = await tagCache.getValue();
-    return Object.keys(cache).filter((id) => id !== excludeListingId).length;
+    return { tags, listingsAnalyzed: total, categoryMatch };
   },
 };

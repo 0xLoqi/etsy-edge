@@ -21,9 +21,12 @@ export default defineContentScript({
     // Top searches are the closest proxy for seller tags
     const topSearches = relatedSearches.slice(0, 13);
 
+    // Use the deepest breadcrumb as primary category
+    const primaryCategory = breadcrumbs.length > 1 ? breadcrumbs[breadcrumbs.length - 1] : breadcrumbs[0] || "";
+
     // Save for competitor analysis later
     if (relatedSearches.length > 0) {
-      await appStorage.saveVisitedListing(listingId, relatedSearches, pageData?.title || "");
+      await appStorage.saveVisitedListing(listingId, relatedSearches, pageData?.title || "", primaryCategory);
     }
 
     // Score locally using scraped data

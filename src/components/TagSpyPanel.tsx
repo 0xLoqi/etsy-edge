@@ -29,9 +29,6 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
   const { isPaid, openUpgrade } = usePaidStatus();
   const [aiSuggestions, setAiSuggestions] = useState<TagSuggestion[]>([]);
   const [aiLoading, setAiLoading] = useState(false);
-  const [competitorTags, setCompetitorTags] = useState<{ tag: string; count: number; percentage: number }[]>([]);
-  const [competitorLoading, setCompetitorLoading] = useState(false);
-  const [listingsAnalyzed, setListingsAnalyzed] = useState(0);
 
   async function loadAiSuggestions() {
     if (!pageData) return;
@@ -43,7 +40,7 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
         description: pageData.description,
         category: breadcrumbs.join(" > "),
         currentTags: topSearches,
-        competitorTags: competitorTags.slice(0, 20).map((t) => t.tag),
+        competitorTags: [],
       });
       if (response.success) {
         setAiSuggestions(response.data);
@@ -54,24 +51,6 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
       // handled by UI
     } finally {
       setAiLoading(false);
-    }
-  }
-
-  async function loadCompetitorTags() {
-    setCompetitorLoading(true);
-    try {
-      const response = await browser.runtime.sendMessage({
-        type: "GET_COMPETITOR_ANALYSIS",
-        excludeListingId: listingId,
-      });
-      if (response.success) {
-        setCompetitorTags(response.data.tags);
-        setListingsAnalyzed(response.data.listingsAnalyzed);
-      }
-    } catch {
-      // handled by UI
-    } finally {
-      setCompetitorLoading(false);
     }
   }
 
@@ -213,10 +192,7 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
           AI Suggest
         </button>
         <button
-          onClick={() => {
-            setActiveTab("competitors");
-            if (competitorTags.length === 0 && !competitorLoading) loadCompetitorTags();
-          }}
+          onClick={() => setActiveTab("competitors")}
           style={tabStyle("competitors")}
         >
           Competitors
@@ -423,145 +399,48 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
 
         {/* === COMPETITORS TAB === */}
         {activeTab === "competitors" && (
-          <>
-            {competitorLoading ? (
-              <div style={{ textAlign: "center", padding: "20px", color: "#9ca3af" }}>
-                Analyzing visited listings...
+          <div style={{ textAlign: "center", padding: "24px 12px" }}>
+            <div
+              style={{
+                width: "48px",
+                height: "48px",
+                margin: "0 auto 12px",
+                borderRadius: "12px",
+                background: "#fff7ed",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "24px",
+              }}
+            >
+              vs
+            </div>
+            <div style={{ fontWeight: 600, fontSize: "15px", color: "#374151", marginBottom: "6px" }}>
+              Competitor Analysis
+            </div>
+            <div style={{ fontSize: "13px", color: "#9ca3af", marginBottom: "16px", lineHeight: "1.5" }}>
+              Coming soon. See which tags your top competitors use
+              and find gaps in your SEO strategy.
+            </div>
+            <div
+              style={{
+                padding: "10px 14px",
+                background: "#f9fafb",
+                borderRadius: "8px",
+                fontSize: "12px",
+                color: "#6b7280",
+                textAlign: "left",
+                lineHeight: "1.6",
+              }}
+            >
+              <div style={{ fontWeight: 600, color: "#374151", marginBottom: "4px" }}>
+                What you'll get:
               </div>
-            ) : competitorTags.length > 0 ? (
-              <div>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginBottom: "12px",
-                  }}
-                >
-                  <span style={{ fontWeight: 600, fontSize: "13px", color: "#374151" }}>
-                    Top search terms
-                  </span>
-                  <span style={{ fontSize: "12px", color: "#9ca3af" }}>
-                    from {listingsAnalyzed} listing{listingsAnalyzed !== 1 ? "s" : ""}
-                  </span>
-                </div>
-                {competitorTags.slice(0, 20).map((t, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                      padding: "5px 0",
-                      borderBottom: "1px solid #f3f4f6",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontSize: "11px",
-                        fontWeight: 600,
-                        color: i < 5 ? "#9a3412" : "#6b7280",
-                        minWidth: "32px",
-                        textAlign: "right",
-                      }}
-                    >
-                      {t.percentage}%
-                    </span>
-                    <div
-                      style={{
-                        flex: 1,
-                        height: "6px",
-                        background: "#f3f4f6",
-                        borderRadius: "3px",
-                        overflow: "hidden",
-                        maxWidth: "60px",
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: `${t.percentage}%`,
-                          height: "100%",
-                          background: i < 5 ? "#ea580c" : "#d1d5db",
-                          borderRadius: "3px",
-                        }}
-                      />
-                    </div>
-                    <button
-                      onClick={() => navigator.clipboard.writeText(t.tag)}
-                      style={{
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        fontSize: "13px",
-                        color: "#374151",
-                        padding: 0,
-                        textAlign: "left",
-                      }}
-                      title="Click to copy"
-                    >
-                      {t.tag}
-                    </button>
-                  </div>
-                ))}
-                <button
-                  onClick={loadCompetitorTags}
-                  style={{
-                    width: "100%",
-                    marginTop: "10px",
-                    padding: "6px",
-                    background: "none",
-                    border: "1px solid #e5e7eb",
-                    borderRadius: "6px",
-                    fontSize: "12px",
-                    cursor: "pointer",
-                    color: "#9ca3af",
-                  }}
-                >
-                  Refresh
-                </button>
-              </div>
-            ) : (
-              <div style={{ padding: "16px 0" }}>
-                <div
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: 600,
-                    color: "#374151",
-                    marginBottom: "8px",
-                  }}
-                >
-                  How it works
-                </div>
-                <div style={{ fontSize: "13px", color: "#6b7280", lineHeight: "1.5" }}>
-                  <div style={{ marginBottom: "8px" }}>
-                    <strong style={{ color: "#374151" }}>1.</strong> Browse competitor listings in your niche
-                  </div>
-                  <div style={{ marginBottom: "8px" }}>
-                    <strong style={{ color: "#374151" }}>2.</strong> Etsy Edge captures search data from each page you visit
-                  </div>
-                  <div style={{ marginBottom: "12px" }}>
-                    <strong style={{ color: "#374151" }}>3.</strong> Come back here to see which search terms appear most
-                  </div>
-                </div>
-                <button
-                  onClick={loadCompetitorTags}
-                  style={{
-                    width: "100%",
-                    background: "#ea580c",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "6px",
-                    padding: "10px",
-                    fontSize: "13px",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                  }}
-                >
-                  Check for data ({relatedSearches.length > 0 ? "this listing counted" : "none yet"})
-                </button>
-              </div>
-            )}
-          </>
+              <div>&#8226; Top tags across competing listings</div>
+              <div>&#8226; Tag frequency analysis</div>
+              <div>&#8226; Gap analysis vs. your listing</div>
+            </div>
+          </div>
         )}
       </div>
     </div>

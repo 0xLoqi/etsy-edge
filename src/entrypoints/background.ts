@@ -1,5 +1,4 @@
 import { getAiTagSuggestions } from "../lib/ai-suggestions";
-import { appStorage } from "../lib/storage";
 import { initPayment, isPaidUser, openPaymentPage } from "../lib/payment";
 
 export default defineBackground(() => {
@@ -27,18 +26,6 @@ async function handleMessage(message: Record<string, unknown>) {
     case "OPEN_PAYMENT_PAGE": {
       openPaymentPage();
       return { success: true, data: null };
-    }
-
-    // --- Free features (local, no API needed) ---
-
-    case "GET_COMPETITOR_ANALYSIS": {
-      const analysis = await appStorage.getCompetitorTagAnalysis(
-        message.excludeListingId as string
-      );
-      const count = await appStorage.getVisitedCount(
-        message.excludeListingId as string
-      );
-      return { success: true, data: { tags: analysis, listingsAnalyzed: count } };
     }
 
     // --- Paid features (gated) ---
