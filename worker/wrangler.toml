@@ -1,0 +1,10 @@
+name = "etsy-edge-api"
+main = "src/index.ts"
+compatibility_date = "2025-12-01"
+
+[observability]
+enabled = true
+
+# Secrets (set via `wrangler secret put`):
+# - ETSY_API_KEY
+# - OPENAI_API_KEY

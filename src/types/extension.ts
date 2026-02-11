@@ -29,8 +29,6 @@ export interface CompetitorAnalysis {
 }
 
 export interface UserSettings {
-  etsyApiKey: string;
-  openaiApiKey: string;
   isPaid: boolean;
   showTagSpy: boolean;
   showSeoScore: boolean;

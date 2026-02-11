@@ -3,8 +3,6 @@ import { appStorage } from "../../lib/storage";
 import { usePaidStatus } from "../../hooks/usePaidStatus";
 
 export default function App() {
-  const [etsyKey, setEtsyKey] = useState("");
-  const [openaiKey, setOpenaiKey] = useState("");
   const [saved, setSaved] = useState(false);
   const [showTagSpy, setShowTagSpy] = useState(true);
   const [showSeoScore, setShowSeoScore] = useState(true);
@@ -12,23 +10,17 @@ export default function App() {
 
   useEffect(() => {
     (async () => {
-      setEtsyKey(await appStorage.etsyApiKey.getValue());
-      setOpenaiKey(await appStorage.openaiApiKey.getValue());
       setShowTagSpy(await appStorage.showTagSpy.getValue());
       setShowSeoScore(await appStorage.showSeoScore.getValue());
     })();
   }, []);
 
   const handleSave = async () => {
-    await appStorage.etsyApiKey.setValue(etsyKey);
-    await appStorage.openaiApiKey.setValue(openaiKey);
     await appStorage.showTagSpy.setValue(showTagSpy);
     await appStorage.showSeoScore.setValue(showSeoScore);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };
-
-  const isConfigured = etsyKey.length > 0;
 
   return (
     <div className="w-80 p-4 bg-white text-gray-900">
@@ -62,56 +54,9 @@ export default function App() {
         </button>
       )}
 
-      {/* Setup warning */}
-      {!isConfigured && (
-        <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm">
-          <p className="font-medium text-yellow-800">Setup required</p>
-          <p className="text-yellow-700 mt-1">
-            Add your Etsy API key below to start seeing listing tags.
-          </p>
-        </div>
-      )}
-
       {/* Settings */}
       <div className="space-y-3">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Etsy API Key
-          </label>
-          <input
-            type="password"
-            value={etsyKey}
-            onChange={(e) => setEtsyKey(e.target.value)}
-            placeholder="Enter your Etsy API key"
-            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none"
-          />
-          <a
-            href="https://www.etsy.com/developers/your-apps"
-            target="_blank"
-            rel="noreferrer"
-            className="text-xs text-orange-600 hover:underline mt-1 inline-block"
-          >
-            Get your API key
-          </a>
-        </div>
-
-        {isPaid && (
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              OpenAI API Key
-              <span className="text-gray-400 font-normal"> (for AI suggestions)</span>
-            </label>
-            <input
-              type="password"
-              value={openaiKey}
-              onChange={(e) => setOpenaiKey(e.target.value)}
-              placeholder="sk-..."
-              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none"
-            />
-          </div>
-        )}
-
-        <div className="border-t pt-3 space-y-2">
+        <div className="space-y-2">
           <label className="flex items-center gap-2 text-sm cursor-pointer">
             <input
               type="checkbox"

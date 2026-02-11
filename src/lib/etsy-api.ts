@@ -1,24 +1,15 @@
 import type { EtsyListing, EtsySearchResult } from "../types/etsy";
 import { appStorage } from "./storage";
+import { WORKER_URL } from "./config";
 
-const BASE_URL = "https://openapi.etsy.com/v3/application";
-
-async function getApiKey(): Promise<string> {
-  const key = await appStorage.etsyApiKey.getValue();
-  if (!key) throw new Error("Etsy API key not configured. Go to extension settings.");
-  return key;
-}
-
-async function fetchEtsy<T>(endpoint: string): Promise<T> {
-  const apiKey = await getApiKey();
-  const res = await fetch(`${BASE_URL}${endpoint}`, {
-    headers: { "x-api-key": apiKey },
-  });
+async function fetchWorker<T>(endpoint: string): Promise<T> {
+  const res = await fetch(`${WORKER_URL}${endpoint}`);
 
   if (!res.ok) {
     if (res.status === 429) throw new Error("Rate limited. Try again in a moment.");
     if (res.status === 404) throw new Error("Listing not found.");
-    throw new Error(`Etsy API error: ${res.status}`);
+    const body = await res.json().catch(() => ({}));
+    throw new Error((body as Record<string, string>).error || `API error: ${res.status}`);
   }
 
   return res.json();
@@ -28,7 +19,7 @@ async function fetchEtsy<T>(endpoint: string): Promise<T> {
  * Fetch a single listing by ID. Returns tags, title, views, favorites, etc.
  */
 export async function fetchListing(listingId: string): Promise<EtsyListing> {
-  return fetchEtsy<EtsyListing>(`/listings/${listingId}`);
+  return fetchWorker<EtsyListing>(`/api/listings/${listingId}`);
 }
 
 /**
@@ -52,8 +43,8 @@ export async function searchListings(
   limit = 25
 ): Promise<EtsySearchResult> {
   const encoded = encodeURIComponent(keyword);
-  return fetchEtsy<EtsySearchResult>(
-    `/listings/active?keywords=${encoded}&limit=${limit}&sort_on=score`
+  return fetchWorker<EtsySearchResult>(
+    `/api/listings/search?keyword=${encoded}&limit=${limit}`
   );
 }
 

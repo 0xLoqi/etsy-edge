@@ -1,5 +1,5 @@
 import type { TagSuggestion } from "../types/extension";
-import { appStorage } from "./storage";
+import { WORKER_URL } from "./config";
 
 interface SuggestionInput {
   title: string;
@@ -10,74 +10,32 @@ interface SuggestionInput {
 }
 
 /**
- * Get AI-powered tag suggestions using OpenAI GPT-4o-mini.
+ * Get AI-powered tag suggestions via the backend worker.
  */
 export async function getAiTagSuggestions(
   input: SuggestionInput
 ): Promise<TagSuggestion[]> {
-  const apiKey = await appStorage.openaiApiKey.getValue();
-  if (!apiKey) throw new Error("OpenAI API key not configured. Go to extension settings.");
-
-  const prompt = buildPrompt(input);
-
-  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+  const res = await fetch(`${WORKER_URL}/api/ai/suggest-tags`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are an Etsy SEO expert. You suggest optimized tags for Etsy listings. Always return exactly 13 tags. Each tag should be max 20 characters. Respond ONLY with valid JSON.",
-        },
-        { role: "user", content: prompt },
-      ],
-      temperature: 0.7,
-      max_tokens: 1000,
+      title: input.title,
+      description: input.description,
+      category: input.category,
+      currentTags: input.currentTags,
+      competitorTags: input.competitorTags,
     }),
   });
 
   if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
+    const body = await res.json().catch(() => ({}));
     throw new Error(
-      `OpenAI error: ${(err as Record<string, unknown>).error || res.status}`
+      (body as Record<string, string>).error || `AI API error: ${res.status}`
     );
   }
 
-  const data = await res.json();
-  const content = data.choices?.[0]?.message?.content || "";
-
-  return parseAiResponse(content);
-}
-
-function buildPrompt(input: SuggestionInput): string {
-  const competitorSection =
-    input.competitorTags.length > 0
-      ? `\n\nTop competitor tags for similar listings:\n${input.competitorTags.slice(0, 30).join(", ")}`
-      : "";
-
-  return `Suggest 13 optimized Etsy tags for this listing.
-
-Title: ${input.title}
-Description: ${input.description.slice(0, 500)}
-Category: ${input.category || "Unknown"}
-Current tags: ${input.currentTags.join(", ") || "None"}
-${competitorSection}
-
-Rules:
-- Exactly 13 tags, each max 20 characters
-- Use multi-word phrases (long-tail keywords are better than single words)
-- Don't repeat words already in the title (Etsy already indexes the title)
-- Mix broad and specific terms
-- Include at least 2 tags describing the item's use/occasion
-- Avoid trademarked terms
-
-Return JSON array:
-[{"tag": "example tag", "reason": "why this tag helps"}, ...]`;
+  const data = await res.json() as { content: string };
+  return parseAiResponse(data.content);
 }
 
 function parseAiResponse(content: string): TagSuggestion[] {

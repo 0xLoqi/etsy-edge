@@ -1,13 +1,5 @@
 import { storage } from "wxt/utils/storage";
 
-const etsyApiKey = storage.defineItem<string>("local:etsyApiKey", {
-  fallback: "",
-});
-
-const openaiApiKey = storage.defineItem<string>("local:openaiApiKey", {
-  fallback: "",
-});
-
 const showTagSpy = storage.defineItem<boolean>("local:showTagSpy", {
   fallback: true,
 });
@@ -25,8 +17,6 @@ const tagCache = storage.defineItem<Record<string, { tags: string[]; timestamp: 
 const CACHE_TTL = 1000 * 60 * 60; // 1 hour
 
 export const appStorage = {
-  etsyApiKey,
-  openaiApiKey,
   showTagSpy,
   showSeoScore,
 
