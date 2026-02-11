@@ -1,11 +1,13 @@
 import type { PageListingData } from "../types/etsy";
 
 /**
- * Extract listing tags from the page source.
- * Etsy embeds tags in a Listzilla spec script as "click_queries".
- * No API key required.
+ * Extract related search queries from the page source.
+ * Etsy embeds these in a Listzilla spec script as "click_queries".
+ * These are Etsy-generated search phrases derived from the listing's
+ * tags, title, and category — NOT the seller's actual 13 tags (those
+ * are API-only). The first ~13 are the closest to real tags.
  */
-export function extractTags(): string[] {
+export function extractRelatedSearches(): string[] {
   const scripts = document.querySelectorAll(
     'script[data-neu-spec-placeholder-data]'
   );

@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom/client";
-import { extractListingId, extractJsonLd, extractTags, extractBreadcrumbs } from "../lib/extractors";
+import { extractListingId, extractJsonLd, extractRelatedSearches, extractBreadcrumbs } from "../lib/extractors";
 import { scoreListing } from "../lib/seo-scorer";
 import { appStorage } from "../lib/storage";
 import TagSpyPanel from "../components/TagSpyPanel";
@@ -15,19 +15,22 @@ export default defineContentScript({
 
     // Scrape everything from the DOM — no API needed
     const pageData = extractJsonLd();
-    const tags = extractTags();
+    const relatedSearches = extractRelatedSearches();
     const breadcrumbs = extractBreadcrumbs();
 
-    // Save this listing's tags for competitor analysis later
-    if (tags.length > 0) {
-      await appStorage.saveVisitedListing(listingId, tags, pageData?.title || "");
+    // Top searches are the closest proxy for seller tags
+    const topSearches = relatedSearches.slice(0, 13);
+
+    // Save for competitor analysis later
+    if (relatedSearches.length > 0) {
+      await appStorage.saveVisitedListing(listingId, relatedSearches, pageData?.title || "");
     }
 
     // Score locally using scraped data
     const seoScore = scoreListing({
       title: pageData?.title || "",
       description: pageData?.description || "",
-      tags,
+      tags: topSearches,
     });
 
     // Create shadow root UI container
@@ -45,7 +48,8 @@ export default defineContentScript({
           <TagSpyPanel
             listingId={listingId}
             pageData={pageData}
-            tags={tags}
+            topSearches={topSearches}
+            relatedSearches={relatedSearches}
             seoScore={seoScore}
             breadcrumbs={breadcrumbs}
           />

@@ -8,17 +8,21 @@ import UpgradePrompt from "./UpgradePrompt";
 interface Props {
   listingId: string;
   pageData: PageListingData | null;
-  tags: string[];
+  /** Top ~13 related searches (closest proxy for seller tags) */
+  topSearches: string[];
+  /** Full 200+ related search phrases from Etsy */
+  relatedSearches: string[];
   seoScore: SeoScore;
   breadcrumbs: string[];
 }
 
 type Tab = "tags" | "ai" | "competitors";
 
-export default function TagSpyPanel({ listingId, pageData, tags, seoScore, breadcrumbs }: Props) {
+export default function TagSpyPanel({ listingId, pageData, topSearches, relatedSearches, seoScore, breadcrumbs }: Props) {
   const [collapsed, setCollapsed] = useState(false);
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
   const [allCopied, setAllCopied] = useState(false);
+  const [showAllSearches, setShowAllSearches] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>("tags");
 
   // Paid feature state
@@ -38,7 +42,7 @@ export default function TagSpyPanel({ listingId, pageData, tags, seoScore, bread
         title: pageData.title,
         description: pageData.description,
         category: breadcrumbs.join(" > "),
-        currentTags: tags,
+        currentTags: topSearches,
         competitorTags: competitorTags.slice(0, 20).map((t) => t.tag),
       });
       if (response.success) {
@@ -77,8 +81,10 @@ export default function TagSpyPanel({ listingId, pageData, tags, seoScore, bread
     setTimeout(() => setCopiedIdx(null), 1500);
   };
 
+  const displayedSearches = showAllSearches ? relatedSearches : topSearches;
+
   const copyAllTags = () => {
-    navigator.clipboard.writeText(tags.join(", "));
+    navigator.clipboard.writeText(displayedSearches.join(", "));
     setAllCopied(true);
     setTimeout(() => setAllCopied(false), 1500);
   };
@@ -230,26 +236,49 @@ export default function TagSpyPanel({ listingId, pageData, tags, seoScore, bread
               }}
             >
               <span style={{ fontWeight: 600, fontSize: "13px", color: "#6b7280" }}>
-                {tags.length}/13 tags
+                {showAllSearches
+                  ? `${relatedSearches.length} related searches`
+                  : `Top ${topSearches.length} related searches`}
               </span>
-              <button
-                onClick={copyAllTags}
-                style={{
-                  background: "none",
-                  border: "1px solid #d1d5db",
-                  borderRadius: "6px",
-                  padding: "4px 10px",
-                  fontSize: "12px",
-                  cursor: "pointer",
-                  color: allCopied ? "#16a34a" : "#6b7280",
-                }}
-              >
-                {allCopied ? "Copied!" : "Copy All"}
-              </button>
+              <div style={{ display: "flex", gap: "6px" }}>
+                {relatedSearches.length > 13 && (
+                  <button
+                    onClick={() => {
+                      setShowAllSearches(!showAllSearches);
+                      setCopiedIdx(null);
+                    }}
+                    style={{
+                      background: "none",
+                      border: "1px solid #d1d5db",
+                      borderRadius: "6px",
+                      padding: "4px 10px",
+                      fontSize: "12px",
+                      cursor: "pointer",
+                      color: "#6b7280",
+                    }}
+                  >
+                    {showAllSearches ? "Top 13" : `All ${relatedSearches.length}`}
+                  </button>
+                )}
+                <button
+                  onClick={copyAllTags}
+                  style={{
+                    background: "none",
+                    border: "1px solid #d1d5db",
+                    borderRadius: "6px",
+                    padding: "4px 10px",
+                    fontSize: "12px",
+                    cursor: "pointer",
+                    color: allCopied ? "#16a34a" : "#6b7280",
+                  }}
+                >
+                  {allCopied ? "Copied!" : "Copy All"}
+                </button>
+              </div>
             </div>
 
             <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "16px" }}>
-              {tags.map((tag, i) => (
+              {displayedSearches.map((tag, i) => (
                 <button
                   key={i}
                   onClick={() => copyTag(tag, i)}
@@ -268,9 +297,9 @@ export default function TagSpyPanel({ listingId, pageData, tags, seoScore, bread
                   {copiedIdx === i ? "Copied!" : tag}
                 </button>
               ))}
-              {tags.length === 0 && (
+              {relatedSearches.length === 0 && (
                 <span style={{ color: "#9ca3af", fontSize: "13px" }}>
-                  No tags found for this listing
+                  No related searches found for this listing
                 </span>
               )}
             </div>
