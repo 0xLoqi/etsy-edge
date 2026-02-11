@@ -1,5 +1,7 @@
 import ReactDOM from "react-dom/client";
-import { extractListingId, isListingPage, extractJsonLd } from "../lib/extractors";
+import { extractListingId, extractJsonLd, extractTags, extractBreadcrumbs } from "../lib/extractors";
+import { scoreListing } from "../lib/seo-scorer";
+import { appStorage } from "../lib/storage";
 import TagSpyPanel from "../components/TagSpyPanel";
 import "../app.css";
 
@@ -11,7 +13,22 @@ export default defineContentScript({
     const listingId = extractListingId(window.location.href);
     if (!listingId) return;
 
+    // Scrape everything from the DOM — no API needed
     const pageData = extractJsonLd();
+    const tags = extractTags();
+    const breadcrumbs = extractBreadcrumbs();
+
+    // Save this listing's tags for competitor analysis later
+    if (tags.length > 0) {
+      await appStorage.saveVisitedListing(listingId, tags, pageData?.title || "");
+    }
+
+    // Score locally using scraped data
+    const seoScore = scoreListing({
+      title: pageData?.title || "",
+      description: pageData?.description || "",
+      tags,
+    });
 
     // Create shadow root UI container
     const ui = await createShadowRootUi(ctx, {
@@ -28,6 +45,9 @@ export default defineContentScript({
           <TagSpyPanel
             listingId={listingId}
             pageData={pageData}
+            tags={tags}
+            seoScore={seoScore}
+            breadcrumbs={breadcrumbs}
           />
         );
         return root;

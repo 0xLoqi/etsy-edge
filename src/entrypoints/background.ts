@@ -1,6 +1,5 @@
-import { fetchListingTags, searchListings, analyzeCompetitorTags, fetchListing } from "../lib/etsy-api";
 import { getAiTagSuggestions } from "../lib/ai-suggestions";
-import { scoreListing } from "../lib/seo-scorer";
+import { appStorage } from "../lib/storage";
 import { initPayment, isPaidUser, openPaymentPage } from "../lib/payment";
 
 export default defineBackground(() => {
@@ -18,28 +17,6 @@ export default defineBackground(() => {
 
 async function handleMessage(message: Record<string, unknown>) {
   switch (message.type) {
-    // --- Free features ---
-
-    case "FETCH_TAGS": {
-      const tags = await fetchListingTags(message.listingId as string);
-      return { success: true, data: { tags } };
-    }
-
-    case "FETCH_LISTING": {
-      const listing = await fetchListing(message.listingId as string);
-      return { success: true, data: listing };
-    }
-
-    case "SCORE_LISTING": {
-      const listing = await fetchListing(message.listingId as string);
-      const score = scoreListing({
-        title: listing.title,
-        description: listing.description || "",
-        tags: listing.tags,
-      });
-      return { success: true, data: score };
-    }
-
     // --- Payment ---
 
     case "CHECK_PAID_STATUS": {
@@ -52,27 +29,19 @@ async function handleMessage(message: Record<string, unknown>) {
       return { success: true, data: null };
     }
 
+    // --- Free features (local, no API needed) ---
+
+    case "GET_COMPETITOR_ANALYSIS": {
+      const analysis = await appStorage.getCompetitorTagAnalysis(
+        message.excludeListingId as string
+      );
+      const count = await appStorage.getVisitedCount(
+        message.excludeListingId as string
+      );
+      return { success: true, data: { tags: analysis, listingsAnalyzed: count } };
+    }
+
     // --- Paid features (gated) ---
-
-    case "SEARCH_LISTINGS": {
-      const paid = await isPaidUser();
-      if (!paid) return { success: false, error: "UPGRADE_REQUIRED" };
-      const results = await searchListings(
-        message.keyword as string,
-        (message.limit as number) || 25
-      );
-      return { success: true, data: results };
-    }
-
-    case "ANALYZE_COMPETITORS": {
-      const paid = await isPaidUser();
-      if (!paid) return { success: false, error: "UPGRADE_REQUIRED" };
-      const analysis = await analyzeCompetitorTags(
-        message.keyword as string,
-        (message.limit as number) || 20
-      );
-      return { success: true, data: analysis };
-    }
 
     case "GET_AI_SUGGESTIONS": {
       const paid = await isPaidUser();

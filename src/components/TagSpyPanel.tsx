@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import type { PageListingData } from "../types/etsy";
 import type { SeoScore, TagSuggestion } from "../types/extension";
 import { usePaidStatus } from "../hooks/usePaidStatus";
@@ -8,15 +8,14 @@ import UpgradePrompt from "./UpgradePrompt";
 interface Props {
   listingId: string;
   pageData: PageListingData | null;
+  tags: string[];
+  seoScore: SeoScore;
+  breadcrumbs: string[];
 }
 
 type Tab = "tags" | "ai" | "competitors";
 
-export default function TagSpyPanel({ listingId, pageData }: Props) {
-  const [tags, setTags] = useState<string[]>([]);
-  const [seoScore, setSeoScore] = useState<SeoScore | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export default function TagSpyPanel({ listingId, pageData, tags, seoScore, breadcrumbs }: Props) {
   const [collapsed, setCollapsed] = useState(false);
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
   const [allCopied, setAllCopied] = useState(false);
@@ -28,39 +27,7 @@ export default function TagSpyPanel({ listingId, pageData }: Props) {
   const [aiLoading, setAiLoading] = useState(false);
   const [competitorTags, setCompetitorTags] = useState<{ tag: string; count: number; percentage: number }[]>([]);
   const [competitorLoading, setCompetitorLoading] = useState(false);
-
-  useEffect(() => {
-    loadData();
-  }, [listingId]);
-
-  async function loadData() {
-    setLoading(true);
-    setError(null);
-    try {
-      const tagResponse = await browser.runtime.sendMessage({
-        type: "FETCH_TAGS",
-        listingId,
-      });
-      if (tagResponse.success) {
-        setTags(tagResponse.data.tags);
-      } else {
-        setError(tagResponse.error);
-        return;
-      }
-
-      const scoreResponse = await browser.runtime.sendMessage({
-        type: "SCORE_LISTING",
-        listingId,
-      });
-      if (scoreResponse.success) {
-        setSeoScore(scoreResponse.data);
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load data");
-    } finally {
-      setLoading(false);
-    }
-  }
+  const [listingsAnalyzed, setListingsAnalyzed] = useState(0);
 
   async function loadAiSuggestions() {
     if (!pageData) return;
@@ -70,7 +37,7 @@ export default function TagSpyPanel({ listingId, pageData }: Props) {
         type: "GET_AI_SUGGESTIONS",
         title: pageData.title,
         description: pageData.description,
-        category: "",
+        category: breadcrumbs.join(" > "),
         currentTags: tags,
         competitorTags: competitorTags.slice(0, 20).map((t) => t.tag),
       });
@@ -87,17 +54,15 @@ export default function TagSpyPanel({ listingId, pageData }: Props) {
   }
 
   async function loadCompetitorTags() {
-    if (!pageData) return;
     setCompetitorLoading(true);
     try {
-      // Use first few words of the title as the keyword
-      const keyword = pageData.title.split(/[\s,|•\-–—]+/).slice(0, 4).join(" ");
       const response = await browser.runtime.sendMessage({
-        type: "ANALYZE_COMPETITORS",
-        keyword,
+        type: "GET_COMPETITOR_ANALYSIS",
+        excludeListingId: listingId,
       });
       if (response.success) {
-        setCompetitorTags(response.data);
+        setCompetitorTags(response.data.tags);
+        setListingsAnalyzed(response.data.listingsAnalyzed);
       }
     } catch {
       // handled by UI
@@ -244,7 +209,7 @@ export default function TagSpyPanel({ listingId, pageData }: Props) {
         <button
           onClick={() => {
             setActiveTab("competitors");
-            if (isPaid && competitorTags.length === 0 && !competitorLoading) loadCompetitorTags();
+            if (competitorTags.length === 0 && !competitorLoading) loadCompetitorTags();
           }}
           style={tabStyle("competitors")}
         >
@@ -253,31 +218,8 @@ export default function TagSpyPanel({ listingId, pageData }: Props) {
       </div>
 
       <div style={{ padding: "16px" }}>
-        {/* Loading state */}
-        {loading && activeTab === "tags" && (
-          <div style={{ textAlign: "center", padding: "20px", color: "#9ca3af" }}>
-            Loading tags...
-          </div>
-        )}
-
-        {/* Error state */}
-        {error && activeTab === "tags" && (
-          <div
-            style={{
-              padding: "12px",
-              background: "#fef2f2",
-              border: "1px solid #fecaca",
-              borderRadius: "8px",
-              color: "#dc2626",
-              fontSize: "13px",
-            }}
-          >
-            {error}
-          </div>
-        )}
-
         {/* === TAGS TAB === */}
-        {activeTab === "tags" && !loading && !error && (
+        {activeTab === "tags" && (
           <>
             <div
               style={{
@@ -453,16 +395,14 @@ export default function TagSpyPanel({ listingId, pageData }: Props) {
         {/* === COMPETITORS TAB === */}
         {activeTab === "competitors" && (
           <>
-            {!isPaid ? (
-              <UpgradePrompt feature="Competitor Tag Analysis" onUpgrade={openUpgrade} />
-            ) : competitorLoading ? (
+            {competitorLoading ? (
               <div style={{ textAlign: "center", padding: "20px", color: "#9ca3af" }}>
-                Analyzing competitor tags...
+                Analyzing visited listings...
               </div>
             ) : competitorTags.length > 0 ? (
               <div>
                 <div style={{ fontSize: "12px", color: "#6b7280", marginBottom: "10px" }}>
-                  Most common tags among top competing listings:
+                  Most common tags across {listingsAnalyzed} visited listing{listingsAnalyzed !== 1 ? "s" : ""}:
                 </div>
                 {competitorTags.slice(0, 20).map((t, i) => (
                   <div
@@ -508,9 +448,16 @@ export default function TagSpyPanel({ listingId, pageData }: Props) {
                     </button>
                   </div>
                 ))}
+                <div style={{ fontSize: "11px", color: "#9ca3af", marginTop: "8px" }}>
+                  Visit more competitor listings to improve analysis.
+                </div>
               </div>
             ) : (
-              <div style={{ textAlign: "center", padding: "20px", color: "#9ca3af" }}>
+              <div style={{ textAlign: "center", padding: "20px" }}>
+                <div style={{ fontSize: "13px", color: "#6b7280", marginBottom: "12px" }}>
+                  Browse competitor listings to build your analysis.
+                  Etsy Edge automatically captures tags from every listing you visit.
+                </div>
                 <button
                   onClick={loadCompetitorTags}
                   style={{
@@ -524,7 +471,7 @@ export default function TagSpyPanel({ listingId, pageData }: Props) {
                     cursor: "pointer",
                   }}
                 >
-                  Analyze Competitor Tags
+                  Check Visited Listings
                 </button>
               </div>
             )}

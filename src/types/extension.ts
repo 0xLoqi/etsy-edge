@@ -35,10 +35,10 @@ export interface UserSettings {
 }
 
 export type MessageType =
-  | { type: "FETCH_TAGS"; listingId: string }
-  | { type: "SEARCH_LISTINGS"; keyword: string; limit?: number }
+  | { type: "GET_COMPETITOR_ANALYSIS"; excludeListingId: string }
   | { type: "GET_AI_SUGGESTIONS"; title: string; description: string; category: string; currentTags: string[]; competitorTags: string[] }
-  | { type: "CHECK_PAID_STATUS" };
+  | { type: "CHECK_PAID_STATUS" }
+  | { type: "OPEN_PAYMENT_PAGE" };
 
 export type MessageResponse =
   | { success: true; data: unknown }

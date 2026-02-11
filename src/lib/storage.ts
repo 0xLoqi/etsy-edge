@@ -8,13 +8,13 @@ const showSeoScore = storage.defineItem<boolean>("local:showSeoScore", {
   fallback: true,
 });
 
-// Cache for API responses to reduce rate limit usage
-const tagCache = storage.defineItem<Record<string, { tags: string[]; timestamp: number }>>(
+// Cache of scraped tags from every visited listing
+const tagCache = storage.defineItem<Record<string, { tags: string[]; title: string; timestamp: number }>>(
   "local:tagCache",
   { fallback: {} }
 );
 
-const CACHE_TTL = 1000 * 60 * 60; // 1 hour
+const MAX_CACHE_ENTRIES = 500;
 
 export const appStorage = {
   showTagSpy,
@@ -23,23 +23,55 @@ export const appStorage = {
   async getCachedTags(listingId: string): Promise<string[] | null> {
     const cache = await tagCache.getValue();
     const entry = cache[listingId];
-    if (entry && Date.now() - entry.timestamp < CACHE_TTL) {
-      return entry.tags;
-    }
+    if (entry) return entry.tags;
     return null;
   },
 
-  async setCachedTags(listingId: string, tags: string[]): Promise<void> {
+  /** Save scraped tags from a visited listing. */
+  async saveVisitedListing(listingId: string, tags: string[], title: string): Promise<void> {
     const cache = await tagCache.getValue();
-    cache[listingId] = { tags, timestamp: Date.now() };
-    // Keep cache from growing unbounded — evict oldest if > 500 entries
+    cache[listingId] = { tags, title, timestamp: Date.now() };
+    // Evict oldest if over limit
     const keys = Object.keys(cache);
-    if (keys.length > 500) {
+    if (keys.length > MAX_CACHE_ENTRIES) {
       const sorted = keys.sort((a, b) => cache[a].timestamp - cache[b].timestamp);
-      for (const key of sorted.slice(0, keys.length - 500)) {
+      for (const key of sorted.slice(0, keys.length - MAX_CACHE_ENTRIES)) {
         delete cache[key];
       }
     }
     await tagCache.setValue(cache);
+  },
+
+  /** Get aggregated tag frequency across all visited listings (excluding a given listing). */
+  async getCompetitorTagAnalysis(
+    excludeListingId: string
+  ): Promise<{ tag: string; count: number; percentage: number; listings: number }[]> {
+    const cache = await tagCache.getValue();
+    const entries = Object.entries(cache).filter(([id]) => id !== excludeListingId);
+    if (entries.length === 0) return [];
+
+    const tagCounts: Record<string, number> = {};
+    for (const [, entry] of entries) {
+      for (const tag of entry.tags) {
+        const normalized = tag.toLowerCase().trim();
+        tagCounts[normalized] = (tagCounts[normalized] || 0) + 1;
+      }
+    }
+
+    const total = entries.length;
+    return Object.entries(tagCounts)
+      .map(([tag, count]) => ({
+        tag,
+        count,
+        percentage: Math.round((count / total) * 100),
+        listings: total,
+      }))
+      .sort((a, b) => b.count - a.count);
+  },
+
+  /** Get count of visited listings (excluding a given one). */
+  async getVisitedCount(excludeListingId: string): Promise<number> {
+    const cache = await tagCache.getValue();
+    return Object.keys(cache).filter((id) => id !== excludeListingId).length;
   },
 };

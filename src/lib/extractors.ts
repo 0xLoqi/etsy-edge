@@ -1,6 +1,50 @@
 import type { PageListingData } from "../types/etsy";
 
 /**
+ * Extract listing tags from the page source.
+ * Etsy embeds tags in a Listzilla spec script as "click_queries".
+ * No API key required.
+ */
+export function extractTags(): string[] {
+  const scripts = document.querySelectorAll(
+    'script[data-neu-spec-placeholder-data]'
+  );
+
+  for (const script of scripts) {
+    try {
+      const data = JSON.parse(script.textContent || "");
+      if (
+        data.spec_name === "Listzilla_ApiSpecs_Tags_Landing" &&
+        Array.isArray(data.args?.click_queries)
+      ) {
+        return data.args.click_queries;
+      }
+    } catch {
+      // Invalid JSON, skip
+    }
+  }
+
+  return [];
+}
+
+/**
+ * Extract category breadcrumbs from the page DOM.
+ */
+export function extractBreadcrumbs(): string[] {
+  // Etsy uses structured breadcrumbs with an ol/li pattern
+  const breadcrumbList = document.querySelector(
+    '[itemtype*="BreadcrumbList"], [aria-label*="Breadcrumb"], [class*="breadcrumb"]'
+  );
+  if (breadcrumbList) {
+    const links = breadcrumbList.querySelectorAll("a");
+    return Array.from(links)
+      .map((a) => a.textContent?.trim() || "")
+      .filter((t) => t.length > 0 && t !== "Homepage");
+  }
+  return [];
+}
+
+/**
  * Extract listing ID from an Etsy URL.
  * Handles: /listing/1234567890/some-title
  */
