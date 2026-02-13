@@ -123,6 +123,18 @@ async function handleMessage(
       return { success: true, data: null };
     }
 
+    case "OPEN_SIDE_PANEL": {
+      try {
+        const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+        if (tab?.windowId) {
+          await (browser.sidePanel as any).open({ windowId: tab.windowId });
+        }
+      } catch {
+        // Side panel may already be open or API not available
+      }
+      return { success: true };
+    }
+
     // --- AI result cache ---
 
     case "GET_CACHED_AI_RESULT": {
@@ -154,10 +166,7 @@ async function handleMessage(
       // Check usage cap before calling AI
       const usage = await appStorage.checkAiUsage(paid);
       if (!usage.allowed) {
-        if (paid) {
-          return { success: false, error: "LIMIT_REACHED", data: usage };
-        }
-        return { success: false, error: "UPGRADE_REQUIRED", data: usage };
+        return { success: false, error: "LIMIT_REACHED", data: usage };
       }
 
       const optimization = await getAiOptimization({

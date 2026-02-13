@@ -67,7 +67,7 @@ const aiResultCache = storage.defineItem<Record<string, CachedAiResult>>(
 
 const MAX_AI_CACHE = 20;
 
-const FREE_INITIAL_AUDITS = 3; // free audits on install
+const FREE_INITIAL_AUDITS = 1; // free audits on install
 const FREE_MONTHLY_AUDITS = 1; // free audits per month after initial
 const PAID_MONTHLY_CAP = 200;
 

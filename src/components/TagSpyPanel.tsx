@@ -37,6 +37,7 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
   const [usageCounter, setUsageCounter] = useState<{ used: number; limit: number } | null>(null);
   const [showCounter, setShowCounter] = useState(false);
   const [limitReached, setLimitReached] = useState(false);
+  const [showFreeConfirm, setShowFreeConfirm] = useState(false);
 
   // On mount: restore cached AI result + fetch current usage stats
   useEffect(() => {
@@ -235,9 +236,7 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
         {/* === AI OPTIMIZATION TAB === */}
         {activeTab === "ai" && (
           <div>
-            {!isPaid ? (
-              <UpgradePrompt feature="Smart SEO Audit" onUpgrade={openUpgrade} />
-            ) : aiLoading ? (
+            {aiLoading ? (
               <div className="text-center py-8">
                 <div className="text-2xl mb-3">🔍</div>
                 <div className="font-semibold text-sm text-gray-700 mb-1">Analyzing your listing...</div>
@@ -248,14 +247,26 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
             ) : aiError && aiError !== "upgrade" ? (
               <div className="text-center py-6">
                 {limitReached ? (
-                  <>
+                  <div>
                     <div className="text-2xl mb-2">⏳</div>
-                    <div className="text-xs text-amber-800 font-semibold mb-1">Monthly limit reached</div>
-                    <div className="text-[11px] text-gray-400 leading-relaxed">
-                      You've used all {usageCounter?.limit || 200} optimizations this month.
-                      <br />Your count resets at the start of next month.
+                    <div className="text-xs text-amber-800 font-semibold mb-1">
+                      {isPaid ? "Monthly limit reached" : "Free audit used"}
                     </div>
-                  </>
+                    <div className="text-[11px] text-gray-400 leading-relaxed mb-4">
+                      {isPaid
+                        ? <>You've used all {usageCounter?.limit || 200} optimizations this month.<br />Your count resets at the start of next month.</>
+                        : "You've used your free Smart Audit. Upgrade to Pro for 200 audits per month."
+                      }
+                    </div>
+                    {!isPaid && (
+                      <button
+                        onClick={openUpgrade}
+                        className="px-5 py-2 bg-orange-600 text-white text-xs font-semibold rounded-lg hover:bg-orange-700 cursor-pointer"
+                      >
+                        Upgrade to Pro — $9.99/mo
+                      </button>
+                    )}
+                  </div>
                 ) : (
                   <>
                     <div className="text-xs text-red-600 mb-3">{aiError}</div>
@@ -381,30 +392,49 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
                   </div>
                 )}
 
-                {/* Re-analyze with credit cost */}
-                <div>
-                  <button
-                    onClick={() => { setAiResult(null); setShowDiagnosis(false); loadAiOptimization(); }}
-                    className="w-full py-2 text-xs text-gray-500 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer"
-                  >
-                    Re-analyze · uses 1 credit
-                    {remaining !== null && (
-                      <span className={`ml-1 ${remaining <= 10 ? "text-red-500" : "text-gray-400"}`}>
-                        ({remaining} left)
-                      </span>
-                    )}
-                  </button>
-                </div>
+                {/* Free user: upgrade CTA after seeing result */}
+                {!isPaid && (
+                  <div className="p-3 bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-lg text-center">
+                    <div className="text-xs font-semibold text-gray-800 mb-1">Want this for every listing?</div>
+                    <div className="text-[11px] text-gray-500 mb-2.5">Pro gives you 200 audits per month</div>
+                    <button
+                      onClick={openUpgrade}
+                      className="px-5 py-2 bg-orange-600 text-white text-xs font-semibold rounded-lg hover:bg-orange-700 cursor-pointer"
+                    >
+                      Upgrade to Pro — $9.99/mo
+                    </button>
+                  </div>
+                )}
+
+                {/* Re-analyze with credit cost (paid users only — free users already used theirs) */}
+                {isPaid && (
+                  <div>
+                    <button
+                      onClick={() => { setAiResult(null); setShowDiagnosis(false); loadAiOptimization(); }}
+                      className="w-full py-2 text-xs text-gray-500 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer"
+                    >
+                      Re-analyze · uses 1 credit
+                      {remaining !== null && (
+                        <span className={`ml-1 ${remaining <= 10 ? "text-red-500" : "text-gray-400"}`}>
+                          ({remaining} left)
+                        </span>
+                      )}
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
-              /* Initial "Optimize" state — sell the value */
+              /* Initial state — sell the value, let them try it */
               <div className="py-4">
                 <div className="text-center mb-4">
                   <div className="text-2xl mb-2">📈</div>
                   <div className="font-semibold text-sm text-gray-800">Get more sales from this listing</div>
-                  <div className="text-xs text-gray-400 mt-1">One audit pays for itself with a single extra sale</div>
+                  <div className="text-xs text-gray-400 mt-1">
+                    {isPaid ? "One audit pays for itself with a single extra sale" : "Try it free — see exactly what you'll get"}
+                  </div>
                 </div>
 
+                {/* Preview of what the audit includes */}
                 <div className="space-y-2 mb-5">
                   <div className="flex items-start gap-2.5 p-2.5 bg-blue-50 rounded-lg">
                     <span className="text-sm mt-0.5">📝</span>
@@ -436,20 +466,58 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
                   </div>
                 </div>
 
-                <button
-                  onClick={loadAiOptimization}
-                  className="w-full py-2.5 bg-orange-600 text-white text-sm font-semibold rounded-lg hover:bg-orange-700 cursor-pointer"
-                >
-                  Run Smart Audit
-                </button>
-                <div className="mt-2 text-center text-[11px] text-gray-400">
-                  Uses 1 credit
-                  {remaining !== null && (
-                    <span className={remaining <= 10 ? "text-red-500" : ""}>
-                      {" "}· {remaining} remaining
-                    </span>
-                  )}
-                </div>
+                {/* Free user confirmation step */}
+                {!isPaid && showFreeConfirm ? (
+                  <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg text-center">
+                    <div className="text-sm font-bold text-gray-800 mb-1">First one's free!</div>
+                    <div className="text-[11px] text-gray-500 mb-3 leading-snug">
+                      You get 1 free Smart Audit to try it out.<br />After that, upgrade to Pro for unlimited audits.
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setShowFreeConfirm(false)}
+                        className="flex-1 py-2 text-xs text-gray-500 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer"
+                      >
+                        Back
+                      </button>
+                      <button
+                        onClick={() => { setShowFreeConfirm(false); loadAiOptimization(); }}
+                        className="flex-1 py-2 bg-orange-600 text-white text-xs font-semibold rounded-lg hover:bg-orange-700 cursor-pointer"
+                      >
+                        Use My Free Audit
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => {
+                        if (!isPaid) {
+                          setShowFreeConfirm(true);
+                        } else {
+                          loadAiOptimization();
+                        }
+                      }}
+                      className="w-full py-2.5 bg-orange-600 text-white text-sm font-semibold rounded-lg hover:bg-orange-700 cursor-pointer"
+                    >
+                      {isPaid ? "Run Smart Audit" : "Try Your Free Audit"}
+                    </button>
+                    <div className="mt-2 text-center text-[11px] text-gray-400">
+                      {isPaid ? (
+                        <>
+                          Uses 1 credit
+                          {remaining !== null && (
+                            <span className={remaining <= 10 ? "text-red-500" : ""}>
+                              {" "}· {remaining} remaining
+                            </span>
+                          )}
+                        </>
+                      ) : (
+                        "1 free audit included — no credit card required"
+                      )}
+                    </div>
+                  </>
+                )}
               </div>
             )}
           </div>
