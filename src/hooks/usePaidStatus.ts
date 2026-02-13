@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 /**
  * Hook to check paid status via the background service worker.
+ * The DEV_BYPASS_PAYMENT flag is now in background.ts (single source of truth).
  */
 export function usePaidStatus() {
   const [isPaid, setIsPaid] = useState(false);

@@ -18,7 +18,7 @@ export default function UpgradePrompt({ feature, onUpgrade }: Props) {
         {feature}
       </div>
       <div style={{ fontSize: "12px", color: "#78716c", marginBottom: "10px", lineHeight: "1.4" }}>
-        Upgrade to Etsy Edge Pro for AI-powered tag suggestions, competitor analysis, and more.
+        Upgrade to Etsy Edge Pro for smart tag suggestions, competitor analysis, and more.
       </div>
       <button
         onClick={onUpgrade}

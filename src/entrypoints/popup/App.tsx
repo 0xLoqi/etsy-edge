@@ -49,7 +49,7 @@ export default function App() {
         >
           <p className="font-semibold text-orange-800 text-sm">Upgrade to Pro</p>
           <p className="text-orange-600 text-xs mt-0.5">
-            AI tag suggestions, competitor analysis, and more — $9.99/mo
+            Smart tag suggestions, competitor analysis, and more — $9.99/mo
           </p>
         </button>
       )}

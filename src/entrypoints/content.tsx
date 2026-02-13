@@ -1,15 +1,11 @@
-import ReactDOM from "react-dom/client";
 import { extractListingId, extractJsonLd, extractRelatedSearches, extractBreadcrumbs } from "../lib/extractors";
 import { scoreListing } from "../lib/seo-scorer";
 import { appStorage } from "../lib/storage";
-import TagSpyPanel from "../components/TagSpyPanel";
-import "../app.css";
 
 export default defineContentScript({
   matches: ["*://*.etsy.com/listing/*"],
-  cssInjectionMode: "ui",
 
-  async main(ctx) {
+  async main() {
     const listingId = extractListingId(window.location.href);
     if (!listingId) return;
 
@@ -36,34 +32,32 @@ export default defineContentScript({
       relatedSearches,
     });
 
-    // Create shadow root UI container
-    const ui = await createShadowRootUi(ctx, {
-      name: "etsy-edge-panel",
-      position: "inline",
-      anchor: "body",
-      onMount: (container) => {
-        const app = document.createElement("div");
-        app.id = "etsy-edge-root";
-        container.append(app);
+    const listingData = {
+      listingId,
+      pageData,
+      topSearches,
+      relatedSearches,
+      seoScore,
+      breadcrumbs,
+    };
 
-        const root = ReactDOM.createRoot(app);
-        root.render(
-          <TagSpyPanel
-            listingId={listingId}
-            pageData={pageData}
-            topSearches={topSearches}
-            relatedSearches={relatedSearches}
-            seoScore={seoScore}
-            breadcrumbs={breadcrumbs}
-          />
-        );
-        return root;
-      },
-      onRemove: (root) => {
-        root?.unmount();
-      },
+    // Send the scraped data to the background so it can relay to the side panel
+    browser.runtime.sendMessage({
+      type: "CONTENT_LISTING_DATA",
+      data: listingData,
+    }).catch(() => {
+      // Side panel might not be open yet, that's fine
     });
 
-    ui.mount();
+    // Also respond to on-demand requests (when side panel opens after page load)
+    browser.runtime.onMessage.addListener((message) => {
+      if (message.type === "PING_CONTENT") {
+        // Re-send listing data to background for relay
+        browser.runtime.sendMessage({
+          type: "CONTENT_LISTING_DATA",
+          data: listingData,
+        }).catch(() => {});
+      }
+    });
   },
 });

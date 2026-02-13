@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { PageListingData } from "../types/etsy";
-import type { SeoScore, TagSuggestion } from "../types/extension";
+import type { SeoScore, AiOptimization } from "../types/extension";
 import { usePaidStatus } from "../hooks/usePaidStatus";
 import SeoScoreCard from "./SeoScoreCard";
 import UpgradePrompt from "./UpgradePrompt";
@@ -8,9 +8,7 @@ import UpgradePrompt from "./UpgradePrompt";
 interface Props {
   listingId: string;
   pageData: PageListingData | null;
-  /** Top ~13 related searches (closest proxy for seller tags) */
   topSearches: string[];
-  /** Full 200+ related search phrases from Etsy */
   relatedSearches: string[];
   seoScore: SeoScore;
   breadcrumbs: string[];
@@ -19,7 +17,6 @@ interface Props {
 type Tab = "tags" | "ai" | "competitors";
 
 export default function TagSpyPanel({ listingId, pageData, topSearches, relatedSearches, seoScore, breadcrumbs }: Props) {
-  const [collapsed, setCollapsed] = useState(false);
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
   const [allCopied, setAllCopied] = useState(false);
   const [showAllSearches, setShowAllSearches] = useState(false);
@@ -27,28 +24,88 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
 
   // Paid feature state
   const { isPaid, openUpgrade } = usePaidStatus();
-  const [aiSuggestions, setAiSuggestions] = useState<TagSuggestion[]>([]);
+  const [aiResult, setAiResult] = useState<AiOptimization | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
+  const [copiedTitle, setCopiedTitle] = useState(false);
+  const [copiedAllTags, setCopiedAllTags] = useState(false);
+  const [copiedTagIdx, setCopiedTagIdx] = useState<number | null>(null);
+  const [showDiagnosis, setShowDiagnosis] = useState(false);
 
-  async function loadAiSuggestions() {
+  // Usage tracking
+  const [usageWarning, setUsageWarning] = useState<string | null>(null);
+  const [usageCounter, setUsageCounter] = useState<{ used: number; limit: number } | null>(null);
+  const [showCounter, setShowCounter] = useState(false);
+  const [limitReached, setLimitReached] = useState(false);
+
+  // On mount: restore cached AI result + fetch current usage stats
+  useEffect(() => {
+    // Restore cached AI result for this listing
+    browser.runtime.sendMessage({ type: "GET_CACHED_AI_RESULT", listingId })
+      .then((res) => {
+        if (res?.success && res.data) {
+          setAiResult(res.data as AiOptimization);
+        }
+      })
+      .catch(() => {});
+
+    // Fetch current usage stats so we can show credits on the button
+    browser.runtime.sendMessage({ type: "CHECK_AI_USAGE" })
+      .then((res) => {
+        if (res?.success && res.data) {
+          const u = res.data as { used: number; limit: number; warning: string | null; showCounter: boolean };
+          setUsageCounter({ used: u.used, limit: u.limit });
+          setShowCounter(u.showCounter);
+          if (u.warning) setUsageWarning(u.warning);
+        }
+      })
+      .catch(() => {});
+  }, [listingId]);
+
+  async function loadAiOptimization() {
     if (!pageData) return;
     setAiLoading(true);
+    setAiError(null);
+    setUsageWarning(null);
     try {
       const response = await browser.runtime.sendMessage({
-        type: "GET_AI_SUGGESTIONS",
+        type: "GET_AI_OPTIMIZATION",
         title: pageData.title,
         description: pageData.description,
         category: breadcrumbs.join(" > "),
         currentTags: topSearches,
-        competitorTags: [],
+        scoreBreakdown: seoScore.breakdown,
+        currentGrade: seoScore.grade,
+        currentScore: seoScore.score,
       });
       if (response.success) {
-        setAiSuggestions(response.data);
+        const result = response.data as AiOptimization;
+        setAiResult(result);
+        // Persist to cache so tab switching doesn't lose it
+        browser.runtime.sendMessage({
+          type: "CACHE_AI_RESULT",
+          listingId,
+          result,
+        }).catch(() => {});
+        // Update usage info
+        if (response.usage) {
+          const u = response.usage as { used: number; limit: number; warning: string | null; showCounter: boolean };
+          setUsageWarning(u.warning);
+          setShowCounter(u.showCounter);
+          setUsageCounter({ used: u.used, limit: u.limit });
+        }
+      } else if (response.error === "LIMIT_REACHED") {
+        setLimitReached(true);
+        const u = response.data as { used: number; limit: number } | undefined;
+        if (u) setUsageCounter({ used: u.used, limit: u.limit });
+        setAiError("You've reached your monthly optimization limit. Resets next month.");
       } else if (response.error === "UPGRADE_REQUIRED") {
-        // handled by UI
+        setAiError("upgrade");
+      } else {
+        setAiError(response.error || "Something went wrong");
       }
-    } catch {
-      // handled by UI
+    } catch (e) {
+      setAiError(e instanceof Error ? e.message : "Failed to get optimization");
     } finally {
       setAiLoading(false);
     }
@@ -68,377 +125,352 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
     setTimeout(() => setAllCopied(false), 1500);
   };
 
-  if (collapsed) {
-    return (
-      <button
-        onClick={() => setCollapsed(false)}
-        style={{
-          position: "fixed",
-          bottom: "20px",
-          right: "20px",
-          zIndex: 10000,
-          background: "#ea580c",
-          color: "white",
-          border: "none",
-          borderRadius: "50%",
-          width: "48px",
-          height: "48px",
-          cursor: "pointer",
-          fontSize: "18px",
-          fontWeight: "bold",
-          boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
-        }}
-        title="Open Etsy Edge"
-      >
-        EE
-      </button>
-    );
-  }
-
-  const tabStyle = (tab: Tab) => ({
-    padding: "6px 12px",
-    fontSize: "12px",
-    fontWeight: activeTab === tab ? 700 : 400,
-    color: activeTab === tab ? "#ea580c" : "#6b7280",
-    background: activeTab === tab ? "#fff7ed" : "transparent",
-    border: "none",
-    borderBottom: activeTab === tab ? "2px solid #ea580c" : "2px solid transparent",
-    cursor: "pointer" as const,
-  });
+  const remaining = usageCounter ? usageCounter.limit - usageCounter.used : null;
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        bottom: "20px",
-        right: "20px",
-        zIndex: 10000,
-        width: "380px",
-        maxHeight: "80vh",
-        overflowY: "auto",
-        background: "white",
-        borderRadius: "12px",
-        boxShadow: "0 4px 24px rgba(0,0,0,0.15)",
-        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-        fontSize: "14px",
-        color: "#1a1a1a",
-      }}
-    >
+    <div className="flex flex-col h-full text-sm text-gray-900">
       {/* Header */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "12px 16px",
-          borderBottom: "1px solid #e5e7eb",
-          background: "#fff7ed",
-          borderRadius: "12px 12px 0 0",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <span style={{ fontWeight: 700, color: "#ea580c", fontSize: "15px" }}>
-            Etsy Edge
-          </span>
+      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-orange-50 shrink-0">
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-orange-600 text-[15px]">Etsy Edge</span>
           {isPaid && (
-            <span
-              style={{
-                fontSize: "10px",
-                background: "#ea580c",
-                color: "white",
-                padding: "1px 6px",
-                borderRadius: "9999px",
-                fontWeight: 600,
-              }}
-            >
+            <span className="text-[10px] bg-orange-600 text-white px-1.5 py-0.5 rounded-full font-semibold">
               PRO
             </span>
           )}
         </div>
-        <button
-          onClick={() => setCollapsed(true)}
-          style={{
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            fontSize: "18px",
-            color: "#9ca3af",
-            padding: "0 4px",
-          }}
-          title="Minimize"
-        >
-          &minus;
-        </button>
       </div>
+
+      {/* Listing info bar */}
+      {pageData && (
+        <div className="px-4 py-2 bg-gray-50 border-b border-gray-100 shrink-0">
+          <div className="font-semibold text-xs text-gray-700 leading-snug truncate">
+            {pageData.title}
+          </div>
+          <div className="text-[11px] text-gray-400 mt-0.5">
+            {pageData.price} {pageData.currency}
+            {pageData.rating && ` · ${pageData.rating}★`}
+          </div>
+        </div>
+      )}
 
       {/* Tabs */}
-      <div
-        style={{
-          display: "flex",
-          borderBottom: "1px solid #e5e7eb",
-          padding: "0 8px",
-        }}
-      >
-        <button onClick={() => setActiveTab("tags")} style={tabStyle("tags")}>
-          Tags
-        </button>
-        <button
-          onClick={() => {
-            setActiveTab("ai");
-            if (isPaid && aiSuggestions.length === 0 && !aiLoading) loadAiSuggestions();
-          }}
-          style={tabStyle("ai")}
-        >
-          AI Suggest
-        </button>
-        <button
-          onClick={() => setActiveTab("competitors")}
-          style={tabStyle("competitors")}
-        >
-          Competitors
-        </button>
+      <div className="flex border-b border-gray-200 px-2 shrink-0">
+        {(["tags", "ai", "competitors"] as Tab[]).map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`px-3 py-2 text-xs font-medium border-b-2 transition-colors cursor-pointer ${
+              activeTab === tab
+                ? "text-orange-600 border-orange-600 bg-orange-50/50"
+                : "text-gray-500 border-transparent hover:text-gray-700"
+            }`}
+          >
+            {tab === "tags" ? "Optimization" : tab === "ai" ? "Smart Audit" : "Competitors"}
+          </button>
+        ))}
       </div>
 
-      <div style={{ padding: "16px" }}>
+      {/* Tab content — scrollable area */}
+      <div className="flex-1 overflow-y-auto p-4">
         {/* === TAGS TAB === */}
         {activeTab === "tags" && (
-          <>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "8px",
-              }}
-            >
-              <span style={{ fontWeight: 600, fontSize: "13px", color: "#6b7280" }}>
+          <div>
+            {/* SEO Score first */}
+            {seoScore && (
+              <div className="mb-4">
+                <SeoScoreCard score={seoScore} />
+              </div>
+            )}
+
+            {/* Related searches below */}
+            <div className="flex justify-between items-center mb-2">
+              <span className="font-semibold text-xs text-gray-500">
                 {showAllSearches
                   ? `${relatedSearches.length} related searches`
                   : `Top ${topSearches.length} related searches`}
               </span>
-              <div style={{ display: "flex", gap: "6px" }}>
+              <div className="flex gap-1.5">
                 {relatedSearches.length > 13 && (
                   <button
-                    onClick={() => {
-                      setShowAllSearches(!showAllSearches);
-                      setCopiedIdx(null);
-                    }}
-                    style={{
-                      background: "none",
-                      border: "1px solid #d1d5db",
-                      borderRadius: "6px",
-                      padding: "4px 10px",
-                      fontSize: "12px",
-                      cursor: "pointer",
-                      color: "#6b7280",
-                    }}
+                    onClick={() => { setShowAllSearches(!showAllSearches); setCopiedIdx(null); }}
+                    className="px-2.5 py-1 text-[11px] text-gray-500 border border-gray-300 rounded-md hover:bg-gray-50 cursor-pointer"
                   >
                     {showAllSearches ? "Top 13" : `All ${relatedSearches.length}`}
                   </button>
                 )}
                 <button
                   onClick={copyAllTags}
-                  style={{
-                    background: "none",
-                    border: "1px solid #d1d5db",
-                    borderRadius: "6px",
-                    padding: "4px 10px",
-                    fontSize: "12px",
-                    cursor: "pointer",
-                    color: allCopied ? "#16a34a" : "#6b7280",
-                  }}
+                  className={`px-2.5 py-1 text-[11px] border rounded-md cursor-pointer ${
+                    allCopied ? "text-green-600 border-green-300 bg-green-50" : "text-gray-500 border-gray-300 hover:bg-gray-50"
+                  }`}
                 >
                   {allCopied ? "Copied!" : "Copy All"}
                 </button>
               </div>
             </div>
 
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "16px" }}>
+            <div className="flex flex-wrap gap-1.5">
               {displayedSearches.map((tag, i) => (
                 <button
                   key={i}
                   onClick={() => copyTag(tag, i)}
-                  style={{
-                    background: copiedIdx === i ? "#dcfce7" : "#f3f4f6",
-                    border: copiedIdx === i ? "1px solid #86efac" : "1px solid #e5e7eb",
-                    borderRadius: "6px",
-                    padding: "4px 10px",
-                    fontSize: "13px",
-                    cursor: "pointer",
-                    color: copiedIdx === i ? "#16a34a" : "#374151",
-                    transition: "all 0.15s",
-                  }}
+                  className={`px-2.5 py-1 text-xs rounded-md border cursor-pointer transition-all ${
+                    copiedIdx === i
+                      ? "bg-green-50 border-green-300 text-green-600"
+                      : "bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100"
+                  }`}
                   title="Click to copy"
                 >
                   {copiedIdx === i ? "Copied!" : tag}
                 </button>
               ))}
               {relatedSearches.length === 0 && (
-                <span style={{ color: "#9ca3af", fontSize: "13px" }}>
-                  No related searches found for this listing
-                </span>
+                <span className="text-gray-400 text-xs">No related searches found for this listing</span>
               )}
             </div>
-
-            {seoScore && <SeoScoreCard score={seoScore} />}
-
-            {pageData && (
-              <div
-                style={{
-                  marginTop: "12px",
-                  padding: "8px 12px",
-                  background: "#f9fafb",
-                  borderRadius: "8px",
-                  fontSize: "12px",
-                  color: "#6b7280",
-                }}
-              >
-                <div style={{ fontWeight: 600, marginBottom: "2px" }}>
-                  {pageData.title.slice(0, 80)}
-                  {pageData.title.length > 80 ? "..." : ""}
-                </div>
-                <div>
-                  {pageData.price} {pageData.currency}
-                  {pageData.rating && ` | ${pageData.rating} stars`}
-                </div>
-              </div>
-            )}
-          </>
+          </div>
         )}
 
-        {/* === AI SUGGESTIONS TAB === */}
+        {/* === AI OPTIMIZATION TAB === */}
         {activeTab === "ai" && (
-          <>
+          <div>
             {!isPaid ? (
-              <UpgradePrompt feature="AI-Powered Tag Suggestions" onUpgrade={openUpgrade} />
+              <UpgradePrompt feature="Smart SEO Audit" onUpgrade={openUpgrade} />
             ) : aiLoading ? (
-              <div style={{ textAlign: "center", padding: "20px", color: "#9ca3af" }}>
-                Generating AI suggestions...
-              </div>
-            ) : aiSuggestions.length > 0 ? (
-              <div>
-                <div style={{ fontSize: "12px", color: "#6b7280", marginBottom: "10px" }}>
-                  AI-optimized tags for this listing:
+              <div className="text-center py-8">
+                <div className="text-2xl mb-3">🔍</div>
+                <div className="font-semibold text-sm text-gray-700 mb-1">Analyzing your listing...</div>
+                <div className="text-xs text-gray-400 leading-relaxed">
+                  Diagnosing weak spots, rewriting your title,<br />and generating optimized tags
                 </div>
-                {aiSuggestions.map((s, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "flex-start",
-                      padding: "8px 10px",
-                      background: i % 2 === 0 ? "#f9fafb" : "white",
-                      borderRadius: "6px",
-                      marginBottom: "4px",
-                    }}
-                  >
-                    <div>
-                      <button
-                        onClick={() => {
-                          navigator.clipboard.writeText(s.tag);
-                        }}
-                        style={{
-                          background: "#f3f4f6",
-                          border: "1px solid #e5e7eb",
-                          borderRadius: "4px",
-                          padding: "2px 8px",
-                          fontSize: "13px",
-                          cursor: "pointer",
-                          color: "#374151",
-                          fontWeight: 500,
-                        }}
-                        title="Click to copy"
-                      >
-                        {s.tag}
-                      </button>
-                      <div style={{ fontSize: "11px", color: "#9ca3af", marginTop: "3px" }}>
-                        {s.reason}
-                      </div>
+              </div>
+            ) : aiError && aiError !== "upgrade" ? (
+              <div className="text-center py-6">
+                {limitReached ? (
+                  <>
+                    <div className="text-2xl mb-2">⏳</div>
+                    <div className="text-xs text-amber-800 font-semibold mb-1">Monthly limit reached</div>
+                    <div className="text-[11px] text-gray-400 leading-relaxed">
+                      You've used all {usageCounter?.limit || 200} optimizations this month.
+                      <br />Your count resets at the start of next month.
                     </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="text-xs text-red-600 mb-3">{aiError}</div>
+                    <button
+                      onClick={loadAiOptimization}
+                      className="px-4 py-2 bg-orange-600 text-white text-xs font-semibold rounded-lg hover:bg-orange-700 cursor-pointer"
+                    >
+                      Try Again
+                    </button>
+                  </>
+                )}
+              </div>
+            ) : aiResult ? (
+              <div className="space-y-4">
+                {/* Grade bar: current → projected */}
+                <div className="flex items-center justify-center gap-6 py-3 px-4 bg-green-50 rounded-lg">
+                  <div className="text-center">
+                    <div className="text-[10px] text-gray-500 mb-1">Current</div>
+                    <div className="w-12 h-12 rounded-lg bg-white flex items-center justify-center font-extrabold text-2xl text-red-600 border-2 border-red-300">
+                      {seoScore.grade}
+                    </div>
+                    <div className="text-[11px] font-semibold text-red-600 mt-1">{seoScore.score}/100</div>
                   </div>
-                ))}
-                <button
-                  onClick={loadAiSuggestions}
-                  style={{
-                    width: "100%",
-                    marginTop: "10px",
-                    padding: "8px",
-                    background: "none",
-                    border: "1px solid #d1d5db",
-                    borderRadius: "6px",
-                    fontSize: "12px",
-                    cursor: "pointer",
-                    color: "#6b7280",
-                  }}
-                >
-                  Regenerate suggestions
-                </button>
+                  <div className="text-xl text-gray-300">→</div>
+                  <div className="text-center">
+                    <div className="text-[10px] text-gray-500 mb-1">Projected</div>
+                    <div className="w-12 h-12 rounded-lg bg-white flex items-center justify-center font-extrabold text-2xl text-green-600 border-2 border-green-300">
+                      {aiResult.projectedGrade}
+                    </div>
+                    <div className="text-[11px] font-semibold text-green-600 mt-1">{aiResult.projectedScore ?? "—"}/100</div>
+                  </div>
+                </div>
+
+                {/* Optimized title */}
+                <div>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <span className="text-[11px] font-bold text-blue-800 uppercase tracking-wide">Optimized Title</span>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(aiResult.optimizedTitle);
+                        setCopiedTitle(true);
+                        setTimeout(() => setCopiedTitle(false), 1500);
+                      }}
+                      className={`text-[11px] cursor-pointer ${copiedTitle ? "text-green-600 font-medium" : "text-gray-500 hover:text-gray-700"}`}
+                    >
+                      {copiedTitle ? "✓ Copied" : "Copy"}
+                    </button>
+                  </div>
+                  <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg text-xs text-blue-900 leading-relaxed">
+                    {aiResult.optimizedTitle}
+                  </div>
+                  {aiResult.titleExplanation && (
+                    <p className="text-[11px] text-gray-400 mt-1.5 leading-snug">{aiResult.titleExplanation}</p>
+                  )}
+                </div>
+
+                {/* Tags as chips */}
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-[11px] font-bold text-violet-800 uppercase tracking-wide">
+                      Tags ({aiResult.tags.length}/13)
+                    </span>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(aiResult.tags.map(t => t.tag).join(", "));
+                        setCopiedAllTags(true);
+                        setTimeout(() => setCopiedAllTags(false), 1500);
+                      }}
+                      className={`text-[11px] cursor-pointer ${copiedAllTags ? "text-green-600 font-medium" : "text-gray-500 hover:text-gray-700"}`}
+                    >
+                      {copiedAllTags ? "✓ Copied All" : "Copy All"}
+                    </button>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {aiResult.tags.map((t, i) => (
+                      <button
+                        key={i}
+                        onClick={() => {
+                          navigator.clipboard.writeText(t.tag);
+                          setCopiedTagIdx(i);
+                          setTimeout(() => setCopiedTagIdx(null), 1500);
+                        }}
+                        className={`px-2 py-1 text-[11px] rounded-md border cursor-pointer font-medium transition-all ${
+                          copiedTagIdx === i
+                            ? "bg-green-50 border-green-300 text-green-600"
+                            : "bg-violet-50 border-violet-200 text-violet-700 hover:bg-violet-100"
+                        }`}
+                        title={t.reason}
+                      >
+                        {copiedTagIdx === i ? "✓" : t.tag}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Collapsible diagnosis */}
+                {aiResult.diagnosis.length > 0 && (
+                  <div>
+                    <button
+                      onClick={() => setShowDiagnosis(!showDiagnosis)}
+                      className="text-[11px] font-semibold text-orange-800 flex items-center gap-1 cursor-pointer hover:text-orange-900"
+                    >
+                      {showDiagnosis ? "▾" : "▸"} Why these changes? ({aiResult.diagnosis.length} issues found)
+                    </button>
+                    {showDiagnosis && (
+                      <div className="mt-2 space-y-1.5">
+                        {aiResult.diagnosis.map((d, i) => (
+                          <div key={i} className="p-2 bg-red-50 rounded-md text-[11px] leading-snug">
+                            <span className="font-semibold text-red-900">{d.metric}</span>
+                            <span className="text-red-800"> — {d.issue}</span>
+                            <div className="text-green-700 mt-0.5">→ {d.fix}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Usage warning */}
+                {usageWarning && (
+                  <div className="px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg text-[11px] text-amber-800 leading-snug">
+                    {usageWarning}
+                  </div>
+                )}
+
+                {/* Re-analyze with credit cost */}
+                <div>
+                  <button
+                    onClick={() => { setAiResult(null); setShowDiagnosis(false); loadAiOptimization(); }}
+                    className="w-full py-2 text-xs text-gray-500 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer"
+                  >
+                    Re-analyze · uses 1 credit
+                    {remaining !== null && (
+                      <span className={`ml-1 ${remaining <= 10 ? "text-red-500" : "text-gray-400"}`}>
+                        ({remaining} left)
+                      </span>
+                    )}
+                  </button>
+                </div>
               </div>
             ) : (
-              <div style={{ textAlign: "center", padding: "20px", color: "#9ca3af" }}>
+              /* Initial "Optimize" state — sell the value */
+              <div className="py-4">
+                <div className="text-center mb-4">
+                  <div className="text-2xl mb-2">📈</div>
+                  <div className="font-semibold text-sm text-gray-800">Get more sales from this listing</div>
+                  <div className="text-xs text-gray-400 mt-1">One audit pays for itself with a single extra sale</div>
+                </div>
+
+                <div className="space-y-2 mb-5">
+                  <div className="flex items-start gap-2.5 p-2.5 bg-blue-50 rounded-lg">
+                    <span className="text-sm mt-0.5">📝</span>
+                    <div>
+                      <div className="text-xs font-semibold text-gray-800">Rewritten title</div>
+                      <div className="text-[11px] text-gray-500 leading-snug">Front-loads high-value search terms buyers actually type</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2.5 p-2.5 bg-violet-50 rounded-lg">
+                    <span className="text-sm mt-0.5">🏷️</span>
+                    <div>
+                      <div className="text-xs font-semibold text-gray-800">13 optimized tags</div>
+                      <div className="text-[11px] text-gray-500 leading-snug">Long-tail phrases matched to buyer search intent</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2.5 p-2.5 bg-red-50 rounded-lg">
+                    <span className="text-sm mt-0.5">🔬</span>
+                    <div>
+                      <div className="text-xs font-semibold text-gray-800">Diagnosis & fixes</div>
+                      <div className="text-[11px] text-gray-500 leading-snug">Pinpoints exactly why you're ranking low and how to fix it</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2.5 p-2.5 bg-green-50 rounded-lg">
+                    <span className="text-sm mt-0.5">🎯</span>
+                    <div>
+                      <div className="text-xs font-semibold text-gray-800">Projected score</div>
+                      <div className="text-[11px] text-gray-500 leading-snug">See your grade jump from {seoScore.grade} to a higher tier</div>
+                    </div>
+                  </div>
+                </div>
+
                 <button
-                  onClick={loadAiSuggestions}
-                  style={{
-                    background: "#ea580c",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "6px",
-                    padding: "10px 20px",
-                    fontSize: "13px",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                  }}
+                  onClick={loadAiOptimization}
+                  className="w-full py-2.5 bg-orange-600 text-white text-sm font-semibold rounded-lg hover:bg-orange-700 cursor-pointer"
                 >
-                  Generate AI Tag Suggestions
+                  Run Smart Audit
                 </button>
+                <div className="mt-2 text-center text-[11px] text-gray-400">
+                  Uses 1 credit
+                  {remaining !== null && (
+                    <span className={remaining <= 10 ? "text-red-500" : ""}>
+                      {" "}· {remaining} remaining
+                    </span>
+                  )}
+                </div>
               </div>
             )}
-          </>
+          </div>
         )}
 
         {/* === COMPETITORS TAB === */}
         {activeTab === "competitors" && (
-          <div style={{ textAlign: "center", padding: "24px 12px" }}>
-            <div
-              style={{
-                width: "48px",
-                height: "48px",
-                margin: "0 auto 12px",
-                borderRadius: "12px",
-                background: "#fff7ed",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: "24px",
-              }}
-            >
+          <div className="text-center py-8">
+            <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-orange-50 flex items-center justify-center text-xl font-bold text-orange-300">
               vs
             </div>
-            <div style={{ fontWeight: 600, fontSize: "15px", color: "#374151", marginBottom: "6px" }}>
-              Competitor Analysis
-            </div>
-            <div style={{ fontSize: "13px", color: "#9ca3af", marginBottom: "16px", lineHeight: "1.5" }}>
+            <div className="font-semibold text-base text-gray-700 mb-2">Competitor Analysis</div>
+            <div className="text-sm text-gray-400 mb-5 leading-relaxed">
               Coming soon. See which tags your top competitors use
               and find gaps in your SEO strategy.
             </div>
-            <div
-              style={{
-                padding: "10px 14px",
-                background: "#f9fafb",
-                borderRadius: "8px",
-                fontSize: "12px",
-                color: "#6b7280",
-                textAlign: "left",
-                lineHeight: "1.6",
-              }}
-            >
-              <div style={{ fontWeight: 600, color: "#374151", marginBottom: "4px" }}>
-                What you'll get:
-              </div>
-              <div>&#8226; Top tags across competing listings</div>
-              <div>&#8226; Tag frequency analysis</div>
-              <div>&#8226; Gap analysis vs. your listing</div>
+            <div className="text-left p-3 bg-gray-50 rounded-lg text-xs text-gray-500 leading-relaxed">
+              <div className="font-semibold text-gray-700 mb-1">What you'll get:</div>
+              <div>• Top tags across competing listings</div>
+              <div>• Tag frequency analysis</div>
+              <div>• Gap analysis vs. your listing</div>
             </div>
           </div>
         )}

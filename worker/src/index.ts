@@ -3,7 +3,7 @@ import { cors } from "hono/cors";
 
 type Bindings = {
   ETSY_API_KEY: string;
-  OPENAI_API_KEY: string;
+  ANTHROPIC_API_KEY: string;
 };
 
 const app = new Hono<{ Bindings: Bindings }>();
@@ -36,6 +36,7 @@ const AI_LIMIT = 20; // requests per minute
 const WINDOW_MS = 60_000;
 
 function checkRate(ip: string, bucket: "etsy" | "ai"): boolean {
+  if (++requestCount % 100 === 0) cleanupRateLimits();
   const now = Date.now();
   let entry = rateLimits.get(ip);
   if (!entry) {
@@ -60,8 +61,8 @@ function getClientIp(c: { req: { header: (name: string) => string | undefined } 
   return c.req.header("cf-connecting-ip") || c.req.header("x-forwarded-for") || "unknown";
 }
 
-// Periodic cleanup of stale rate limit entries (every 5 minutes)
-setInterval(() => {
+// Cleanup stale rate limit entries (called lazily during checks)
+function cleanupRateLimits() {
   const cutoff = Date.now() - WINDOW_MS * 2;
   for (const [ip, entry] of rateLimits) {
     const lastEtsy = entry.etsy[entry.etsy.length - 1] || 0;
@@ -70,7 +71,10 @@ setInterval(() => {
       rateLimits.delete(ip);
     }
   }
-}, 300_000);
+}
+
+// Run cleanup every 100 requests instead of setInterval (not allowed in Workers global scope)
+let requestCount = 0;
 
 // ---------------------------------------------------------------------------
 // Etsy proxy endpoints
@@ -119,13 +123,20 @@ app.get("/api/listings/:id", async (c) => {
 });
 
 // ---------------------------------------------------------------------------
-// AI endpoint
+// AI endpoint — full listing optimization
 // ---------------------------------------------------------------------------
 
-const AI_SYSTEM_PROMPT =
-  "You are an Etsy SEO expert. You suggest optimized tags for Etsy listings. Always return exactly 13 tags. Each tag should be max 20 characters. Respond ONLY with valid JSON.";
+const OPTIMIZE_SYSTEM_PROMPT = `You are an elite Etsy SEO consultant. You analyze Etsy listings and provide specific, actionable optimization advice. You understand Etsy's search algorithm deeply:
+- Etsy indexes the title, tags, categories, and attributes for search
+- Title keywords in the first 40 characters carry the most weight
+- Tags should be multi-word long-tail phrases (max 20 chars each, Etsy allows 13 tags)
+- Don't repeat title words in tags — Etsy already indexes them separately
+- Description's first 160 characters matter for search
+- Keyword diversity across different search intents beats repetition
 
-app.post("/api/ai/suggest-tags", async (c) => {
+You always respond with valid JSON. Never include markdown formatting or code fences.`;
+
+app.post("/api/ai/optimize-listing", async (c) => {
   const ip = getClientIp(c);
   if (!checkRate(ip, "ai")) {
     return c.json({ error: "Rate limited. Try again in a moment." }, 429);
@@ -136,66 +147,93 @@ app.post("/api/ai/suggest-tags", async (c) => {
     description: string;
     category: string;
     currentTags: string[];
-    competitorTags: string[];
+    scoreBreakdown: Record<string, { score: number; max: number; detail: string }>;
+    currentGrade: string;
+    currentScore: number;
   }>();
 
   if (!body.title) {
     return c.json({ error: "title is required" }, 400);
   }
 
-  const competitorSection =
-    body.competitorTags?.length > 0
-      ? `\n\nTop competitor tags for similar listings:\n${body.competitorTags.slice(0, 30).join(", ")}`
-      : "";
+  // Build a diagnosis of weak areas from the score breakdown
+  const weakAreas: string[] = [];
+  const strongAreas: string[] = [];
+  for (const [key, val] of Object.entries(body.scoreBreakdown || {})) {
+    const pct = val.score / val.max;
+    const label = key.replace(/([A-Z])/g, " $1").toLowerCase().trim();
+    if (pct < 0.6) weakAreas.push(`${label}: ${val.score}/${val.max} — ${val.detail}`);
+    else if (pct >= 0.8) strongAreas.push(`${label}: ${val.score}/${val.max}`);
+  }
 
-  const userPrompt = `Suggest 13 optimized Etsy tags for this listing.
+  const userPrompt = `Optimize this Etsy listing. Current grade: ${body.currentGrade} (${body.currentScore}/100).
 
+LISTING DATA:
 Title: ${body.title}
-Description: ${(body.description || "").slice(0, 500)}
+Description (first 500 chars): ${(body.description || "").slice(0, 500)}
 Category: ${body.category || "Unknown"}
 Current tags: ${(body.currentTags || []).join(", ") || "None"}
-${competitorSection}
 
-Rules:
-- Exactly 13 tags, each max 20 characters
-- Use multi-word phrases (long-tail keywords are better than single words)
-- Don't repeat words already in the title (Etsy already indexes the title)
-- Mix broad and specific terms
-- Include at least 2 tags describing the item's use/occasion
-- Avoid trademarked terms
+WEAK AREAS (fix these):
+${weakAreas.length > 0 ? weakAreas.join("\n") : "No major weaknesses detected."}
 
-Return JSON array:
-[{"tag": "example tag", "reason": "why this tag helps"}, ...]`;
+STRONG AREAS (keep these):
+${strongAreas.length > 0 ? strongAreas.join("\n") : "None scoring above 80%."}
 
-  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+Provide a complete optimization. Return JSON with this exact structure:
+{
+  "optimizedTitle": "A rewritten title (100-140 chars) that front-loads high-value search terms and improves all weak metrics. Keep the product identity intact.",
+  "titleExplanation": "1-2 sentences explaining what you changed and why it scores better.",
+  "tags": [
+    {"tag": "multi word tag", "reason": "brief reason this tag helps"},
+    ... exactly 13 tags
+  ],
+  "diagnosis": [
+    {"metric": "metric name", "issue": "what's wrong", "fix": "how the suggestions fix it"},
+    ... one per weak area
+  ],
+  "projectedGrade": "A or B — your honest estimate after applying all suggestions",
+  "projectedScore": 82
+}
+
+CRITICAL RULES:
+- Every tag MUST be 20 characters or fewer (this is an Etsy hard limit, no exceptions)
+- Every tag MUST be multi-word (2-4 words, long-tail phrases)
+- Tags must NOT repeat words already in the optimized title
+- The optimized title must be 100-140 characters
+- Focus tags on buyer search intent: what would someone TYPE to find this product?
+- Include occasion/use tags (gift for her, birthday present, etc.) if relevant
+- projectedGrade should be realistic, not just "A" every time
+- projectedScore should be a realistic 0-100 number matching the grade (A=90+, B=75-89, C=60-74, D=40-59, F=<40)`;
+
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${c.env.OPENAI_API_KEY}`,
+      "x-api-key": c.env.ANTHROPIC_API_KEY,
+      "anthropic-version": "2023-06-01",
     },
     body: JSON.stringify({
-      model: "gpt-4o-mini",
-      messages: [
-        { role: "system", content: AI_SYSTEM_PROMPT },
-        { role: "user", content: userPrompt },
-      ],
-      temperature: 0.7,
-      max_tokens: 1000,
+      model: "claude-haiku-4-5-20251001",
+      system: OPTIMIZE_SYSTEM_PROMPT,
+      messages: [{ role: "user", content: userPrompt }],
+      temperature: 0.6,
+      max_tokens: 1500,
     }),
   });
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     return c.json(
-      { error: `OpenAI error: ${(err as Record<string, unknown>).error || res.status}` },
+      { error: `AI error: ${(err as Record<string, { message?: string }>).error?.message || res.status}` },
       res.status as 400
     );
   }
 
   const data = (await res.json()) as {
-    choices?: { message?: { content?: string } }[];
+    content?: { type: string; text: string }[];
   };
-  const content = data.choices?.[0]?.message?.content || "";
+  const content = data.content?.[0]?.text || "";
 
   return c.json({ content });
 });

@@ -1,21 +1,23 @@
-import type { TagSuggestion } from "../types/extension";
+import type { AiOptimization } from "../types/extension";
 import { WORKER_URL } from "./config";
 
-interface SuggestionInput {
+interface OptimizationInput {
   title: string;
   description: string;
   category: string;
   currentTags: string[];
-  competitorTags: string[];
+  scoreBreakdown: Record<string, { score: number; max: number; detail: string }>;
+  currentGrade: string;
+  currentScore: number;
 }
 
 /**
- * Get AI-powered tag suggestions via the backend worker.
+ * Get AI-powered listing optimization via the backend worker.
  */
-export async function getAiTagSuggestions(
-  input: SuggestionInput
-): Promise<TagSuggestion[]> {
-  const res = await fetch(`${WORKER_URL}/api/ai/suggest-tags`, {
+export async function getAiOptimization(
+  input: OptimizationInput
+): Promise<AiOptimization> {
+  const res = await fetch(`${WORKER_URL}/api/ai/optimize-listing`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -23,7 +25,9 @@ export async function getAiTagSuggestions(
       description: input.description,
       category: input.category,
       currentTags: input.currentTags,
-      competitorTags: input.competitorTags,
+      scoreBreakdown: input.scoreBreakdown,
+      currentGrade: input.currentGrade,
+      currentScore: input.currentScore,
     }),
   });
 
@@ -35,24 +39,36 @@ export async function getAiTagSuggestions(
   }
 
   const data = await res.json() as { content: string };
-  return parseAiResponse(data.content);
+  return parseOptimizationResponse(data.content);
 }
 
-function parseAiResponse(content: string): TagSuggestion[] {
+function parseOptimizationResponse(content: string): AiOptimization {
   try {
-    // Extract JSON from potential markdown code blocks
-    const jsonMatch = content.match(/\[[\s\S]*\]/);
-    if (!jsonMatch) throw new Error("No JSON array found");
+    // Strip markdown code fences if present
+    const cleaned = content.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
+
+    // Extract the JSON object
+    const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error("No JSON object found in response");
 
     const parsed = JSON.parse(jsonMatch[0]);
-    if (!Array.isArray(parsed)) throw new Error("Not an array");
 
-    return parsed.slice(0, 13).map((item: Record<string, string>) => ({
-      tag: String(item.tag || "").slice(0, 20),
-      reason: String(item.reason || ""),
-      source: "ai" as const,
-    }));
-  } catch {
-    throw new Error("Failed to parse AI response. Try again.");
+    return {
+      optimizedTitle: String(parsed.optimizedTitle || ""),
+      titleExplanation: String(parsed.titleExplanation || ""),
+      tags: (parsed.tags || []).slice(0, 13).map((t: Record<string, string>) => ({
+        tag: String(t.tag || "").slice(0, 20),
+        reason: String(t.reason || ""),
+      })),
+      diagnosis: (parsed.diagnosis || []).map((d: Record<string, string>) => ({
+        metric: String(d.metric || ""),
+        issue: String(d.issue || ""),
+        fix: String(d.fix || ""),
+      })),
+      projectedGrade: String(parsed.projectedGrade || "B"),
+      projectedScore: typeof parsed.projectedScore === "number" ? parsed.projectedScore : undefined,
+    };
+  } catch (e) {
+    throw new Error(`Failed to parse AI response: ${e instanceof Error ? e.message : "unknown error"}`);
   }
 }
