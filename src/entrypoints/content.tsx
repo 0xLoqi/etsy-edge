@@ -20,7 +20,7 @@ export default defineContentScript({
     // Use the deepest breadcrumb as primary category
     const primaryCategory = breadcrumbs.length > 1 ? breadcrumbs[breadcrumbs.length - 1] : breadcrumbs[0] || "";
 
-    // Save for competitor analysis later
+    // Cache visited listing data for future features
     if (relatedSearches.length > 0) {
       await appStorage.saveVisitedListing(listingId, relatedSearches, pageData?.title || "", primaryCategory);
     }
@@ -82,10 +82,15 @@ function injectGradeBadge(grade: string, score: number) {
   const badge = document.createElement("button");
   badge.id = "etsy-edge-badge";
   badge.title = `Optimization: ${score}/100 — Click to open Etsy Edge`;
-  badge.innerHTML = `
-    <span style="font-weight:800;font-size:20px;line-height:1;color:${colors.text}">${grade}</span>
-    <span style="font-size:9px;color:#78716c;font-weight:600;letter-spacing:0.5px">ETSY EDGE</span>
-  `;
+  const gradeSpan = document.createElement("span");
+  gradeSpan.textContent = grade;
+  Object.assign(gradeSpan.style, { fontWeight: "800", fontSize: "20px", lineHeight: "1", color: colors.text });
+  badge.appendChild(gradeSpan);
+
+  const labelSpan = document.createElement("span");
+  labelSpan.textContent = "ETSY EDGE";
+  Object.assign(labelSpan.style, { fontSize: "9px", color: "#78716c", fontWeight: "600", letterSpacing: "0.5px" });
+  badge.appendChild(labelSpan);
 
   Object.assign(badge.style, {
     position: "fixed",

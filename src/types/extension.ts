@@ -8,7 +8,7 @@ export interface SeoScore {
 export interface TagSuggestion {
   tag: string;
   reason: string;
-  source: "ai" | "competitor" | "trending";
+  source: "ai" | "trending";
 }
 
 export interface AiOptimization {
@@ -20,17 +20,6 @@ export interface AiOptimization {
   projectedScore?: number;
 }
 
-export interface CompetitorAnalysis {
-  keyword: string;
-  topListings: {
-    title: string;
-    tags: string[];
-    views: number;
-    favorites: number;
-  }[];
-  commonTags: { tag: string; count: number; percentage: number }[];
-}
-
 export interface UserSettings {
   isPaid: boolean;
   showTagSpy: boolean;
@@ -38,8 +27,7 @@ export interface UserSettings {
 }
 
 export type MessageType =
-  | { type: "GET_COMPETITOR_ANALYSIS"; excludeListingId: string }
-  | { type: "GET_AI_SUGGESTIONS"; title: string; description: string; category: string; currentTags: string[]; competitorTags: string[] }
+  | { type: "GET_AI_SUGGESTIONS"; title: string; description: string; category: string; currentTags: string[] }
   | { type: "CHECK_PAID_STATUS" }
   | { type: "OPEN_PAYMENT_PAGE" };
 

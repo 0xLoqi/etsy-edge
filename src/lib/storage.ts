@@ -110,53 +110,6 @@ export const appStorage = {
     await tagCache.setValue(cache);
   },
 
-  /**
-   * Get aggregated search term frequency from visited listings in the same category.
-   * Falls back to all listings if no same-category matches found.
-   */
-  async getCompetitorTagAnalysis(
-    excludeListingId: string,
-    currentCategory: string
-  ): Promise<{
-    tags: { tag: string; count: number; percentage: number }[];
-    listingsAnalyzed: number;
-    categoryMatch: boolean;
-  }> {
-    const cache = await tagCache.getValue();
-    const allEntries = Object.entries(cache).filter(([id]) => id !== excludeListingId);
-    if (allEntries.length === 0) {
-      return { tags: [], listingsAnalyzed: 0, categoryMatch: false };
-    }
-
-    // Try same-category first
-    const categoryNorm = currentCategory.toLowerCase().trim();
-    const sameCat = categoryNorm
-      ? allEntries.filter(([, e]) => e.category.toLowerCase().trim() === categoryNorm)
-      : [];
-
-    const entries = sameCat.length >= 2 ? sameCat : allEntries;
-    const categoryMatch = sameCat.length >= 2 && categoryNorm.length > 0;
-
-    const tagCounts: Record<string, number> = {};
-    for (const [, entry] of entries) {
-      for (const tag of entry.tags) {
-        const normalized = tag.toLowerCase().trim();
-        tagCounts[normalized] = (tagCounts[normalized] || 0) + 1;
-      }
-    }
-
-    const total = entries.length;
-    const tags = Object.entries(tagCounts)
-      .map(([tag, count]) => ({
-        tag,
-        count,
-        percentage: Math.round((count / total) * 100),
-      }))
-      .sort((a, b) => b.count - a.count);
-
-    return { tags, listingsAnalyzed: total, categoryMatch };
-  },
-
   // -------------------------------------------------------------------------
   // AI usage tracking
   // -------------------------------------------------------------------------

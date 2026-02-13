@@ -5,9 +5,9 @@ export default defineConfig({
   srcDir: "src",
   modules: ["@wxt-dev/module-react"],
   manifest: {
-    name: "Etsy Edge — SEO Tags & Smart Optimization",
+    name: "Etsy Edge — Tags, Optimization & Smart Audit",
     description:
-      "See any Etsy listing's hidden tags. Optimize yours with smart suggestions and competitor analysis.",
+      "See any Etsy listing's hidden tags. Get optimization scores, rewritten titles, and 13 optimized tags with one-click Smart Audit.",
     version: "0.1.0",
     permissions: ["storage", "activeTab", "sidePanel"],
     host_permissions: ["https://*.etsy.com/*"],

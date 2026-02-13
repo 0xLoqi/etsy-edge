@@ -49,7 +49,7 @@ export default function App() {
         >
           <p className="font-semibold text-orange-800 text-sm">Upgrade to Pro</p>
           <p className="text-orange-600 text-xs mt-0.5">
-            Smart tag suggestions, competitor analysis, and more — $9.99/mo
+            200 Smart Audits per month — rewritten titles, optimized tags & diagnosis — $9.99/mo
           </p>
         </button>
       )}
@@ -73,7 +73,7 @@ export default function App() {
               onChange={(e) => setShowSeoScore(e.target.checked)}
               className="rounded text-orange-600"
             />
-            Show SEO Score on listing pages
+            Show Optimization Score on listing pages
           </label>
         </div>
 
