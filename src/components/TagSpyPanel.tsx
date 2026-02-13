@@ -14,7 +14,7 @@ interface Props {
   breadcrumbs: string[];
 }
 
-type Tab = "tags" | "ai" | "competitors";
+type Tab = "tags" | "ai";
 
 export default function TagSpyPanel({ listingId, pageData, topSearches, relatedSearches, seoScore, breadcrumbs }: Props) {
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
@@ -156,7 +156,7 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
 
       {/* Tabs */}
       <div className="flex border-b border-gray-200 px-2 shrink-0">
-        {(["tags", "ai", "competitors"] as Tab[]).map((tab) => (
+        {(["tags", "ai"] as Tab[]).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -166,7 +166,7 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
                 : "text-gray-500 border-transparent hover:text-gray-700"
             }`}
           >
-            {tab === "tags" ? "Optimization" : tab === "ai" ? "Smart Audit" : "Competitors"}
+            {tab === "tags" ? "Optimization" : "Smart Audit"}
           </button>
         ))}
       </div>
@@ -455,25 +455,6 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
           </div>
         )}
 
-        {/* === COMPETITORS TAB === */}
-        {activeTab === "competitors" && (
-          <div className="text-center py-8">
-            <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-orange-50 flex items-center justify-center text-xl font-bold text-orange-300">
-              vs
-            </div>
-            <div className="font-semibold text-base text-gray-700 mb-2">Competitor Analysis</div>
-            <div className="text-sm text-gray-400 mb-5 leading-relaxed">
-              Coming soon. See which tags your top competitors use
-              and find gaps in your SEO strategy.
-            </div>
-            <div className="text-left p-3 bg-gray-50 rounded-lg text-xs text-gray-500 leading-relaxed">
-              <div className="font-semibold text-gray-700 mb-1">What you'll get:</div>
-              <div>• Top tags across competing listings</div>
-              <div>• Tag frequency analysis</div>
-              <div>• Gap analysis vs. your listing</div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
