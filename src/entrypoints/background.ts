@@ -19,8 +19,22 @@ export default defineBackground(() => {
   // Open the side panel when the extension icon is clicked
   browser.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
 
+  // Side panel open needs its own listener to preserve user gesture context.
+  // Chrome requires sidePanel.open() to be called synchronously within the
+  // user-gesture event chain — the async handleMessage wrapper breaks this.
+  chrome.runtime.onMessage.addListener((message, sender) => {
+    if (message.type === "OPEN_SIDE_PANEL" && sender.tab?.windowId) {
+      chrome.sidePanel.open({ windowId: sender.tab.windowId });
+    }
+    // Don't return true — let it fall through to the main handler for other types
+  });
+
   // Handle messages from content script, side panel, and popup
   browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.type === "OPEN_SIDE_PANEL") {
+      sendResponse({ success: true });
+      return false; // Already handled above
+    }
     handleMessage(message, sender).then(sendResponse).catch((err) =>
       sendResponse({ success: false, error: err.message })
     );
@@ -121,18 +135,6 @@ async function handleMessage(
     case "OPEN_PAYMENT_PAGE": {
       openPaymentPage();
       return { success: true, data: null };
-    }
-
-    case "OPEN_SIDE_PANEL": {
-      try {
-        const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
-        if (tab?.windowId) {
-          await (browser.sidePanel as any).open({ windowId: tab.windowId });
-        }
-      } catch {
-        // Side panel may already be open or API not available
-      }
-      return { success: true };
     }
 
     // --- AI result cache ---

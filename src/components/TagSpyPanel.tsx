@@ -38,6 +38,7 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
   const [showCounter, setShowCounter] = useState(false);
   const [limitReached, setLimitReached] = useState(false);
   const [showFreeConfirm, setShowFreeConfirm] = useState(false);
+  const [showDemo, setShowDemo] = useState(false);
 
   // On mount: restore cached AI result + fetch current usage stats
   useEffect(() => {
@@ -423,6 +424,99 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
                   </div>
                 )}
               </div>
+            ) : showDemo ? (
+              /* Demo view — realistic example of what an audit looks like */
+              <div className="py-2">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Example Audit</div>
+                  <button
+                    onClick={() => setShowDemo(false)}
+                    className="text-[11px] text-orange-600 font-medium cursor-pointer hover:text-orange-700"
+                  >
+                    ← Back
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  {/* Demo grade bar */}
+                  <div className="flex items-center justify-center gap-6 py-2.5 px-3 bg-green-50 rounded-lg">
+                    <div className="text-center">
+                      <div className="text-[9px] text-gray-500 mb-0.5">Current</div>
+                      <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center font-extrabold text-xl text-orange-600 border-2 border-orange-300">C</div>
+                      <div className="text-[10px] font-semibold text-orange-600 mt-0.5">58/100</div>
+                    </div>
+                    <div className="text-lg text-gray-300">→</div>
+                    <div className="text-center">
+                      <div className="text-[9px] text-gray-500 mb-0.5">Projected</div>
+                      <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center font-extrabold text-xl text-green-600 border-2 border-green-300">A</div>
+                      <div className="text-[10px] font-semibold text-green-600 mt-0.5">93/100</div>
+                    </div>
+                  </div>
+
+                  {/* Demo title */}
+                  <div>
+                    <div className="text-[10px] font-bold text-blue-800 uppercase tracking-wide mb-1">Optimized Title</div>
+                    <div className="p-2.5 bg-blue-50 border border-blue-200 rounded-lg text-[11px] text-blue-900 leading-relaxed">
+                      Personalized Ceramic Mug — Custom Name Coffee Cup, Handmade Gift for Her, Unique Birthday Present, Artisan Pottery
+                    </div>
+                    <p className="text-[10px] text-gray-400 mt-1 leading-snug">Front-loads "personalized" and "ceramic mug" — the two highest-volume search terms for this category.</p>
+                  </div>
+
+                  {/* Demo tags */}
+                  <div>
+                    <div className="text-[10px] font-bold text-violet-800 uppercase tracking-wide mb-1.5">Tags (13/13)</div>
+                    <div className="flex flex-wrap gap-1">
+                      {["personalized mug", "custom coffee cup", "handmade ceramic", "gift for her", "unique birthday gift", "custom name mug", "artisan pottery", "personalized gift", "coffee lover gift", "ceramic cup handmade", "mothers day gift", "coworker gift idea", "housewarming gift"].map((tag) => (
+                        <span key={tag} className="px-1.5 py-0.5 text-[10px] rounded bg-violet-50 border border-violet-200 text-violet-700 font-medium">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Demo diagnosis */}
+                  <div>
+                    <div className="text-[10px] font-semibold text-orange-800 mb-1.5">3 issues found</div>
+                    <div className="space-y-1.5">
+                      <div className="p-2 bg-red-50 rounded text-[10px] leading-snug">
+                        <span className="font-semibold text-red-900">Title front-loading</span>
+                        <span className="text-red-800"> — "Beautiful Hand-Painted" wastes first 20 characters on filler</span>
+                        <div className="text-green-700 mt-0.5">→ Lead with "Personalized Ceramic Mug" to match buyer searches</div>
+                      </div>
+                      <div className="p-2 bg-red-50 rounded text-[10px] leading-snug">
+                        <span className="font-semibold text-red-900">Missing long-tail tags</span>
+                        <span className="text-red-800"> — only 8 of 13 tag slots used</span>
+                        <div className="text-green-700 mt-0.5">→ Added 5 intent-matched phrases like "coffee lover gift"</div>
+                      </div>
+                      <div className="p-2 bg-red-50 rounded text-[10px] leading-snug">
+                        <span className="font-semibold text-red-900">Search alignment</span>
+                        <span className="text-red-800"> — title doesn't contain top buyer search terms</span>
+                        <div className="text-green-700 mt-0.5">→ Added "custom," "personalized," and "gift for her" to title</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* CTA at bottom of demo */}
+                <div className="mt-4 pt-3 border-t border-gray-100">
+                  <button
+                    onClick={() => {
+                      setShowDemo(false);
+                      if (!isPaid) {
+                        setShowFreeConfirm(true);
+                      } else {
+                        loadAiOptimization();
+                      }
+                    }}
+                    className="w-full py-2.5 bg-orange-600 text-white text-sm font-semibold rounded-lg hover:bg-orange-700 cursor-pointer"
+                  >
+                    {isPaid ? "Run Smart Audit on This Listing" : "Try It Free on This Listing"}
+                  </button>
+                  <div className="mt-1.5 text-center text-[11px] text-gray-400">
+                    {isPaid ? "Uses 1 credit" : "1 free audit included — no credit card required"}
+                  </div>
+                </div>
+              </div>
             ) : (
               /* Initial state — sell the value, let them try it */
               <div className="py-4">
@@ -471,7 +565,7 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
                   <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg text-center">
                     <div className="text-sm font-bold text-gray-800 mb-1">First one's free!</div>
                     <div className="text-[11px] text-gray-500 mb-3 leading-snug">
-                      You get 1 free Smart Audit to try it out.<br />After that, upgrade to Pro for unlimited audits.
+                      You get 1 free Smart Audit to try it out.<br />After that, upgrade to Pro for 200 audits/month.
                     </div>
                     <div className="flex gap-2">
                       <button
@@ -502,8 +596,8 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
                     >
                       {isPaid ? "Run Smart Audit" : "Try Your Free Audit"}
                     </button>
-                    <div className="mt-2 text-center text-[11px] text-gray-400">
-                      {isPaid ? (
+                    <div className="mt-2 flex items-center justify-center gap-2 text-[11px] text-gray-400">
+                      <span>{isPaid ? (
                         <>
                           Uses 1 credit
                           {remaining !== null && (
@@ -512,9 +606,14 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
                             </span>
                           )}
                         </>
-                      ) : (
-                        "1 free audit included — no credit card required"
-                      )}
+                      ) : "1 free audit — no card required"}</span>
+                      <span className="text-gray-300">·</span>
+                      <button
+                        onClick={() => setShowDemo(true)}
+                        className="text-orange-600 hover:text-orange-700 font-medium cursor-pointer"
+                      >
+                        See example
+                      </button>
                     </div>
                   </>
                 )}
