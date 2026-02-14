@@ -69,10 +69,7 @@ const MAX_AI_CACHE = 20;
 
 const FREE_INITIAL_AUDITS = 1; // free audits on install
 const FREE_MONTHLY_AUDITS = 1; // free audits per month after initial
-const PAID_MONTHLY_CAP = 200;
-
-/** Warning thresholds for paid users (only shown when count >= threshold) */
-const PAID_WARN_THRESHOLDS = [100, 150, 175, 190, 195];
+const PAID_SAFETY_CAP = 500; // silent abuse prevention — no UI messaging
 
 function currentMonthKey(): string {
   const d = new Date();
@@ -144,31 +141,9 @@ export const appStorage = {
     const monthlyCount = usage.month === month ? usage.count : 0;
 
     if (isPaid) {
-      const remaining = PAID_MONTHLY_CAP - monthlyCount;
-      const allowed = remaining > 0;
-
-      // Progressive warnings
-      let warning: string | null = null;
-      let showCounter = false;
-
-      if (monthlyCount >= 195) {
-        warning = `You've used ${monthlyCount} of ${PAID_MONTHLY_CAP} optimizations this month. Only ${remaining} left.`;
-        showCounter = true;
-      } else if (monthlyCount >= 190) {
-        warning = `${remaining} optimizations remaining this month.`;
-        showCounter = true;
-      } else if (monthlyCount >= 175) {
-        warning = `You've used ${monthlyCount} optimizations this month. ${remaining} remaining.`;
-        showCounter = true;
-      } else if (monthlyCount >= 150) {
-        warning = `${remaining} optimizations remaining this month.`;
-        showCounter = false;
-      } else if (monthlyCount >= 100) {
-        warning = `You've used ${monthlyCount} of your ${PAID_MONTHLY_CAP} monthly optimizations.`;
-        showCounter = false;
-      }
-
-      return { allowed, used: monthlyCount, limit: PAID_MONTHLY_CAP, warning, showCounter };
+      // Paid users get "unlimited" audits — silent safety cap prevents abuse
+      const allowed = monthlyCount < PAID_SAFETY_CAP;
+      return { allowed, used: monthlyCount, limit: PAID_SAFETY_CAP, warning: null, showCounter: false };
     }
 
     // --- Free tier ---
@@ -194,7 +169,7 @@ export const appStorage = {
       used: effectiveUsed,
       limit: freeLimit,
       warning: !allowed
-        ? "You've used all your free optimizations. Upgrade to Pro for 200/month."
+        ? "You've used your free optimization. Upgrade to Pro for unlimited audits — $9.99/mo."
         : null,
       showCounter: false,
     };

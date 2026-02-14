@@ -49,7 +49,7 @@ export default function App() {
         >
           <p className="font-semibold text-orange-800 text-sm">Upgrade to Pro</p>
           <p className="text-orange-600 text-xs mt-0.5">
-            200 Smart Audits per month — rewritten titles, optimized tags & diagnosis — $9.99/mo
+            Unlimited Smart Audits — rewritten titles, optimized tags & diagnosis — $9.99/mo
           </p>
         </button>
       )}

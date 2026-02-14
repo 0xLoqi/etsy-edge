@@ -18,7 +18,7 @@ export default function UpgradePrompt({ feature, onUpgrade }: Props) {
         {feature}
       </div>
       <div style={{ fontSize: "12px", color: "#78716c", marginBottom: "10px", lineHeight: "1.4" }}>
-        Upgrade to Etsy Edge Pro for 200 Smart Audits per month — rewritten titles, optimized tags, and diagnosis.
+        Upgrade to Etsy Edge Pro for unlimited Smart Audits — rewritten titles, optimized tags, and diagnosis.
       </div>
       <button
         onClick={onUpgrade}
