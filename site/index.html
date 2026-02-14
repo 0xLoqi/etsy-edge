@@ -964,6 +964,161 @@
       }
     }
 
+    /* Hero screenshot showcase */
+    .hero-screenshot {
+      max-width: 960px;
+      margin: 60px auto 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-screenshot img {
+      width: 100%;
+      border-radius: 16px;
+      box-shadow:
+        0 20px 60px rgba(0,0,0,0.12),
+        0 4px 20px rgba(0,0,0,0.08),
+        0 0 0 1px rgba(0,0,0,0.04);
+    }
+
+    .hero-screenshot-caption {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 0.85rem;
+      color: var(--warm-gray-light);
+      font-style: italic;
+    }
+
+    /* Feature inline visuals */
+    .feature-visual {
+      margin-top: 24px;
+      padding: 16px;
+      background: var(--cream);
+      border-radius: 12px;
+      border: 1px solid rgba(45, 42, 38, 0.06);
+    }
+
+    /* Tag Spy — demo tag chips */
+    .tag-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .demo-tag {
+      padding: 6px 12px;
+      background: white;
+      border: 1px solid rgba(45, 42, 38, 0.1);
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: var(--charcoal);
+      white-space: nowrap;
+    }
+
+    .demo-tag.dim {
+      color: var(--warm-gray-light);
+      border-style: dashed;
+      background: transparent;
+    }
+
+    /* Optimization Score — grade bar */
+    .grade-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .grade-cell {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      background: white;
+      border: 1px solid rgba(45, 42, 38, 0.1);
+      color: var(--warm-gray-light);
+      transition: all 0.3s;
+    }
+
+    .grade-cell.active {
+      background: var(--sage);
+      color: white;
+      border-color: var(--sage);
+      box-shadow: 0 2px 8px rgba(122, 158, 126, 0.35);
+      transform: scale(1.1);
+    }
+
+    .grade-label {
+      margin-left: auto;
+      font-size: 0.85rem;
+      color: var(--warm-gray);
+    }
+
+    .grade-label strong {
+      color: var(--sage);
+    }
+
+    /* Smart Audit — grade jump + checklist */
+    .audit-preview {
+      text-align: center;
+    }
+
+    .audit-grade-jump {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .audit-grade {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+
+    .audit-grade.before {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fcd34d;
+    }
+
+    .audit-grade.after {
+      background: var(--sage-light);
+      color: #15803d;
+      border: 1px solid #86efac;
+      box-shadow: 0 2px 8px rgba(122, 158, 126, 0.3);
+    }
+
+    .audit-arrow {
+      font-size: 1.25rem;
+      color: var(--warm-gray-light);
+    }
+
+    .audit-items {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: flex-start;
+    }
+
+    .audit-item {
+      font-size: 0.82rem;
+      color: var(--sage);
+      font-weight: 500;
+    }
+
     /* Animation on scroll */
     .animate-in {
       opacity: 0;
@@ -1031,6 +1186,11 @@
       </div>
 
       <p class="hero-note">No account needed. Tag Spy is free forever.</p>
+
+      <div class="hero-screenshot">
+        <img src="assets/screenshots/optimization.png" alt="Etsy Edge showing optimization score and related searches on an Etsy listing" loading="eager">
+        <p class="hero-screenshot-caption">Etsy Edge side panel — live on any Etsy listing</p>
+      </div>
     </div>
   </section>
 
@@ -1076,6 +1236,14 @@
           <p>See the hidden tags on any Etsy listing. Browse a competitor's page, and all 13 tags appear in the side panel — click any tag to copy.</p>
           <p class="feature-hint">Reverse-engineer what's already ranking in your niche.</p>
           <span class="feature-badge badge-free">Free Forever</span>
+          <div class="feature-visual tag-chips" aria-hidden="true">
+            <span class="demo-tag">handmade jewelry</span>
+            <span class="demo-tag">personalized gift</span>
+            <span class="demo-tag">boho necklace</span>
+            <span class="demo-tag">birthday gift for her</span>
+            <span class="demo-tag">custom name</span>
+            <span class="demo-tag dim">+ 8 more</span>
+          </div>
         </div>
 
         <div class="feature-card animate-in">
@@ -1084,6 +1252,14 @@
           <p>Every listing gets an instant A–F grade showing how well its title and description are optimized for Etsy search. <strong>Even top sellers leave optimization on the table.</strong></p>
           <p class="feature-hint">See exactly where each listing's copy can improve.</p>
           <span class="feature-badge badge-free">Free Forever</span>
+          <div class="feature-visual grade-bar" aria-hidden="true">
+            <span class="grade-cell">A</span>
+            <span class="grade-cell active">B</span>
+            <span class="grade-cell">C</span>
+            <span class="grade-cell">D</span>
+            <span class="grade-cell">F</span>
+            <span class="grade-label">Your listing: <strong>B</strong></span>
+          </div>
         </div>
 
         <div class="feature-card animate-in">
@@ -1092,6 +1268,18 @@
           <p>Get a full optimization report: rewritten title, 13 tailored tags, and a diagnosis of exactly what's hurting your rankings. Each suggestion includes reasoning so you learn as you go.</p>
           <p class="feature-hint">One audit can pay for itself with a single extra sale.</p>
           <span class="feature-badge badge-pro">Pro</span>
+          <div class="feature-visual audit-preview" aria-hidden="true">
+            <div class="audit-grade-jump">
+              <span class="audit-grade before">C</span>
+              <span class="audit-arrow">→</span>
+              <span class="audit-grade after">A</span>
+            </div>
+            <div class="audit-items">
+              <span class="audit-item">✓ Rewritten title</span>
+              <span class="audit-item">✓ 13 optimized tags</span>
+              <span class="audit-item">✓ 3 diagnosis fixes</span>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -1343,7 +1531,6 @@
       <div class="footer-links">
         <a href="blog/index.html">Blog</a>
         <a href="privacy-policy.html">Privacy Policy</a>
-        <a href="https://github.com/0xloqi/etsy-edge">GitHub</a>
         <a href="mailto:hello@etsyedge.app">Contact</a>
       </div>
       <p class="footer-disclaimer">Etsy Edge is not affiliated with or endorsed by Etsy, Inc. "Etsy" is a trademark of Etsy, Inc.</p>
