@@ -7,7 +7,7 @@ export default defineConfig({
   manifest: {
     name: "Etsy Edge — Tags, Optimization & Smart Audit",
     description:
-      "See any Etsy listing's related searches and optimization score. Get rewritten titles, 13 optimized tags, and a full diagnosis with one-click Smart Audit.",
+      "See any Etsy listing's optimization score and related searches. One-click Smart Audit: rewritten title, 13 tags, and diagnosis.",
     version: "0.1.0",
     permissions: ["storage", "activeTab", "sidePanel"],
     host_permissions: ["https://*.etsy.com/*"],
