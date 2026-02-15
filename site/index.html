@@ -1119,6 +1119,140 @@
       font-weight: 500;
     }
 
+    /* Announcement banner */
+    .announce-banner {
+      background: var(--charcoal);
+      color: white;
+      text-align: center;
+      padding: 12px 24px;
+      font-size: 0.9rem;
+    }
+
+    .announce-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .announce-icon {
+      font-size: 1rem;
+    }
+
+    .announce-banner a {
+      color: var(--terracotta);
+      color: #e8875a;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .announce-banner a:hover {
+      color: white;
+    }
+
+    /* Waitlist form */
+    .waitlist-form-wrapper {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .waitlist-form {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .waitlist-input {
+      flex: 1;
+      padding: 14px 20px;
+      border: 2px solid rgba(45, 42, 38, 0.12);
+      border-radius: 100px;
+      font-size: 1rem;
+      font-family: 'DM Sans', sans-serif;
+      background: white;
+      color: var(--charcoal);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .waitlist-input:focus {
+      border-color: var(--terracotta);
+    }
+
+    .waitlist-input::placeholder {
+      color: var(--warm-gray-light);
+    }
+
+    .waitlist-btn {
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .waitlist-note {
+      font-size: 0.85rem;
+      color: var(--warm-gray-light);
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    /* Dark variant for final CTA */
+    .waitlist-form-dark {
+      justify-content: center;
+    }
+
+    .waitlist-input-dark {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.2);
+      color: white;
+      max-width: 280px;
+    }
+
+    .waitlist-input-dark:focus {
+      border-color: var(--terracotta);
+    }
+
+    .waitlist-input-dark::placeholder {
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* Thank-you state */
+    .waitlist-thanks {
+      display: none;
+      text-align: center;
+      padding: 16px 24px;
+      background: var(--sage-light);
+      border: 1px solid rgba(122, 158, 126, 0.3);
+      border-radius: 16px;
+    }
+
+    .waitlist-thanks.show {
+      display: block;
+    }
+
+    .waitlist-thanks p {
+      color: var(--sage);
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .waitlist-form {
+        flex-direction: column;
+      }
+
+      .waitlist-input-dark {
+        max-width: 100%;
+      }
+
+      .announce-banner {
+        font-size: 0.82rem;
+        padding: 10px 16px;
+      }
+    }
+
     /* Animation on scroll */
     .animate-in {
       opacity: 0;
@@ -1147,12 +1281,20 @@
         <a href="#faq">FAQ</a>
         <a href="blog/index.html">Blog</a>
       </div>
-      <a href="#" class="btn btn-primary">Add to Chrome — Free</a>
+      <a href="#waitlist" class="btn btn-primary">Join the Waitlist</a>
       <button class="mobile-menu-btn" aria-label="Menu">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
     </div>
   </nav>
+
+  <!-- Announcement Banner -->
+  <div class="announce-banner">
+    <div class="announce-inner">
+      <span class="announce-icon">🚀</span>
+      <span>Launching soon on the Chrome Web Store — <a href="#waitlist">join the waitlist</a> to get notified.</span>
+    </div>
+  </div>
 
   <!-- Hero -->
   <section class="hero">
@@ -1171,7 +1313,7 @@
     <div class="hero-content">
       <div class="hero-badge">
         <span class="hero-badge-dot"></span>
-        Free Chrome extension
+        Launching soon — free Chrome extension
       </div>
 
       <h1>Stop guessing at tags.<br><em>See what's working.</em></h1>
@@ -1180,12 +1322,20 @@
         See the related searches buyers use to find any Etsy listing. Get intelligent optimization suggestions tailored to your shop. Finally know why some listings rank and others don't.
       </p>
 
-      <div class="hero-ctas">
-        <a href="#" class="btn btn-primary">Get More Traffic — Free →</a>
-        <a href="#features" class="btn btn-secondary">See how it works</a>
+      <!-- Waitlist Form -->
+      <div id="waitlist" class="waitlist-form-wrapper">
+        <form class="waitlist-form" action="https://formsubmit.co/hello@etsyedge.app" method="POST">
+          <input type="hidden" name="_subject" value="New Etsy Edge Waitlist Signup!">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_next" value="https://etsyedge.app/?thanks=1">
+          <input type="text" name="_honey" style="display:none">
+          <input type="email" name="email" placeholder="you@email.com" required class="waitlist-input">
+          <button type="submit" class="btn btn-primary waitlist-btn">Get Early Access →</button>
+        </form>
+        <p class="waitlist-note">Be first to install when we launch. Tag Spy will be free forever.</p>
       </div>
 
-      <p class="hero-note">No account needed. Tag Spy is free forever.</p>
+      <a href="#features" class="btn btn-secondary" style="margin-top: 16px;">See how it works</a>
 
       <div class="hero-screenshot">
         <img src="assets/screenshots/optimization.png" alt="Etsy Edge showing optimization score and related searches on an Etsy listing" loading="eager">
@@ -1347,7 +1497,7 @@
               Works on every Etsy listing
             </li>
           </ul>
-          <a href="#" class="btn btn-secondary">Add to Chrome</a>
+          <a href="#waitlist" class="btn btn-secondary">Join the Waitlist</a>
         </div>
 
         <div class="pricing-card featured animate-in">
@@ -1371,7 +1521,7 @@
               Detailed SEO breakdown with tips
             </li>
           </ul>
-          <a href="#" class="btn btn-primary">Start Pro — $9.99/mo</a>
+          <a href="#waitlist" class="btn btn-primary">Join Waitlist — Pro at Launch</a>
         </div>
       </div>
 
@@ -1516,8 +1666,16 @@
   <section class="final-cta">
     <div class="final-cta-inner animate-in">
       <h2>Every unoptimized listing is leaving sales on the table.</h2>
-      <p>Most Etsy sellers never look at their title structure, keyword placement, or tag strategy. Etsy Edge shows you exactly what to fix — install, browse, and start climbing search results.</p>
-      <a href="#" class="btn btn-primary">Get More Traffic — Free →</a>
+      <p>Most Etsy sellers never look at their title structure, keyword placement, or tag strategy. Etsy Edge shows you exactly what to fix — and it's launching soon.</p>
+      <form class="waitlist-form waitlist-form-dark" action="https://formsubmit.co/hello@etsyedge.app" method="POST">
+        <input type="hidden" name="_subject" value="New Etsy Edge Waitlist Signup!">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="https://etsyedge.app/?thanks=1">
+        <input type="text" name="_honey" style="display:none">
+        <input type="email" name="email" placeholder="you@email.com" required class="waitlist-input waitlist-input-dark">
+        <button type="submit" class="btn btn-primary waitlist-btn">Get Early Access →</button>
+      </form>
+      <p style="font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-top: 12px;">Free forever for Tag Spy & Optimization Score. No spam.</p>
     </div>
   </section>
 
@@ -1556,6 +1714,18 @@
     }, observerOptions);
 
     document.querySelectorAll('.animate-in').forEach(el => observer.observe(el));
+
+    // Handle thank-you redirect from formsubmit
+    if (new URLSearchParams(window.location.search).get('thanks') === '1') {
+      document.querySelectorAll('.waitlist-form').forEach(form => {
+        const thanks = document.createElement('div');
+        thanks.className = 'waitlist-thanks show';
+        thanks.innerHTML = '<p>🎉 You\'re on the list! We\'ll email you the moment Etsy Edge launches.</p>';
+        form.replaceWith(thanks);
+      });
+      // Clean URL
+      window.history.replaceState({}, '', '/');
+    }
   </script>
 
 </body>
