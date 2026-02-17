@@ -1281,7 +1281,7 @@
         <a href="#faq">FAQ</a>
         <a href="blog/index.html">Blog</a>
       </div>
-      <a href="#waitlist" class="btn btn-primary">Get Early Access</a>
+      <a href="https://chrome.google.com/webstore/detail/adkcnpgopfdaflmombdojmcnjgipibad" class="btn btn-primary" target="_blank">Add to Chrome — Free</a>
       <button class="mobile-menu-btn" aria-label="Menu">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
@@ -1305,7 +1305,7 @@
     <div class="hero-content">
       <div class="hero-badge">
         <span class="hero-badge-dot"></span>
-        Launching soon — free Chrome extension
+        Now available — free Chrome extension
       </div>
 
       <h1>Stop guessing at tags.<br><em>See what's working.</em></h1>
@@ -1314,18 +1314,10 @@
         See the related searches buyers use to find any Etsy listing. Get intelligent optimization suggestions tailored to your shop. Finally know why some listings rank and others don't.
       </p>
 
-      <!-- Waitlist Form -->
-      <div id="waitlist" class="waitlist-form-wrapper">
-        <form class="waitlist-form" action="https://formsubmit.co/hello@etsyedge.app" method="POST">
-          <input type="hidden" name="_subject" value="New Etsy Edge Waitlist Signup!">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_next" value="https://etsyedge.app/?thanks=1">
-          <input type="text" name="_honey" style="display:none">
-          <input type="email" name="email" placeholder="you@email.com" required class="waitlist-input">
-          <button type="submit" class="btn btn-primary waitlist-btn">Get Early Access →</button>
-        </form>
-        <p class="waitlist-note">Be first to install when we launch. Tag Spy will be free forever.</p>
+      <div style="margin-top: 32px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: center;">
+        <a href="https://chrome.google.com/webstore/detail/adkcnpgopfdaflmombdojmcnjgipibad" class="btn btn-primary" target="_blank">Add to Chrome — Free →</a>
       </div>
+      <p class="waitlist-note">Tag Spy & Optimization Score free forever. Pro for $9.99/mo.</p>
 
       <div class="hero-screenshot">
         <img src="assets/screenshots/optimization.png" alt="Etsy Edge showing optimization score and related searches on an Etsy listing" loading="eager">
@@ -1487,7 +1479,7 @@
               Works on every Etsy listing
             </li>
           </ul>
-          <a href="#waitlist" class="btn btn-secondary">Join the Waitlist</a>
+          <a href="https://chrome.google.com/webstore/detail/adkcnpgopfdaflmombdojmcnjgipibad" class="btn btn-secondary" target="_blank">Add to Chrome</a>
         </div>
 
         <div class="pricing-card featured animate-in">
@@ -1511,7 +1503,7 @@
               Detailed SEO breakdown with tips
             </li>
           </ul>
-          <a href="#waitlist" class="btn btn-primary">Join Waitlist — Pro at Launch</a>
+          <a href="https://chrome.google.com/webstore/detail/adkcnpgopfdaflmombdojmcnjgipibad" class="btn btn-primary" target="_blank">Add to Chrome — Try Pro Free</a>
         </div>
       </div>
 
@@ -1656,16 +1648,11 @@
   <section class="final-cta">
     <div class="final-cta-inner animate-in">
       <h2>Every unoptimized listing is leaving sales on the table.</h2>
-      <p>Most Etsy sellers never look at their title structure, keyword placement, or tag strategy. Etsy Edge shows you exactly what to fix — and it's launching soon.</p>
-      <form class="waitlist-form waitlist-form-dark" action="https://formsubmit.co/hello@etsyedge.app" method="POST">
-        <input type="hidden" name="_subject" value="New Etsy Edge Waitlist Signup!">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_next" value="https://etsyedge.app/?thanks=1">
-        <input type="text" name="_honey" style="display:none">
-        <input type="email" name="email" placeholder="you@email.com" required class="waitlist-input waitlist-input-dark">
-        <button type="submit" class="btn btn-primary waitlist-btn">Get Early Access →</button>
-      </form>
-      <p style="font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-top: 12px;">Free forever for Tag Spy & Optimization Score. No spam.</p>
+      <p>Most Etsy sellers never look at their title structure, keyword placement, or tag strategy. Etsy Edge shows you exactly what to fix — in one click.</p>
+      <div style="margin-top: 24px;">
+        <a href="https://chrome.google.com/webstore/detail/adkcnpgopfdaflmombdojmcnjgipibad" class="btn btn-primary" target="_blank" style="font-size: 1.1rem; padding: 16px 36px;">Add to Chrome — Free →</a>
+      </div>
+      <p style="font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-top: 12px;">Free forever for Tag Spy & Optimization Score. Pro for $9.99/mo.</p>
     </div>
   </section>
 
@@ -1678,6 +1665,7 @@
       </a>
       <div class="footer-links">
         <a href="blog/index.html">Blog</a>
+        <a href="feedback/">Feedback</a>
         <a href="privacy-policy.html">Privacy Policy</a>
         <a href="mailto:hello@etsyedge.app">Contact</a>
       </div>
@@ -1705,15 +1693,8 @@
 
     document.querySelectorAll('.animate-in').forEach(el => observer.observe(el));
 
-    // Handle thank-you redirect from formsubmit
+    // Legacy: clean up old waitlist redirect params
     if (new URLSearchParams(window.location.search).get('thanks') === '1') {
-      document.querySelectorAll('.waitlist-form').forEach(form => {
-        const thanks = document.createElement('div');
-        thanks.className = 'waitlist-thanks show';
-        thanks.innerHTML = '<p>🎉 You\'re on the list! We\'ll email you the moment Etsy Edge launches.</p>';
-        form.replaceWith(thanks);
-      });
-      // Clean URL
       window.history.replaceState({}, '', '/');
     }
   </script>

@@ -42,6 +42,15 @@ export async function getAiOptimization(
   return parseOptimizationResponse(data.content);
 }
 
+/** Trim a tag to fit Etsy's 20-char limit at a word boundary. */
+function fitTag(raw: string): string {
+  const tag = raw.trim().toLowerCase();
+  if (tag.length <= 20) return tag;
+  const trimmed = tag.slice(0, 20);
+  const lastSpace = trimmed.lastIndexOf(" ");
+  return lastSpace > 0 ? trimmed.slice(0, lastSpace) : trimmed;
+}
+
 function parseOptimizationResponse(content: string): AiOptimization {
   try {
     // Strip markdown code fences if present
@@ -57,7 +66,7 @@ function parseOptimizationResponse(content: string): AiOptimization {
       optimizedTitle: String(parsed.optimizedTitle || ""),
       titleExplanation: String(parsed.titleExplanation || ""),
       tags: (parsed.tags || []).slice(0, 13).map((t: Record<string, string>) => ({
-        tag: String(t.tag || "").slice(0, 20),
+        tag: fitTag(String(t.tag || "")),
         reason: String(t.reason || ""),
       })),
       diagnosis: (parsed.diagnosis || []).map((d: Record<string, string>) => ({

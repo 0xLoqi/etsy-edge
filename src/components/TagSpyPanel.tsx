@@ -374,7 +374,7 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
                     </span>
                     <button
                       onClick={() => {
-                        navigator.clipboard.writeText(aiResult.tags.map(t => t.tag).join(", "));
+                        navigator.clipboard.writeText(aiResult.tags.map(t => t.tag).join(","));
                         setCopiedAllTags(true);
                         setTimeout(() => setCopiedAllTags(false), 1500);
                       }}
@@ -650,6 +650,19 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
           </div>
         )}
 
+      </div>
+
+      {/* Footer */}
+      <div className="flex items-center justify-between px-4 py-2 border-t border-gray-100 text-[10px] text-gray-400 shrink-0">
+        <span>v0.1.1</span>
+        <a
+          href="https://etsyedge.app/feedback"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-orange-600 transition-colors"
+        >
+          Send feedback
+        </a>
       </div>
     </div>
   );

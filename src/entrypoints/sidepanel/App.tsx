@@ -48,13 +48,19 @@ export default function App() {
             Navigate to an Etsy listing page to see tags, SEO score, and optimization insights.
           </p>
         ) : (
-          <p className="text-sm text-gray-500 leading-relaxed">
-            Open any Etsy listing page to get started.
-            <br />
-            <span className="text-xs text-gray-400 mt-2 block">
-              etsy.com/listing/...
-            </span>
-          </p>
+          <>
+            <p className="text-sm text-gray-500 leading-relaxed mb-4">
+              Open any Etsy listing page to get started.
+            </p>
+            <button
+              onClick={() => {
+                browser.tabs.create({ url: "https://www.etsy.com" });
+              }}
+              className="px-5 py-2.5 bg-[#f56400] hover:bg-[#d95700] text-white text-sm font-semibold rounded-full transition-colors"
+            >
+              Go to Etsy
+            </button>
+          </>
         )}
       </div>
     );

@@ -8,7 +8,7 @@ export default defineConfig({
     name: "Etsy Edge — Tags, Optimization & Smart Audit",
     description:
       "See any Etsy listing's optimization score and related searches. One-click Smart Audit: rewritten title, 13 tags, and diagnosis.",
-    version: "0.1.0",
+    version: "0.1.1",
     permissions: ["storage", "activeTab", "sidePanel"],
     host_permissions: ["https://*.etsy.com/*"],
     icons: {
