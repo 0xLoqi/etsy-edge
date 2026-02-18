@@ -554,6 +554,45 @@
       line-height: 1.7;
     }
 
+    /* Video Section */
+    .video-section {
+      padding: 120px 24px;
+      background: var(--cream);
+    }
+
+    .video-section-inner {
+      max-width: 840px;
+      margin: 0 auto;
+    }
+
+    .video-wrapper {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow:
+        0 24px 64px rgba(0,0,0,0.12),
+        0 8px 24px rgba(0,0,0,0.08),
+        0 0 0 1px rgba(45, 42, 38, 0.06);
+      background: var(--charcoal);
+    }
+
+    .video-wrapper iframe {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: none;
+    }
+
+    @media (max-width: 768px) {
+      .video-section {
+        padding: 80px 20px;
+      }
+
+      .video-wrapper {
+        border-radius: 14px;
+      }
+    }
+
     /* Pricing */
     .pricing {
       padding: 120px 24px;
@@ -1449,6 +1488,19 @@
             <p>Instantly see your SEO grade and related searches. With Pro, run a Smart Audit to get a rewritten title, 13 optimized tags, and a diagnosis of what's costing you sales.</p>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Video Demo -->
+  <section class="video-section">
+    <div class="video-section-inner">
+      <div class="section-header animate-in">
+        <h2>See it in action</h2>
+        <p>Watch Etsy Edge optimize a real listing in under 60 seconds.</p>
+      </div>
+      <div class="video-wrapper animate-in">
+        <iframe src="https://www.youtube.com/embed/WBkxAuFs_Tg?rel=0&modestbranding=1" title="Etsy Edge Demo — See it in action" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
       </div>
     </div>
   </section>
