@@ -40,6 +40,9 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
   const [showFreeConfirm, setShowFreeConfirm] = useState(false);
   const [showDemo, setShowDemo] = useState(false);
 
+  // Review prompt
+  const [showReviewPrompt, setShowReviewPrompt] = useState(false);
+
   // On mount: restore cached AI result + fetch current usage stats
   useEffect(() => {
     // Restore cached AI result for this listing
@@ -83,6 +86,10 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
       if (response.success) {
         const result = response.data as AiOptimization;
         setAiResult(result);
+        // Check if we should show the review prompt
+        browser.runtime.sendMessage({ type: "CHECK_REVIEW_PROMPT" })
+          .then((res) => { if (res?.data?.show) setShowReviewPrompt(true); })
+          .catch(() => {});
         // Persist to cache so tab switching doesn't lose it
         browser.runtime.sendMessage({
           type: "CACHE_AI_RESULT",
@@ -425,6 +432,39 @@ export default function TagSpyPanel({ listingId, pageData, topSearches, relatedS
                         ))}
                       </div>
                     )}
+                  </div>
+                )}
+
+                {/* Review prompt — shown once after first audit */}
+                {showReviewPrompt && (
+                  <div className="p-3 bg-sky-50 border border-sky-200 rounded-lg">
+                    <div className="flex justify-between items-start">
+                      <div className="text-xs font-semibold text-gray-800 mb-1">Enjoying Etsy Edge?</div>
+                      <button
+                        onClick={() => {
+                          setShowReviewPrompt(false);
+                          browser.runtime.sendMessage({ type: "DISMISS_REVIEW_PROMPT" }).catch(() => {});
+                        }}
+                        className="text-gray-400 hover:text-gray-600 text-xs cursor-pointer -mt-0.5"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                    <div className="text-[11px] text-gray-500 leading-snug mb-2.5">
+                      A quick review helps other Etsy sellers find this tool. Takes 30 seconds.
+                    </div>
+                    <a
+                      href="https://chromewebstore.google.com/detail/etsy-edge-%E2%80%94-tags-optimiza/adkcnpgopfdaflmombdojmcnjgipibad/reviews"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => {
+                        setShowReviewPrompt(false);
+                        browser.runtime.sendMessage({ type: "DISMISS_REVIEW_PROMPT" }).catch(() => {});
+                      }}
+                      className="inline-block px-4 py-1.5 bg-sky-600 text-white text-xs font-semibold rounded-lg hover:bg-sky-700 no-underline"
+                    >
+                      Leave a Review ★
+                    </a>
                   </div>
                 )}
 

@@ -183,11 +183,24 @@ async function handleMessage(
 
       // Record the usage AFTER successful call
       await appStorage.recordAiUsage(paid);
+      await appStorage.incrementAuditsCompleted();
 
       // Re-check to get updated warning info
       const updatedUsage = await appStorage.checkAiUsage(paid);
 
       return { success: true, data: optimization, usage: updatedUsage };
+    }
+
+    // --- Review prompt ---
+
+    case "CHECK_REVIEW_PROMPT": {
+      const show = await appStorage.shouldShowReviewPrompt();
+      return { success: true, data: { show } };
+    }
+
+    case "DISMISS_REVIEW_PROMPT": {
+      await appStorage.dismissReviewPrompt();
+      return { success: true };
     }
 
     default:

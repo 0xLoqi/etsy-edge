@@ -67,6 +67,18 @@ const aiResultCache = storage.defineItem<Record<string, CachedAiResult>>(
 
 const MAX_AI_CACHE = 20;
 
+/** Whether the user has dismissed the review prompt */
+const reviewPromptDismissed = storage.defineItem<boolean>(
+  "local:reviewPromptDismissed",
+  { fallback: false }
+);
+
+/** Total audits completed (lifetime, across all tiers) */
+const totalAuditsCompleted = storage.defineItem<number>(
+  "local:totalAuditsCompleted",
+  { fallback: 0 }
+);
+
 const FREE_INITIAL_AUDITS = 1; // free audits on install
 const FREE_MONTHLY_AUDITS = 1; // free audits per month after initial
 const PAID_SAFETY_CAP = 500; // silent abuse prevention — no UI messaging
@@ -222,5 +234,27 @@ export const appStorage = {
     // Expire after 24 hours
     if (Date.now() - entry.timestamp > 24 * 60 * 60 * 1000) return null;
     return entry.result;
+  },
+
+  // -------------------------------------------------------------------------
+  // Review prompt
+  // -------------------------------------------------------------------------
+
+  async shouldShowReviewPrompt(): Promise<boolean> {
+    const dismissed = await reviewPromptDismissed.getValue();
+    if (dismissed) return false;
+    const total = await totalAuditsCompleted.getValue();
+    return total >= 1;
+  },
+
+  async dismissReviewPrompt(): Promise<void> {
+    await reviewPromptDismissed.setValue(true);
+  },
+
+  async incrementAuditsCompleted(): Promise<number> {
+    const total = await totalAuditsCompleted.getValue();
+    const next = total + 1;
+    await totalAuditsCompleted.setValue(next);
+    return next;
   },
 };
