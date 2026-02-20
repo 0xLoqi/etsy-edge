@@ -28,7 +28,7 @@ The free version is genuinely useful on its own — I use Tag Spy constantly jus
 - Is the Tag Spy overlay in a good position or does it get in the way?
 - For those who try Pro — are the AI suggestions actually good?
 
-Chrome Web Store link: [link]
+Chrome Web Store link: https://chromewebstore.google.com/detail/etsy-edge-%E2%80%94-tags-optimiza/adkcnpgopfdaflmombdojmcnjgipibad
 
 Happy to answer any questions. This is a real side project, not a big company — your feedback genuinely shapes what I build next.
 

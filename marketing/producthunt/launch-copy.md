@@ -15,7 +15,7 @@ Free Chrome extension that reveals the hidden tags on any Etsy listing. Browse a
 
 ## Links
 - Website: https://etsyedge.app/
-- Chrome Web Store: [link]
+- Chrome Web Store: https://chromewebstore.google.com/detail/etsy-edge-%E2%80%94-tags-optimiza/adkcnpgopfdaflmombdojmcnjgipibad
 - GitHub: https://github.com/0xloqi/etsy-edge
 
 ## Gallery (screenshots to take)
