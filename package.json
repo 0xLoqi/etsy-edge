@@ -1,6 +1,6 @@
 {
   "name": "etsy-edge",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Etsy SEO optimization Chrome extension — tag spy, AI suggestions, competitor analysis",
   "type": "module",
   "scripts": {
