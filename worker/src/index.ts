@@ -239,6 +239,39 @@ CRITICAL RULES:
 });
 
 // ---------------------------------------------------------------------------
+// Early adopter code validation
+// ---------------------------------------------------------------------------
+
+const EARLY_ADOPTER_CODES = new Set([
+  "EDGE-EARLY-A1B2",
+  "EDGE-EARLY-C3D4",
+  "EDGE-EARLY-E5F6",
+  "EDGE-EARLY-G7H8",
+  "EDGE-EARLY-J9K0",
+  "EDGE-EARLY-L1M2",
+  "EDGE-EARLY-N3P4",
+  "EDGE-EARLY-Q5R6",
+  "EDGE-EARLY-S7T8",
+  "EDGE-EARLY-U9V0",
+  "EDGE-EARLY-W1X2",
+  "EDGE-EARLY-Y3Z4",
+  "EDGE-EARLY-A5B6",
+  "EDGE-EARLY-C7D8",
+  "EDGE-EARLY-E9F0",
+  "EDGE-EARLY-G1H2",
+  "EDGE-EARLY-J3K4",
+  "EDGE-EARLY-L5M6",
+  "EDGE-EARLY-N7P8",
+  "EDGE-EARLY-Q9R0",
+]);
+
+app.post("/api/codes/validate", async (c) => {
+  const body = await c.req.json<{ code?: string }>();
+  const code = (body.code || "").trim().toUpperCase();
+  return c.json({ valid: EARLY_ADOPTER_CODES.has(code) });
+});
+
+// ---------------------------------------------------------------------------
 // Health check
 // ---------------------------------------------------------------------------
 app.get("/health", (c) => c.json({ status: "ok" }));

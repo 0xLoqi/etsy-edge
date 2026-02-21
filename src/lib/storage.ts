@@ -73,6 +73,15 @@ const reviewPromptDismissed = storage.defineItem<boolean>(
   { fallback: false }
 );
 
+/**
+ * Expiry timestamp (ms) for an early adopter Pro code redemption.
+ * 0 means no active code.
+ */
+const earlyAdopterExpiry = storage.defineItem<number>(
+  "local:earlyAdopterExpiry",
+  { fallback: 0 }
+);
+
 /** Total audits completed (lifetime, across all tiers) */
 const totalAuditsCompleted = storage.defineItem<number>(
   "local:totalAuditsCompleted",
@@ -249,6 +258,20 @@ export const appStorage = {
 
   async dismissReviewPrompt(): Promise<void> {
     await reviewPromptDismissed.setValue(true);
+  },
+
+  // -------------------------------------------------------------------------
+  // Early adopter Pro codes
+  // -------------------------------------------------------------------------
+
+  async isEarlyAdopterActive(): Promise<boolean> {
+    const expiry = await earlyAdopterExpiry.getValue();
+    return expiry > Date.now();
+  },
+
+  async redeemEarlyAdopterCode(): Promise<void> {
+    const thirtyDays = 30 * 24 * 60 * 60 * 1000;
+    await earlyAdopterExpiry.setValue(Date.now() + thirtyDays);
   },
 
   async incrementAuditsCompleted(): Promise<number> {

@@ -1,6 +1,7 @@
 import { getAiOptimization } from "../lib/ai-suggestions";
 import { initPayment, isPaidUser, openPaymentPage } from "../lib/payment";
 import { appStorage } from "../lib/storage";
+import { WORKER_URL } from "../lib/config";
 
 // Set to true to bypass payment checks during development/testing.
 // IMPORTANT: Set back to false before publishing to Chrome Web Store!
@@ -128,8 +129,27 @@ async function handleMessage(
     // --- Payment ---
 
     case "CHECK_PAID_STATUS": {
-      const paid = DEV_BYPASS_PAYMENT || await isPaidUser();
+      const paid = DEV_BYPASS_PAYMENT || await isPaidUser() || await appStorage.isEarlyAdopterActive();
       return { success: true, data: { paid } };
+    }
+
+    case "VALIDATE_CODE": {
+      const code = (message.code as string || "").trim().toUpperCase();
+      try {
+        const res = await fetch(`${WORKER_URL}/api/codes/validate`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code }),
+        });
+        const data = await res.json() as { valid: boolean };
+        if (data.valid) {
+          await appStorage.redeemEarlyAdopterCode();
+          return { success: true, data: { valid: true } };
+        }
+        return { success: true, data: { valid: false } };
+      } catch {
+        return { success: false, error: "Could not reach server. Try again." };
+      }
     }
 
     case "OPEN_PAYMENT_PAGE": {

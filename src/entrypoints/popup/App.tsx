@@ -6,7 +6,28 @@ export default function App() {
   const [saved, setSaved] = useState(false);
   const [showTagSpy, setShowTagSpy] = useState(true);
   const [showSeoScore, setShowSeoScore] = useState(true);
+  const [code, setCode] = useState("");
+  const [codeStatus, setCodeStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const { isPaid, loading: paymentLoading, openUpgrade } = usePaidStatus();
+
+  const handleRedeemCode = async () => {
+    if (!code.trim()) return;
+    setCodeStatus("loading");
+    try {
+      const res = await browser.runtime.sendMessage({ type: "VALIDATE_CODE", code: code.trim() });
+      if (res?.success && res?.data?.valid) {
+        setCodeStatus("success");
+        // Reload to pick up new paid status
+        setTimeout(() => window.location.reload(), 1200);
+      } else {
+        setCodeStatus("error");
+        setTimeout(() => setCodeStatus("idle"), 3000);
+      }
+    } catch {
+      setCodeStatus("error");
+      setTimeout(() => setCodeStatus("idle"), 3000);
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -52,6 +73,35 @@ export default function App() {
             Unlimited Smart Audits — rewritten titles, optimized tags & diagnosis — $9.99/mo
           </p>
         </button>
+      )}
+
+      {/* Early adopter code redemption */}
+      {!paymentLoading && !isPaid && (
+        <div className="mb-4">
+          <p className="text-xs text-gray-500 mb-1.5">Have an early adopter code?</p>
+          <div className="flex gap-1.5">
+            <input
+              type="text"
+              value={code}
+              onChange={(e) => setCode(e.target.value.toUpperCase())}
+              placeholder="EDGE-EARLY-XXXX"
+              className="flex-1 text-xs border border-gray-200 rounded px-2 py-1.5 font-mono focus:outline-none focus:border-orange-400"
+            />
+            <button
+              onClick={handleRedeemCode}
+              disabled={codeStatus === "loading" || !code.trim()}
+              className="text-xs px-2.5 py-1.5 bg-orange-600 text-white rounded hover:bg-orange-700 disabled:opacity-50 transition-colors cursor-pointer"
+            >
+              {codeStatus === "loading" ? "..." : "Apply"}
+            </button>
+          </div>
+          {codeStatus === "success" && (
+            <p className="text-xs text-green-600 mt-1">Pro unlocked for 30 days!</p>
+          )}
+          {codeStatus === "error" && (
+            <p className="text-xs text-red-500 mt-1">Invalid code. Try again.</p>
+          )}
+        </div>
       )}
 
       {/* Settings */}
