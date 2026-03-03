@@ -1417,6 +1417,13 @@
     .exit-popup-icon svg {
       width: 28px;
       height: 28px;
+    }
+
+    .exit-popup-highlight {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-style: italic;
+      font-size: 1.1em;
       color: var(--terracotta);
     }
 
@@ -1566,27 +1573,35 @@
       fill: #facc15;
     }
 
-    .cta-audit-note {
-      font-size: 0.9rem;
-      color: rgba(255, 255, 255, 0.5);
-      margin-top: 12px;
-    }
-
-    .cta-email-fallback {
-      display: none;
+    .cta-email-primary {
       margin-top: 32px;
-      padding-top: 32px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    .cta-email-fallback.show {
-      display: block;
+    .cta-email-primary.hidden {
+      display: none;
     }
 
-    .cta-email-fallback p {
-      font-size: 1rem;
-      color: rgba(255, 255, 255, 0.7);
+    .cta-email-lead {
+      font-size: 1.05rem;
+      color: rgba(255, 255, 255, 0.8);
       margin-bottom: 16px;
+    }
+
+    .cta-install-link {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.45);
+      margin-top: 14px;
+    }
+
+    .cta-install-link a {
+      color: rgba(255, 255, 255, 0.65);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      transition: color 0.2s;
+    }
+
+    .cta-install-link a:hover {
+      color: white;
     }
 
     .cta-email-form {
@@ -2057,23 +2072,20 @@
       </div>
       <h2>Wrong tags. Wrong traffic. Wrong buyers.</h2>
       <p>Bad tags attract browsers, not buyers. Your conversion rate drops, Etsy thinks your listing sucks, and you spiral down the rankings. It starts with fixing your tags to match buyer intent.</p>
-      <div style="margin-top: 24px;">
-        <a href="https://chromewebstore.google.com/detail/etsy-edge-%E2%80%94-tags-optimiza/adkcnpgopfdaflmombdojmcnjgipibad" class="btn btn-primary" target="_blank" style="font-size: 1.1rem; padding: 16px 36px;">Add to Chrome — Free →</a>
-      </div>
-      <p class="cta-audit-note">Includes 1 free Smart Audit on any listing. Tag Spy & Optimization Score free forever.</p>
 
-      <!-- Email fallback: shown only after popup is dismissed -->
-      <div class="cta-email-fallback" id="ctaEmailFallback">
-        <p>Not ready to install? Get 3 free Smart Audits by email.</p>
+      <!-- Email capture form (default CTA) -->
+      <div class="cta-email-primary" id="ctaEmailPrimary">
+        <p class="cta-email-lead">Get 3 free Smart Audits — see exactly what's hurting your rankings.</p>
         <form class="cta-email-form" id="ctaEmailForm" action="https://formsubmit.co/hello@etsyedge.app" method="POST">
           <input type="hidden" name="_subject" value="Etsy Edge — CTA Email Capture">
           <input type="hidden" name="_captcha" value="false">
           <input type="hidden" name="_next" value="https://etsyedge.app/?captured=1">
           <input type="text" name="_honey" style="display:none">
           <input type="hidden" name="source" value="final_cta">
-          <input type="email" name="email" placeholder="Your email" required>
+          <input type="email" name="email" placeholder="you@example.com" required>
           <button type="submit" class="btn btn-primary">Get My Free Audits</button>
         </form>
+        <p class="cta-install-link">or <a href="https://chromewebstore.google.com/detail/etsy-edge-%E2%80%94-tags-optimiza/adkcnpgopfdaflmombdojmcnjgipibad" target="_blank">install the free Chrome extension</a></p>
       </div>
 
       <!-- Shown after email captured from any source -->
@@ -2116,10 +2128,10 @@
 
       <div id="exitPopupContent">
         <div class="exit-popup-icon">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          <svg width="28" height="28" viewBox="0 0 128 128"><rect width="128" height="128" rx="20" fill="#ea580c"/><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-family="system-ui" font-size="84" font-weight="900" fill="white">E</text></svg>
         </div>
         <h2 id="exitPopupHeading">Your listings could rank higher.</h2>
-        <p>Get 2 bonus Smart Audits free — plus occasional Etsy SEO tips. No spam, unsubscribe anytime.</p>
+        <p>Get <em class="exit-popup-highlight">2 bonus Smart Audits free</em> — plus occasional Etsy SEO tips. No spam, unsubscribe anytime.</p>
         <form class="exit-popup-form" id="exitPopupForm" action="https://formsubmit.co/hello@etsyedge.app" method="POST">
           <input type="hidden" name="_subject" value="Etsy Edge — Exit Popup Email Capture">
           <input type="hidden" name="_captcha" value="false">
@@ -2127,7 +2139,7 @@
           <input type="text" name="_honey" style="display:none">
           <input type="hidden" name="source" value="exit_popup">
           <input type="email" name="email" placeholder="you@example.com" required>
-          <button type="submit" class="btn btn-primary">Get My Free Audits →</button>
+          <button type="submit" class="btn btn-primary">Get My Free Audits</button>
         </form>
         <button class="exit-popup-dismiss" id="exitPopupDismiss">No thanks, I'll skip the bonus audits</button>
       </div>
@@ -2186,16 +2198,13 @@
 
     // --- Adaptive Final CTA ---
     function adaptFinalCTA() {
-      var fallback = document.getElementById('ctaEmailFallback');
+      var primary = document.getElementById('ctaEmailPrimary');
       var captured = document.getElementById('ctaCapturedMsg');
-      if (!fallback || !captured) return;
+      if (!primary || !captured) return;
 
       if (sessionStorage.getItem('ee_email_captured')) {
-        fallback.classList.remove('show');
+        primary.classList.add('hidden');
         captured.classList.add('show');
-      } else if (sessionStorage.getItem('ee_popup_dismissed')) {
-        fallback.classList.add('show');
-        captured.classList.remove('show');
       }
     }
 
