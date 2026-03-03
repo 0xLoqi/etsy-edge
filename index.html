@@ -1480,6 +1480,8 @@
       font-weight: 600;
       font-family: 'DM Sans', sans-serif;
       letter-spacing: -0.01em;
+      text-align: center;
+      justify-content: center;
     }
 
     .exit-popup-dismiss {
@@ -1559,17 +1561,22 @@
     /* Adaptive Final CTA */
     .cta-proof {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 4px;
+      gap: 6px;
       margin-bottom: 24px;
       font-size: 0.9rem;
       color: rgba(255, 255, 255, 0.7);
     }
 
+    .cta-proof-stars {
+      display: flex;
+      gap: 3px;
+    }
+
     .cta-proof svg {
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
       fill: #facc15;
     }
 
@@ -1916,9 +1923,6 @@
             </li>
           </ul>
           <a href="https://chromewebstore.google.com/detail/etsy-edge-%E2%80%94-tags-optimiza/adkcnpgopfdaflmombdojmcnjgipibad" class="btn btn-primary" target="_blank">Try Pro Free</a>
-          <div style="margin-top: 16px; padding: 14px 16px; background: linear-gradient(135deg, #fff8f5 0%, #fef3ec 100%); border: 1px solid rgba(194, 97, 58, 0.2); border-radius: 12px; text-align: center;">
-            <p style="font-size: 0.82rem; color: var(--warm-gray); line-height: 1.5; margin: 0;"><strong style="color: var(--terracotta);">Get 30 days free</strong> — leave an honest review and <a href="mailto:hello@etsyedge.app?subject=Early Adopter&body=Hi! I installed Etsy Edge and left a review. Here's my feedback: " style="color: var(--terracotta); text-decoration: underline; text-underline-offset: 2px;">email us</a></p>
-          </div>
         </div>
       </div>
 
@@ -2063,12 +2067,14 @@
   <section class="final-cta">
     <div class="final-cta-inner animate-in">
       <div class="cta-proof">
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <span style="margin-left: 4px;">Rated 5 stars by Etsy sellers</span>
+        <div class="cta-proof-stars">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <span>Rated 5 stars by Etsy sellers</span>
       </div>
       <h2>Wrong tags. Wrong traffic. Wrong buyers.</h2>
       <p>Bad tags attract browsers, not buyers. Your conversion rate drops, Etsy thinks your listing sucks, and you spiral down the rankings. It starts with fixing your tags to match buyer intent.</p>
