@@ -11,6 +11,15 @@
   <!-- Pinterest domain verification -->
   <meta name="p:domain_verify" content="7e58728a27f46dba3cb4bdb9e92fba2a"/>
 
+  <!-- Google Analytics (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1EC63T9J73"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-1EC63T9J73');
+  </script>
+
   <!-- Open Graph -->
   <meta property="og:title" content="Etsy Edge — Your Etsy SEO is outdated. See what actually works now.">
   <meta property="og:description" content="Etsy changed. Your tags didn't. See hidden tags on any listing, find what's ranking now, and fix your SEO in minutes.">
@@ -22,6 +31,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Etsy Edge — Your Etsy SEO is outdated. See what actually works now.">
   <meta name="twitter:description" content="Etsy changed. Your tags didn't. See hidden tags on any listing, find what's ranking now, and fix your SEO in minutes.">
+  <meta name="twitter:image" content="https://etsyedge.app/assets/og-image.png">
 
   <!-- JSON-LD -->
   <script type="application/ld+json">
@@ -1328,6 +1338,316 @@
       opacity: 1;
       transform: translateY(0);
     }
+
+    /* Exit-intent popup */
+    .exit-popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(45, 42, 38, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .exit-popup-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .exit-popup-modal {
+      background: white;
+      border-radius: 24px;
+      padding: 48px 44px 40px;
+      max-width: 440px;
+      width: 100%;
+      position: relative;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.04);
+      transform: scale(0.95) translateY(16px);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      text-align: center;
+    }
+
+    .exit-popup-overlay.show .exit-popup-modal {
+      transform: scale(1) translateY(0);
+    }
+
+    .exit-popup-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 32px;
+      height: 32px;
+      background: transparent;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .exit-popup-close:hover {
+      background: var(--cream);
+    }
+
+    .exit-popup-close svg {
+      width: 16px;
+      height: 16px;
+      color: var(--warm-gray-light);
+    }
+
+    .exit-popup-icon {
+      width: 56px;
+      height: 56px;
+      background: var(--terracotta-light);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+
+    .exit-popup-icon svg {
+      width: 28px;
+      height: 28px;
+      color: var(--terracotta);
+    }
+
+    .exit-popup-modal h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      line-height: 1.3;
+      margin-bottom: 8px;
+      color: var(--charcoal);
+    }
+
+    .exit-popup-modal p {
+      color: var(--warm-gray);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .exit-popup-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .exit-popup-form input[type="email"] {
+      width: 100%;
+      padding: 14px 20px;
+      border: 2px solid rgba(45, 42, 38, 0.1);
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      text-align: center;
+    }
+
+    .exit-popup-form input[type="email"]:focus {
+      border-color: var(--terracotta);
+      box-shadow: 0 0 0 3px rgba(194, 97, 58, 0.12);
+    }
+
+    .exit-popup-form input[type="email"]::placeholder {
+      color: var(--warm-gray-light);
+    }
+
+    .exit-popup-form button[type="submit"] {
+      width: 100%;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      letter-spacing: -0.01em;
+    }
+
+    .exit-popup-dismiss {
+      display: block;
+      width: 100%;
+      margin-top: 12px;
+      padding: 10px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--warm-gray-light);
+      background: none;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .exit-popup-dismiss:hover {
+      color: var(--warm-gray);
+      border-color: rgba(45, 42, 38, 0.08);
+    }
+
+    .exit-popup-thanks {
+      display: none;
+      text-align: center;
+    }
+
+    .exit-popup-thanks.show {
+      display: block;
+    }
+
+    .exit-popup-thanks svg {
+      width: 48px;
+      height: 48px;
+      color: var(--sage);
+      margin-bottom: 12px;
+    }
+
+    .exit-popup-thanks p {
+      font-family: 'Fraunces', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--charcoal);
+      margin-bottom: 6px;
+    }
+
+    .exit-popup-thanks .exit-popup-thanks-sub {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: var(--warm-gray);
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .exit-popup-modal {
+        padding: 36px 28px 32px;
+      }
+
+      .exit-popup-modal h2 {
+        font-size: 1.35rem;
+      }
+
+      .exit-popup-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+      }
+
+      .exit-popup-icon svg {
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    /* Adaptive Final CTA */
+    .cta-proof {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 24px;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .cta-proof svg {
+      width: 16px;
+      height: 16px;
+      fill: #facc15;
+    }
+
+    .cta-audit-note {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 12px;
+    }
+
+    .cta-email-fallback {
+      display: none;
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .cta-email-fallback.show {
+      display: block;
+    }
+
+    .cta-email-fallback p {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 16px;
+    }
+
+    .cta-email-form {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .cta-email-form input {
+      flex: 1;
+      padding: 14px 20px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 100px;
+      font-size: 1rem;
+      font-family: 'DM Sans', sans-serif;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .cta-email-form input:focus {
+      border-color: var(--terracotta);
+    }
+
+    .cta-email-form input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .cta-email-form button {
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .cta-captured-msg {
+      display: none;
+      margin-top: 24px;
+      padding: 16px 24px;
+      background: rgba(122, 158, 126, 0.15);
+      border: 1px solid rgba(122, 158, 126, 0.3);
+      border-radius: 12px;
+    }
+
+    .cta-captured-msg.show {
+      display: block;
+    }
+
+    .cta-captured-msg p {
+      color: var(--sage);
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin: 0;
+    }
+
+    @media (max-width: 768px) {
+      .cta-email-form {
+        flex-direction: column;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1727,12 +2047,39 @@
   <!-- Final CTA -->
   <section class="final-cta">
     <div class="final-cta-inner animate-in">
+      <div class="cta-proof">
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <span style="margin-left: 4px;">Rated 5 stars by Etsy sellers</span>
+      </div>
       <h2>Wrong tags. Wrong traffic. Wrong buyers.</h2>
       <p>Bad tags attract browsers, not buyers. Your conversion rate drops, Etsy thinks your listing sucks, and you spiral down the rankings. It starts with fixing your tags to match buyer intent.</p>
       <div style="margin-top: 24px;">
         <a href="https://chromewebstore.google.com/detail/etsy-edge-%E2%80%94-tags-optimiza/adkcnpgopfdaflmombdojmcnjgipibad" class="btn btn-primary" target="_blank" style="font-size: 1.1rem; padding: 16px 36px;">Add to Chrome — Free →</a>
       </div>
-      <p style="font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-top: 12px;">Free forever for Tag Spy & Optimization Score. Pro for $9.99/mo.</p>
+      <p class="cta-audit-note">Includes 1 free Smart Audit on any listing. Tag Spy & Optimization Score free forever.</p>
+
+      <!-- Email fallback: shown only after popup is dismissed -->
+      <div class="cta-email-fallback" id="ctaEmailFallback">
+        <p>Not ready to install? Get 3 free Smart Audits by email.</p>
+        <form class="cta-email-form" id="ctaEmailForm" action="https://formsubmit.co/hello@etsyedge.app" method="POST">
+          <input type="hidden" name="_subject" value="Etsy Edge — CTA Email Capture">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_next" value="https://etsyedge.app/?captured=1">
+          <input type="text" name="_honey" style="display:none">
+          <input type="hidden" name="source" value="final_cta">
+          <input type="email" name="email" placeholder="Your email" required>
+          <button type="submit" class="btn btn-primary">Get My Free Audits</button>
+        </form>
+      </div>
+
+      <!-- Shown after email captured from any source -->
+      <div class="cta-captured-msg" id="ctaCapturedMsg">
+        <p>You're in! Check your inbox for your free audits.</p>
+      </div>
     </div>
   </section>
 
@@ -1760,6 +2107,40 @@
     </div>
   </footer>
 
+  <!-- Exit-Intent Popup -->
+  <div class="exit-popup-overlay" id="exitPopup">
+    <div class="exit-popup-modal" role="dialog" aria-modal="true" aria-labelledby="exitPopupHeading">
+      <button class="exit-popup-close" id="exitPopupClose" aria-label="Close">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <div id="exitPopupContent">
+        <div class="exit-popup-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+        </div>
+        <h2 id="exitPopupHeading">Your listings could rank higher.</h2>
+        <p>Get 2 bonus Smart Audits free — plus occasional Etsy SEO tips. No spam, unsubscribe anytime.</p>
+        <form class="exit-popup-form" id="exitPopupForm" action="https://formsubmit.co/hello@etsyedge.app" method="POST">
+          <input type="hidden" name="_subject" value="Etsy Edge — Exit Popup Email Capture">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_next" value="https://etsyedge.app/?captured=1">
+          <input type="text" name="_honey" style="display:none">
+          <input type="hidden" name="source" value="exit_popup">
+          <input type="email" name="email" placeholder="you@example.com" required>
+          <button type="submit" class="btn btn-primary">Get My Free Audits →</button>
+        </form>
+        <button class="exit-popup-dismiss" id="exitPopupDismiss">No thanks, I'll skip the bonus audits</button>
+      </div>
+
+      <div class="exit-popup-thanks" id="exitPopupThanks">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <p>You're in!</p>
+        <p class="exit-popup-thanks-sub">Check your inbox for your free audits.</p>
+        <a href="https://chromewebstore.google.com/detail/etsy-edge-%E2%80%94-tags-optimiza/adkcnpgopfdaflmombdojmcnjgipibad" class="btn btn-primary" target="_blank">Install Etsy Edge →</a>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Scroll animations
     const observerOptions = {
@@ -1782,6 +2163,204 @@
 
     // Legacy: clean up old waitlist redirect params
     if (new URLSearchParams(window.location.search).get('thanks') === '1') {
+      window.history.replaceState({}, '', '/');
+    }
+
+    // Safe GA4 wrapper (ad blockers may prevent gtag from loading)
+    function trackEvent(name, params) {
+      if (typeof gtag === 'function') gtag('event', name, params);
+    }
+
+    // Track CWS link clicks
+    document.querySelectorAll('a[href*="chromewebstore.google.com"]').forEach(link => {
+      link.addEventListener('click', () => {
+        const label = link.textContent.trim();
+        const source = new URLSearchParams(window.location.search).get('utm_source') || 'direct';
+        trackEvent('cws_click', {
+          event_category: 'conversion',
+          event_label: label,
+          utm_source: source
+        });
+      });
+    });
+
+    // --- Adaptive Final CTA ---
+    function adaptFinalCTA() {
+      var fallback = document.getElementById('ctaEmailFallback');
+      var captured = document.getElementById('ctaCapturedMsg');
+      if (!fallback || !captured) return;
+
+      if (sessionStorage.getItem('ee_email_captured')) {
+        fallback.classList.remove('show');
+        captured.classList.add('show');
+      } else if (sessionStorage.getItem('ee_popup_dismissed')) {
+        fallback.classList.add('show');
+        captured.classList.remove('show');
+      }
+    }
+
+    // Run on page load (handles page refreshes within session)
+    adaptFinalCTA();
+
+    // --- Exit-Intent Popup ---
+    (function() {
+      var overlay = document.getElementById('exitPopup');
+      var form = document.getElementById('exitPopupForm');
+      var closeBtn = document.getElementById('exitPopupClose');
+      var dismissBtn = document.getElementById('exitPopupDismiss');
+      var content = document.getElementById('exitPopupContent');
+      var thanks = document.getElementById('exitPopupThanks');
+
+      // Record page entry time
+      sessionStorage.setItem('ee_page_enter', Date.now().toString());
+
+      function hasBeenLongEnough() {
+        var enter = parseInt(sessionStorage.getItem('ee_page_enter') || '0');
+        return (Date.now() - enter) >= 8000;
+      }
+
+      function shouldShow() {
+        return !sessionStorage.getItem('ee_popup_shown')
+          && !sessionStorage.getItem('ee_email_captured')
+          && hasBeenLongEnough();
+      }
+
+      var previousFocus;
+      function showPopup() {
+        if (!shouldShow()) return;
+        previousFocus = document.activeElement;
+        sessionStorage.setItem('ee_popup_shown', '1');
+        overlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        closeBtn.focus();
+        trackEvent('popup_shown', { event_category: 'conversion' });
+      }
+
+      function hidePopup() {
+        overlay.classList.remove('show');
+        document.body.style.overflow = '';
+        if (previousFocus) previousFocus.focus();
+      }
+
+      // Desktop: mouse leaves viewport
+      document.documentElement.addEventListener('mouseleave', function(e) {
+        if (e.clientY <= 0) showPopup();
+      });
+
+      // Mobile: idle timeout (45 seconds)
+      var mobileTimer;
+      function resetMobileTimer() {
+        clearTimeout(mobileTimer);
+        if ('ontouchstart' in window) {
+          mobileTimer = setTimeout(showPopup, 45000);
+        }
+      }
+      ['touchstart', 'scroll'].forEach(function(evt) {
+        document.addEventListener(evt, resetMobileTimer, { passive: true });
+      });
+      resetMobileTimer();
+
+      // Close button
+      closeBtn.addEventListener('click', function() {
+        sessionStorage.setItem('ee_popup_dismissed', '1');
+        hidePopup();
+        trackEvent('popup_dismissed', { event_category: 'conversion' });
+        adaptFinalCTA();
+      });
+
+      // Dismiss link
+      dismissBtn.addEventListener('click', function() {
+        sessionStorage.setItem('ee_popup_dismissed', '1');
+        hidePopup();
+        trackEvent('popup_dismissed', { event_category: 'conversion' });
+        adaptFinalCTA();
+      });
+
+      // Overlay click (outside modal)
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) {
+          sessionStorage.setItem('ee_popup_dismissed', '1');
+          hidePopup();
+          trackEvent('popup_dismissed', { event_category: 'conversion' });
+          adaptFinalCTA();
+        }
+      });
+
+      // Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && overlay.classList.contains('show')) {
+          sessionStorage.setItem('ee_popup_dismissed', '1');
+          hidePopup();
+          trackEvent('popup_dismissed', { event_category: 'conversion' });
+          adaptFinalCTA();
+        }
+      });
+
+      // Form submit — intercept and handle via fetch
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var formData = new FormData(form);
+
+        fetch(form.action, {
+          method: 'POST',
+          body: formData,
+          headers: { 'Accept': 'application/json' }
+        }).then(function(res) {
+          if (!res.ok) throw new Error('Server error');
+          sessionStorage.setItem('ee_email_captured', '1');
+          content.style.display = 'none';
+          thanks.classList.add('show');
+          trackEvent('email_capture', {
+            event_category: 'conversion',
+            event_label: 'exit_popup'
+          });
+          adaptFinalCTA();
+        }).catch(function() {
+          // Fallback: submit form natively so FormSubmit handles the redirect
+          form.submit();
+        });
+      });
+
+      // Suppress popup if visitor clicks a CWS link (use ee_popup_shown, not ee_email_captured)
+      document.querySelectorAll('a[href*="chromewebstore.google.com"]').forEach(function(link) {
+        link.addEventListener('click', function() {
+          sessionStorage.setItem('ee_popup_shown', '1');
+        });
+      });
+    })();
+
+    // CTA email form submit
+    (function() {
+      var form = document.getElementById('ctaEmailForm');
+      if (!form) return;
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var formData = new FormData(form);
+
+        fetch(form.action, {
+          method: 'POST',
+          body: formData,
+          headers: { 'Accept': 'application/json' }
+        }).then(function(res) {
+          if (!res.ok) throw new Error('Server error');
+          sessionStorage.setItem('ee_email_captured', '1');
+          adaptFinalCTA();
+          trackEvent('email_capture', {
+            event_category: 'conversion',
+            event_label: 'final_cta'
+          });
+        }).catch(function() {
+          // Fallback: submit form natively
+          form.submit();
+        });
+      });
+    })();
+
+    // Handle ?captured=1 redirect from FormSubmit (if JS fetch fails and form submits normally)
+    if (new URLSearchParams(window.location.search).get('captured') === '1') {
+      sessionStorage.setItem('ee_email_captured', '1');
+      adaptFinalCTA();
       window.history.replaceState({}, '', '/');
     }
   </script>
