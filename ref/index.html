@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Install Etsy Edge — Free Smart Audit Credits</title>
+  <meta name="description" content="Install Etsy Edge and get 3 free Smart Audit credits. See hidden tags, optimize your Etsy listings, and boost your SEO.">
+  <meta name="robots" content="noindex">
+
+  <!-- Google Analytics (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1EC63T9J73"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-1EC63T9J73');
+  </script>
+
+  <!-- Fonts (same as main site) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 128 128'><rect width='128' height='128' rx='20' fill='%23ea580c'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='system-ui' font-size='84' font-weight='900' fill='white'>E</text></svg>">
+
+  <style>
+    :root {
+      --terracotta: #c2613a;
+      --terracotta-dark: #a34f2e;
+      --terracotta-light: #f4e4dc;
+      --cream: #faf6f1;
+      --charcoal: #2d2a26;
+      --warm-gray: #6b6560;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--cream);
+      color: var(--charcoal);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      text-align: center;
+      padding: 2rem;
+      max-width: 480px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 64px;
+      height: 64px;
+      background: var(--terracotta);
+      border-radius: 16px;
+      margin-bottom: 1.5rem;
+    }
+
+    .logo span {
+      font-family: system-ui, sans-serif;
+      font-size: 42px;
+      font-weight: 900;
+      color: white;
+      line-height: 1;
+    }
+
+    h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 0.75rem;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: var(--warm-gray);
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+
+    .credit-badge {
+      display: inline-block;
+      background: var(--terracotta-light);
+      color: var(--terracotta-dark);
+      font-weight: 600;
+      font-size: 0.875rem;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      margin-bottom: 2rem;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--terracotta-light);
+      border-top-color: var(--terracotta);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .redirect-msg {
+      font-size: 0.875rem;
+      color: var(--warm-gray);
+    }
+
+    .error-msg {
+      display: none;
+      font-size: 0.875rem;
+      color: var(--terracotta-dark);
+      margin-top: 1rem;
+    }
+
+    .fallback-link {
+      color: var(--terracotta);
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo"><span>E</span></div>
+    <h1>Etsy Edge</h1>
+    <div class="credit-badge">3 free Smart Audit credits</div>
+    <p class="subtitle">
+      Your friend invited you to try Etsy Edge. Install the extension and you'll both get 3 free AI-powered listing audits.
+    </p>
+    <p class="redirect-msg">
+      <span class="spinner"></span>
+      Redirecting to Chrome Web Store...
+    </p>
+    <p class="error-msg" id="error-msg">
+      Something went wrong.
+      <a class="fallback-link" href="https://chromewebstore.google.com/detail/etsy-edge-%E2%80%94-tags-optimiza/adkcnpgopfdaflmombdojmcnjgipibad">
+        Install Etsy Edge manually
+      </a>
+    </p>
+  </div>
+
+  <script>
+    (function() {
+      var CWS_URL = 'https://chromewebstore.google.com/detail/etsy-edge-%E2%80%94-tags-optimiza/adkcnpgopfdaflmombdojmcnjgipibad';
+      var MAIN_SITE = 'https://etsyedge.app/';
+
+      var params = new URLSearchParams(window.location.search);
+      var referrerId = params.get('c');
+
+      if (!referrerId) {
+        // No referral code — redirect to main site
+        window.location.href = MAIN_SITE;
+        return;
+      }
+
+      // Store the referrer ID so the extension can read it on install
+      try {
+        localStorage.setItem('etsy_edge_ref', referrerId);
+      } catch (e) {
+        // localStorage blocked — show error
+        document.getElementById('error-msg').style.display = 'block';
+      }
+
+      // Track referral click in GA
+      if (typeof gtag === 'function') {
+        gtag('event', 'referral_click', {
+          event_category: 'referral',
+          event_label: referrerId
+        });
+      }
+
+      // Redirect to Chrome Web Store after a brief pause
+      setTimeout(function() {
+        window.location.href = CWS_URL;
+      }, 1500);
+    })();
+  </script>
+</body>
+</html>
