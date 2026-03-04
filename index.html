@@ -1559,43 +1559,25 @@
     }
 
     /* Social Proof Strip */
-    .social-proof-strip {
-      padding: 48px 24px;
-      text-align: center;
-      background: var(--cream);
-    }
-
-    .social-proof-strip-inner {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .social-proof-stars {
+    .cta-trust-badge {
       display: flex;
+      align-items: center;
       justify-content: center;
-      gap: 6px;
-      margin-bottom: 12px;
-    }
-
-    .social-proof-stars svg {
-      width: 32px;
-      height: 32px;
-      fill: #f59e0b;
-      filter: drop-shadow(0 1px 2px rgba(245, 158, 11, 0.3));
-    }
-
-    .social-proof-text {
-      font-family: 'Fraunces', serif;
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: var(--charcoal);
-      letter-spacing: -0.01em;
-    }
-
-    .social-proof-sub {
-      font-size: 0.85rem;
+      gap: 4px;
+      margin-top: 14px;
+      font-size: 0.82rem;
       color: var(--warm-gray-light);
-      margin-top: 4px;
+      letter-spacing: 0.01em;
+    }
+
+    .cta-trust-badge svg {
+      width: 14px;
+      height: 14px;
+      fill: #f59e0b;
+    }
+
+    .cta-trust-badge span {
+      margin-left: 2px;
     }
 
     /* Adaptive Final CTA */
@@ -2082,21 +2064,6 @@
     </div>
   </section>
 
-  <!-- Social Proof -->
-  <div class="social-proof-strip animate-in">
-    <div class="social-proof-strip-inner">
-      <div class="social-proof-stars">
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-      </div>
-      <p class="social-proof-text">Rated 5 stars by Etsy sellers</p>
-      <p class="social-proof-sub">Chrome Web Store</p>
-    </div>
-  </div>
-
   <!-- Final CTA -->
   <section class="final-cta">
     <div class="final-cta-inner animate-in">
@@ -2115,6 +2082,14 @@
           <input type="email" name="email" placeholder="you@example.com" required>
           <button type="submit" class="btn btn-primary">Get My Free Audits</button>
         </form>
+        <div class="cta-trust-badge">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span>5.0 on Chrome Web Store</span>
+        </div>
         <p class="cta-install-link">or <a href="https://chromewebstore.google.com/detail/etsy-edge-%E2%80%94-tags-optimiza/adkcnpgopfdaflmombdojmcnjgipibad" target="_blank">install the free Chrome extension</a></p>
       </div>
 
