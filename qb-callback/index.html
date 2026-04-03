@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head><title>Redirecting...</title></head>
+<body>
+<p>Redirecting to local app...</p>
+<script>
+// Forward OAuth callback to localhost, preserving all query params
+window.location.href = 'http://localhost:3850/callback' + window.location.search;
+</script>
+</body>
+</html>
