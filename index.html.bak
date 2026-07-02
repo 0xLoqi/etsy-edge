@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Etsy Edge — Rank Higher on Etsy Search. Free Chrome Extension.</title>
+  <title>TagSpy — Rank Higher on Etsy Search. Free Chrome Extension.</title>
   <meta name="description" content="Stop guessing at Etsy tags. See what top sellers use, get smart optimization suggestions, and climb Etsy search rankings. Free Chrome extension.">
   <meta name="keywords" content="etsy tags, etsy seo, etsy tag tool, etsy optimization, etsy listing optimization, etsy tag spy">
   <link rel="canonical" href="https://etsyedge.app/">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="Etsy Edge — Rank Higher on Etsy Search">
+  <meta property="og:title" content="TagSpy — Rank Higher on Etsy Search">
   <meta property="og:description" content="Stop guessing at Etsy tags. See what top sellers use, get smart optimization suggestions, and climb Etsy search rankings.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://etsyedge.app/">
@@ -17,7 +17,7 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Etsy Edge — Rank Higher on Etsy Search">
+  <meta name="twitter:title" content="TagSpy — Rank Higher on Etsy Search">
   <meta name="twitter:description" content="Stop guessing at Etsy tags. See what top sellers use, get smart optimization suggestions, and climb search rankings.">
 
   <!-- JSON-LD -->
@@ -25,7 +25,7 @@
   {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "Etsy Edge",
+    "name": "TagSpy",
     "applicationCategory": "BrowserApplication",
     "operatingSystem": "Chrome",
     "description": "Chrome extension that shows related searches for any Etsy listing, grades listing optimization, and provides smart audit reports for Etsy sellers.",
@@ -1312,7 +1312,7 @@
     <div class="nav-inner">
       <a href="/" class="logo">
         <span class="logo-icon"><svg width="20" height="20" viewBox="0 0 128 128" style="display:block"><rect width="128" height="128" rx="20" fill="#ea580c"/><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-family="system-ui" font-size="100" font-weight="900" fill="white">E</text></svg></span>
-        <span>Etsy Edge</span>
+        <span>TagSpy</span>
       </a>
       <div class="nav-links">
         <a href="#features">Features</a>
@@ -1354,13 +1354,13 @@
       </p>
 
       <div style="margin-top: 32px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: center;">
-        <a href="https://www.producthunt.com/posts/etsy-edge?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-etsy-edge" target="_blank" rel="noopener noreferrer"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1083663&theme=light&t=1771753777916" alt="Etsy Edge - See any Etsy listing's hidden tags. Optimize yours with AI. | Product Hunt" width="250" height="54" style="width: 250px; height: 54px;" /></a>
+        <a href="https://www.producthunt.com/posts/etsy-edge?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-etsy-edge" target="_blank" rel="noopener noreferrer"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1083663&theme=light&t=1771753777916" alt="TagSpy - See any Etsy listing's hidden tags. Optimize yours with AI. | Product Hunt" width="250" height="54" style="width: 250px; height: 54px;" /></a>
       </div>
       <p class="waitlist-note">Tag Spy & Optimization Score free forever. Pro for $9.99/mo.</p>
 
       <div class="hero-screenshot">
-        <img src="assets/screenshots/optimization.png" alt="Etsy Edge showing optimization score and related searches on an Etsy listing" loading="eager">
-        <p class="hero-screenshot-caption">Etsy Edge side panel — live on any Etsy listing</p>
+        <img src="assets/screenshots/optimization.png" alt="TagSpy showing optimization score and related searches on an Etsy listing" loading="eager">
+        <p class="hero-screenshot-caption">TagSpy side panel — live on any Etsy listing</p>
       </div>
     </div>
   </section>
@@ -1469,7 +1469,7 @@
           <div class="step-number">1</div>
           <div class="step-content">
             <h3>Install the extension</h3>
-            <p>Add Etsy Edge from the Chrome Web Store. Takes 10 seconds, no account needed.</p>
+            <p>Add TagSpy from the Chrome Web Store. Takes 10 seconds, no account needed.</p>
           </div>
         </div>
 
@@ -1497,10 +1497,10 @@
     <div class="video-section-inner">
       <div class="section-header animate-in">
         <h2>See it in action</h2>
-        <p>Watch Etsy Edge optimize a real listing in under 60 seconds.</p>
+        <p>Watch TagSpy optimize a real listing in under 60 seconds.</p>
       </div>
       <div class="video-wrapper animate-in">
-        <iframe src="https://www.youtube.com/embed/WBkxAuFs_Tg?rel=0&modestbranding=1" title="Etsy Edge Demo — See it in action" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        <iframe src="https://www.youtube.com/embed/WBkxAuFs_Tg?rel=0&modestbranding=1" title="TagSpy Demo — See it in action" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
       </div>
     </div>
   </section>
@@ -1557,19 +1557,19 @@
           </ul>
           <a href="https://chromewebstore.google.com/detail/etsy-edge-%E2%80%94-tags-optimiza/adkcnpgopfdaflmombdojmcnjgipibad" class="btn btn-primary" target="_blank">Try Pro Free</a>
           <div style="margin-top: 16px; padding: 14px 16px; background: linear-gradient(135deg, #fff8f5 0%, #fef3ec 100%); border: 1px solid rgba(194, 97, 58, 0.2); border-radius: 12px; text-align: center;">
-            <p style="font-size: 0.82rem; color: var(--warm-gray); line-height: 1.5; margin: 0;"><strong style="color: var(--terracotta);">Get 30 days free</strong> — leave an honest review and <a href="mailto:hello@etsyedge.app?subject=Early Adopter&body=Hi! I installed Etsy Edge and left a review. Here's my feedback: " style="color: var(--terracotta); text-decoration: underline; text-underline-offset: 2px;">email us</a></p>
+            <p style="font-size: 0.82rem; color: var(--warm-gray); line-height: 1.5; margin: 0;"><strong style="color: var(--terracotta);">Get 30 days free</strong> — leave an honest review and <a href="mailto:hello@etsyedge.app?subject=Early Adopter&body=Hi! I installed TagSpy and left a review. Here's my feedback: " style="color: var(--terracotta); text-decoration: underline; text-underline-offset: 2px;">email us</a></p>
           </div>
         </div>
       </div>
 
       <div class="comparison animate-in">
-        <h3>How Etsy Edge compares</h3>
+        <h3>How TagSpy compares</h3>
         <div style="overflow-x: auto;">
           <table class="comparison-table">
             <thead>
               <tr>
                 <th>Feature</th>
-                <th>Etsy Edge</th>
+                <th>TagSpy</th>
                 <th>eRank</th>
                 <th>Marmalead</th>
                 <th>Alura</th>
@@ -1652,7 +1652,7 @@
             <svg class="faq-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
           </summary>
           <div class="faq-answer">
-            <p>Yes. Etsy Edge works on every public Etsy listing page. Just navigate to any listing and click the extension icon — the side panel opens right next to the page.</p>
+            <p>Yes. TagSpy works on every public Etsy listing page. Just navigate to any listing and click the extension icon — the side panel opens right next to the page.</p>
           </div>
         </details>
 
@@ -1692,7 +1692,7 @@
             <svg class="faq-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
           </summary>
           <div class="faq-answer">
-            <p>Those are great tools, but they require you to leave Etsy and use a separate dashboard. Etsy Edge works right on the listing page — no context switching. Plus, Tag Spy is free (eRank charges for tag viewing), and our smart suggestions are unique to Etsy Edge.</p>
+            <p>Those are great tools, but they require you to leave Etsy and use a separate dashboard. TagSpy works right on the listing page — no context switching. Plus, Tag Spy is free (eRank charges for tag viewing), and our smart suggestions are unique to TagSpy.</p>
           </div>
         </details>
       </div>
@@ -1703,7 +1703,7 @@
   <section class="final-cta">
     <div class="final-cta-inner animate-in">
       <h2>Every unoptimized listing is leaving sales on the table.</h2>
-      <p>Most Etsy sellers never look at their title structure, keyword placement, or tag strategy. Etsy Edge shows you exactly what to fix — in one click.</p>
+      <p>Most Etsy sellers never look at their title structure, keyword placement, or tag strategy. TagSpy shows you exactly what to fix — in one click.</p>
       <div style="margin-top: 24px;">
         <a href="https://chromewebstore.google.com/detail/etsy-edge-%E2%80%94-tags-optimiza/adkcnpgopfdaflmombdojmcnjgipibad" class="btn btn-primary" target="_blank" style="font-size: 1.1rem; padding: 16px 36px;">Add to Chrome — Free →</a>
       </div>
@@ -1716,7 +1716,7 @@
     <div class="footer-inner">
       <a href="/" class="footer-logo">
         <span class="logo-icon"><svg width="20" height="20" viewBox="0 0 128 128" style="display:block"><rect width="128" height="128" rx="20" fill="#ea580c"/><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-family="system-ui" font-size="100" font-weight="900" fill="white">E</text></svg></span>
-        <span>Etsy Edge</span>
+        <span>TagSpy</span>
       </a>
       <div class="footer-links">
         <a href="blog/index.html">Blog</a>
@@ -1724,7 +1724,7 @@
         <a href="privacy-policy.html">Privacy Policy</a>
         <a href="mailto:hello@etsyedge.app">Contact</a>
       </div>
-      <p class="footer-disclaimer">Etsy Edge is not affiliated with or endorsed by Etsy, Inc. "Etsy" is a trademark of Etsy, Inc.</p>
+      <p class="footer-disclaimer">TagSpy is not affiliated with or endorsed by Etsy, Inc. "Etsy" is a trademark of Etsy, Inc.</p>
     </div>
   </footer>
 
