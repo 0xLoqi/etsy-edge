@@ -15,6 +15,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="assets/style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 128 128'><rect width='128' height='128' rx='20' fill='%23A63A5C'/><circle cx='55' cy='55' r='31' fill='%23ffffff'/><g transform='translate(55 55) rotate(-38)'><path d='M -16 -9 L 7 -9 A 6 6 0 0 1 13 -3 L 13 9 A 6 6 0 0 1 7 15 L -16 15 Z' fill='%23A63A5C'/><circle cx='5' cy='-1.5' r='3.4' fill='%23ffffff'/></g><rect x='80' y='80' width='34' height='13' rx='6.5' transform='rotate(45 80 80)' fill='%23ffffff'/></svg>">
+  <script src="/assets/attribution.js" defer></script>
 </head>
 <body class="bg-white text-gray-900 antialiased">
 
@@ -51,6 +52,8 @@
         <li><strong>Anonymous install identifier</strong> — On first install, the extension generates a random UUID (not tied to your identity, email, or Etsy account). This ID is used for the referral credit system and to authenticate requests to our backend. It is synced across your Chrome devices via Chrome Sync and stored on our server.</li>
         <li><strong>Listing data for AI features</strong> — When you use Smart Audit or Listing Creator (paid/promotional features), the listing title, description, tags, and category are sent through our backend to the Anthropic API for analysis. This data passes through our server but is never stored or logged.</li>
         <li><strong>Referral attribution</strong> — If you install via a referral link, the extension reads a referral code from tagspy.app localStorage (and removes it immediately) to credit the referrer. Only the anonymous referrer UUID is transmitted.</li>
+        <li><strong>Anonymous install-source attribution</strong> — If you visited tagspy.app before installing, the extension reads a source label (for example "producthunt" or "google") that the site stored in its own localStorage, and reports anonymous usage events (install, first use, upgrade) tagged with that label. These events contain no identifiers, no listing data, and nothing about you — they are pure counts that tell us which marketing channel works.</li>
+        <li><strong>Uninstall survey</strong> — When you uninstall, Chrome may open a one-question feedback page on tagspy.app. Answering is optional and anonymous.</li>
         <li><strong>Payment data</strong> — Handled entirely by ExtensionPay/Stripe. We never see or store your payment information.</li>
       </ul>
       <p>We do <strong>not</strong> collect your name, email, Etsy account credentials, browsing history, or any data from non-Etsy pages.</p>
@@ -68,6 +71,7 @@
       <h3>Server-side (Cloudflare Workers KV)</h3>
       <ul>
         <li>Referral records keyed by anonymous UUID: referral chain, credit counts, and credit expiry dates. No listing data, no personal information.</li>
+        <li>Anonymous attribution events (install, first use, upgrade, uninstall reason) tagged with a marketing source label. No identifiers of any kind; auto-deleted after 13 months.</li>
       </ul>
       <p>Listing data and AI prompts are <strong>not</strong> stored or logged on our server. They are forwarded to the Anthropic API in real time and discarded.</p>
 
@@ -84,12 +88,12 @@
         <li><strong>storage</strong> — Save settings, cache results, and track usage locally in your browser.</li>
         <li><strong>activeTab</strong> — Read the current Etsy listing page to extract tags and calculate SEO scores.</li>
         <li><strong>sidePanel</strong> — Display the main TagSpy interface as a Chrome side panel.</li>
-        <li><strong>scripting</strong> — Execute a small script on tagspy.app tabs (only) to read and remove referral attribution data from localStorage on install.</li>
+        <li><strong>scripting</strong> — Execute a small script on tagspy.app tabs (only) to read and remove referral and install-source attribution data from localStorage on install.</li>
       </ul>
       <h3>Host Permissions</h3>
       <ul>
         <li><strong>https://*.etsy.com/*</strong> — Inject the content script on Etsy listing pages to extract tags, titles, and related searches.</li>
-        <li><strong>https://tagspy.app/*</strong> — Read referral attribution from tagspy.app localStorage during installation. No other data is read from or written to this site.</li>
+        <li><strong>https://tagspy.app/*</strong> — Read referral and install-source attribution from tagspy.app localStorage during installation. No other data is read from or written to this site.</li>
         <li><strong>https://extensionpay.com/*</strong> — Required by our payment provider (ExtensionPay) to detect completed payments and restore subscriptions. A minimal content script runs on this domain to communicate payment status back to the extension.</li>
       </ul>
 
