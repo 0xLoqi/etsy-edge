@@ -217,9 +217,8 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(240, 247, 251, 0.82);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(22, 27, 46, 0.06);
+      background: #131a2c;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
 
     .nav-inner {
@@ -315,7 +314,7 @@
       position: relative;
       padding: 100px 24px 140px;
       overflow: hidden;
-      background: linear-gradient(165deg, #e7faf0 0%, #f2fbf6 55%, #ffffff 100%);
+      background: linear-gradient(165deg, #131a2c 0%, #1b2540 60%, #1e2947 100%);
     }
 
     .hero-bg {
@@ -324,8 +323,8 @@
       right: -300px;
       width: 900px;
       height: 900px;
-      background: radial-gradient(circle, var(--terracotta-light) 0%, transparent 70%);
-      opacity: 0.6;
+      background: radial-gradient(circle, rgba(47,208,122,0.18) 0%, transparent 70%);
+      opacity: 0.7;
       pointer-events: none;
     }
 
@@ -335,8 +334,8 @@
       left: -200px;
       width: 700px;
       height: 700px;
-      background: radial-gradient(circle, #cdf0dd 0%, transparent 70%);
-      opacity: 0.55;
+      background: radial-gradient(circle, rgba(47,208,122,0.13) 0%, transparent 70%);
+      opacity: 0.7;
       pointer-events: none;
     }
 
@@ -448,10 +447,10 @@
 
     .floating-tag:nth-child(1) { top: 15%; left: 8%; animation-delay: 0s; }
     .floating-tag:nth-child(2) { top: 25%; right: 12%; animation-delay: 1s; }
-    .floating-tag:nth-child(3) { top: 60%; left: 5%; animation-delay: 2s; }
-    .floating-tag:nth-child(4) { top: 70%; right: 8%; animation-delay: 0.5s; }
-    .floating-tag:nth-child(5) { top: 40%; left: 3%; animation-delay: 1.5s; }
-    .floating-tag:nth-child(6) { top: 85%; right: 15%; animation-delay: 2.5s; }
+    .floating-tag:nth-child(3) { top: 46%; left: 4%; animation-delay: 2s; }
+    .floating-tag:nth-child(4) { top: 52%; right: 5%; animation-delay: 0.5s; }
+    .floating-tag:nth-child(5) { top: 38%; left: 3%; animation-delay: 1.5s; }
+    .floating-tag:nth-child(6) { top: 34%; right: 17%; animation-delay: 2.5s; }
 
     @keyframes float {
       0%, 100% { transform: translateY(0) rotate(0deg); }
@@ -1780,6 +1779,20 @@
         flex-direction: column;
       }
     }
+
+    /* ---- Dark navy hero treatment (palette A) ---- */
+    nav .logo { color: #ffffff; }
+    nav .nav-links a { color: rgba(255,255,255,0.72); }
+    nav .nav-links a:hover { color: #ffffff; }
+    .hero h1 { color: #ffffff; }
+    .hero h1 em { color: #3ad57f; }
+    .hero-subtitle { color: #aab3c5; }
+    .hero .waitlist-note, .hero .hero-note { color: #8b93a5; }
+    .hero-badge {
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(255,255,255,0.18);
+      color: #d7dde8;
+    }
   </style>
   <script src="/assets/attribution.js" defer></script>
 </head>
@@ -1988,7 +2001,7 @@
         <p>Watch TagSpy optimize a real listing in under 60 seconds.</p>
       </div>
       <div class="video-wrapper animate-in">
-        <iframe src="https://www.youtube.com/embed/WBkxAuFs_Tg?rel=0&modestbranding=1" title="TagSpy Demo, See it in action" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        <iframe src="https://www.youtube.com/embed/SSkEbYh6wrw?rel=0&modestbranding=1" title="TagSpy Demo, See it in action" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
       </div>
     </div>
   </section>
