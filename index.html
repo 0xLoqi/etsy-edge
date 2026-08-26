@@ -160,16 +160,18 @@
 
   <style>
     :root {
-      --terracotta: #A63A5C;
-      --terracotta-dark: #7E2A44;
-      --terracotta-light: #f4e4dc;
-      --cream: #faf6f1;
-      --cream-dark: #f0ebe4;
-      --sage: #7a9e7e;
-      --sage-light: #e8f0e9;
-      --charcoal: #2d2a26;
-      --warm-gray: #6b6560;
-      --warm-gray-light: #9c9690;
+      /* Rebranded to TagSpy identity (green/navy/gold). Var names kept so the
+         rest of the sheet needs no churn; values now map to the new palette. */
+      --terracotta: #12a150;        /* primary action / accent (green) */
+      --terracotta-dark: #0c7a3c;   /* green pressed / gradient end */
+      --terracotta-light: #dcf5e6;  /* mint tint */
+      --cream: #f5f8fc;             /* cool near-white page bg */
+      --cream-dark: #eaf0f7;
+      --sage: #12a150;
+      --sage-light: #e3f6ec;
+      --charcoal: #161b2e;          /* ink / navy text */
+      --warm-gray: #5b6472;
+      --warm-gray-light: #9aa2ad;
     }
 
     * {
@@ -244,7 +246,7 @@
     .logo-icon {
       width: 36px;
       height: 36px;
-      background: #A63A5C;
+      background: transparent;
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -288,13 +290,13 @@
     .btn-primary {
       background: var(--terracotta);
       color: white;
-      box-shadow: 0 4px 14px rgba(194, 97, 58, 0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+      box-shadow: 0 4px 14px rgba(18, 161, 80, 0.35), inset 0 1px 0 rgba(255,255,255,0.15);
     }
 
     .btn-primary:hover {
       background: var(--terracotta-dark);
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(194, 97, 58, 0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+      box-shadow: 0 6px 20px rgba(18, 161, 80, 0.4), inset 0 1px 0 rgba(255,255,255,0.15);
     }
 
     .btn-secondary {
@@ -313,6 +315,7 @@
       position: relative;
       padding: 100px 24px 140px;
       overflow: hidden;
+      background: linear-gradient(135deg, #e6f9ee 0%, #e9f1ff 52%, #f2ecff 100%);
     }
 
     .hero-bg {
@@ -332,8 +335,8 @@
       left: -200px;
       width: 700px;
       height: 700px;
-      background: radial-gradient(circle, var(--sage-light) 0%, transparent 70%);
-      opacity: 0.5;
+      background: radial-gradient(circle, #dcecff 0%, transparent 70%);
+      opacity: 0.6;
       pointer-events: none;
     }
 
@@ -641,7 +644,7 @@
       font-weight: 700;
       font-size: 1.25rem;
       flex-shrink: 0;
-      box-shadow: 0 4px 14px rgba(194, 97, 58, 0.3);
+      box-shadow: 0 4px 14px rgba(18, 161, 80, 0.3);
     }
 
     .step-content h3 {
@@ -923,7 +926,7 @@
       left: -50%;
       width: 200%;
       height: 200%;
-      background: radial-gradient(circle at center, rgba(194, 97, 58, 0.15) 0%, transparent 50%);
+      background: radial-gradient(circle at center, rgba(18, 161, 80, 0.15) 0%, transparent 50%);
       pointer-events: none;
     }
 
@@ -949,11 +952,11 @@
 
     .final-cta .btn-primary {
       background: var(--terracotta);
-      box-shadow: 0 4px 20px rgba(194, 97, 58, 0.4);
+      box-shadow: 0 4px 20px rgba(18, 161, 80, 0.4);
     }
 
     .final-cta .btn-primary:hover {
-      background: #B85178;
+      background: #17b45a;
     }
 
     /* Footer */
@@ -1552,7 +1555,7 @@
 
     .exit-popup-form input[type="email"]:focus {
       border-color: var(--terracotta);
-      box-shadow: 0 0 0 3px rgba(194, 97, 58, 0.12);
+      box-shadow: 0 0 0 3px rgba(18, 161, 80, 0.12);
     }
 
     .exit-popup-form input[type="email"]::placeholder {
@@ -1767,7 +1770,7 @@
   <nav>
     <div class="nav-inner">
       <a href="/" class="logo">
-        <span class="logo-icon"><svg width="20" height="20" viewBox="0 0 128 128" style="display:block"><rect width="128" height="128" rx="20" fill="#A63A5C"/><circle cx="55" cy="55" r="31" fill="#ffffff"/><g transform="translate(55 55) rotate(-38)"><path d="M -16 -9 L 7 -9 A 6 6 0 0 1 13 -3 L 13 9 A 6 6 0 0 1 7 15 L -16 15 Z" fill="#A63A5C"/><circle cx="5" cy="-1.5" r="3.4" fill="#ffffff"/></g><rect x="80" y="80" width="34" height="13" rx="6.5" transform="rotate(45 80 80)" fill="#ffffff"/></svg></span>
+        <span class="logo-icon"><img src="assets/tagspy-logo.png" alt="TagSpy" width="36" height="36" style="display:block;border-radius:9px"></span>
         <span>TagSpy</span>
       </a>
       <div class="nav-links">
@@ -2192,7 +2195,7 @@
   <footer>
     <div class="footer-inner">
       <a href="/" class="footer-logo">
-        <span class="logo-icon"><svg width="20" height="20" viewBox="0 0 128 128" style="display:block"><rect width="128" height="128" rx="20" fill="#A63A5C"/><circle cx="55" cy="55" r="31" fill="#ffffff"/><g transform="translate(55 55) rotate(-38)"><path d="M -16 -9 L 7 -9 A 6 6 0 0 1 13 -3 L 13 9 A 6 6 0 0 1 7 15 L -16 15 Z" fill="#A63A5C"/><circle cx="5" cy="-1.5" r="3.4" fill="#ffffff"/></g><rect x="80" y="80" width="34" height="13" rx="6.5" transform="rotate(45 80 80)" fill="#ffffff"/></svg></span>
+        <span class="logo-icon"><img src="assets/tagspy-logo.png" alt="TagSpy" width="36" height="36" style="display:block;border-radius:9px"></span>
         <span>TagSpy</span>
       </a>
       <div class="footer-links">
