@@ -85,6 +85,7 @@
       var params = new URLSearchParams(window.location.search);
       var source = params.get('s') || '';
       var version = params.get('v') || '';
+      var installId = params.get('i') || '';
 
       function send(payload) {
         try {
@@ -97,11 +98,11 @@
       }
 
       // Record the uninstall itself (page open = uninstall happened)
-      send({ event: 'uninstall', source: source, version: version });
+      send({ event: 'uninstall', source: source, version: version, installId: installId });
 
       document.querySelectorAll('.reasons button').forEach(function (btn) {
         btn.addEventListener('click', function () {
-          send({ event: 'uninstall_survey', answer: btn.getAttribute('data-reason'), source: source, version: version });
+          send({ event: 'uninstall_survey', answer: btn.getAttribute('data-reason'), source: source, version: version, installId: installId });
           document.getElementById('survey').style.display = 'none';
           document.getElementById('thanks').classList.add('show');
         });
