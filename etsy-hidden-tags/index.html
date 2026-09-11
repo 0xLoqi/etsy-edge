@@ -157,20 +157,22 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 128 128'><rect width='128' height='128' rx='20' fill='%23A63A5C'/><circle cx='55' cy='55' r='31' fill='%23ffffff'/><g transform='translate(55 55) rotate(-38)'><path d='M -16 -9 L 7 -9 A 6 6 0 0 1 13 -3 L 13 9 A 6 6 0 0 1 7 15 L -16 15 Z' fill='%23A63A5C'/><circle cx='5' cy='-1.5' r='3.4' fill='%23ffffff'/></g><rect x='80' y='80' width='34' height='13' rx='6.5' transform='rotate(45 80 80)' fill='%23ffffff'/></svg>">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon-180.png">
 
   <style>
     :root {
-      --terracotta: #A63A5C;
-      --terracotta-dark: #7E2A44;
-      --terracotta-light: #f4e4dc;
-      --cream: #faf6f1;
-      --cream-dark: #f0ebe4;
-      --sage: #7a9e7e;
-      --sage-light: #e8f0e9;
-      --charcoal: #2d2a26;
-      --warm-gray: #6b6560;
-      --warm-gray-light: #9c9690;
+      /* TagSpy identity (green/navy). Var names kept so component styles carry over. */
+      --terracotta: #12a150;        /* primary action / accent (green) */
+      --terracotta-dark: #0c7a3c;   /* green pressed / gradient end */
+      --terracotta-light: #dcf5e6;  /* mint tint */
+      --cream: #f7faf8;             /* neutral near-white page bg */
+      --cream-dark: #eef4ef;
+      --sage: #12a150;
+      --sage-light: #e3f6ec;
+      --charcoal: #161b2e;          /* ink / navy text */
+      --warm-gray: #5b6472;
+      --warm-gray-light: #9aa2ad;
     }
 
     * {
@@ -216,9 +218,8 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(250, 246, 241, 0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(45, 42, 38, 0.08);
+      background: #131a2c;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
 
     .nav-inner {
@@ -243,16 +244,12 @@
     }
 
     .logo-icon {
-      width: 36px;
-      height: 36px;
-      background: #A63A5C;
-      border-radius: 8px;
+      width: 44px;
+      height: 44px;
+      background: transparent;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.1rem;
-      transform: rotate(-3deg);
-      box-shadow: 0 2px 8px rgba(234, 88, 12, 0.25);
     }
 
     .nav-links {
@@ -289,13 +286,13 @@
     .btn-primary {
       background: var(--terracotta);
       color: white;
-      box-shadow: 0 4px 14px rgba(194, 97, 58, 0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+      box-shadow: 0 4px 14px rgba(18, 161, 80, 0.35), inset 0 1px 0 rgba(255,255,255,0.15);
     }
 
     .btn-primary:hover {
       background: var(--terracotta-dark);
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(194, 97, 58, 0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+      box-shadow: 0 6px 20px rgba(18, 161, 80, 0.4), inset 0 1px 0 rgba(255,255,255,0.15);
     }
 
     .btn-secondary {
@@ -314,6 +311,7 @@
       position: relative;
       padding: 100px 24px 140px;
       overflow: hidden;
+      background: linear-gradient(165deg, #131a2c 0%, #1b2540 60%, #1e2947 100%);
     }
 
     .hero-bg {
@@ -322,8 +320,8 @@
       right: -300px;
       width: 900px;
       height: 900px;
-      background: radial-gradient(circle, var(--terracotta-light) 0%, transparent 70%);
-      opacity: 0.6;
+      background: radial-gradient(circle, rgba(47,208,122,0.18) 0%, transparent 70%);
+      opacity: 0.7;
       pointer-events: none;
     }
 
@@ -333,8 +331,8 @@
       left: -200px;
       width: 700px;
       height: 700px;
-      background: radial-gradient(circle, var(--sage-light) 0%, transparent 70%);
-      opacity: 0.5;
+      background: radial-gradient(circle, rgba(47,208,122,0.13) 0%, transparent 70%);
+      opacity: 0.7;
       pointer-events: none;
     }
 
@@ -394,14 +392,6 @@
       line-height: 1.7;
     }
 
-    .hero-ctas {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
     .hero-note {
       font-size: 0.9rem;
       color: var(--warm-gray-light);
@@ -444,12 +434,12 @@
       border: 2px solid white;
     }
 
-    .floating-tag:nth-child(1) { top: 15%; left: 8%; animation-delay: 0s; }
-    .floating-tag:nth-child(2) { top: 25%; right: 12%; animation-delay: 1s; }
-    .floating-tag:nth-child(3) { top: 60%; left: 5%; animation-delay: 2s; }
-    .floating-tag:nth-child(4) { top: 70%; right: 8%; animation-delay: 0.5s; }
-    .floating-tag:nth-child(5) { top: 40%; left: 3%; animation-delay: 1.5s; }
-    .floating-tag:nth-child(6) { top: 85%; right: 15%; animation-delay: 2.5s; }
+    .floating-tag:nth-child(1) { top: 14%; left: 6%; animation-delay: 0s; }
+    .floating-tag:nth-child(2) { top: 22%; right: 9%; animation-delay: 1s; }
+    .floating-tag:nth-child(3) { top: 44%; left: 3%; animation-delay: 2s; }
+    .floating-tag:nth-child(4) { top: 52%; right: 4%; animation-delay: 0.5s; }
+    .floating-tag:nth-child(5) { top: 34%; left: 2%; animation-delay: 1.5s; }
+    .floating-tag:nth-child(6) { top: 30%; right: 14%; animation-delay: 2.5s; }
 
     @keyframes float {
       0%, 100% { transform: translateY(0) rotate(0deg); }
@@ -640,7 +630,7 @@
       font-weight: 700;
       font-size: 1.25rem;
       flex-shrink: 0;
-      box-shadow: 0 4px 14px rgba(194, 97, 58, 0.3);
+      box-shadow: 0 4px 14px rgba(18, 161, 80, 0.3);
     }
 
     .step-content h3 {
@@ -824,7 +814,7 @@
     }
 
     .comparison-table tbody tr:nth-child(odd) {
-      background: rgba(250, 246, 241, 0.5);
+      background: rgba(231, 244, 236, 0.5);
     }
 
     .comparison-table tbody td:first-child {
@@ -922,7 +912,7 @@
       left: -50%;
       width: 200%;
       height: 200%;
-      background: radial-gradient(circle at center, rgba(194, 97, 58, 0.15) 0%, transparent 50%);
+      background: radial-gradient(circle at center, rgba(18, 161, 80, 0.15) 0%, transparent 50%);
       pointer-events: none;
     }
 
@@ -948,11 +938,11 @@
 
     .final-cta .btn-primary {
       background: var(--terracotta);
-      box-shadow: 0 4px 20px rgba(194, 97, 58, 0.4);
+      box-shadow: 0 4px 20px rgba(18, 161, 80, 0.4);
     }
 
     .final-cta .btn-primary:hover {
-      background: #B85178;
+      background: #17b45a;
     }
 
     /* Footer */
@@ -1050,7 +1040,7 @@
     .mobile-menu-btn svg {
       width: 28px;
       height: 28px;
-      color: var(--charcoal);
+      color: #ffffff;
     }
 
     @media (max-width: 768px) {
@@ -1127,7 +1117,7 @@
     /* Hero screenshot showcase */
     .hero-screenshot {
       max-width: 960px;
-      margin: 60px auto 0;
+      margin: 56px auto 0;
       position: relative;
       z-index: 1;
     }
@@ -1136,16 +1126,16 @@
       width: 100%;
       border-radius: 16px;
       box-shadow:
-        0 20px 60px rgba(0,0,0,0.12),
-        0 4px 20px rgba(0,0,0,0.08),
-        0 0 0 1px rgba(0,0,0,0.04);
+        0 24px 64px rgba(0,0,0,0.35),
+        0 4px 20px rgba(0,0,0,0.25),
+        0 0 0 1px rgba(255,255,255,0.06);
     }
 
     .hero-screenshot-caption {
       text-align: center;
       margin-top: 16px;
       font-size: 0.85rem;
-      color: var(--warm-gray-light);
+      color: rgba(255,255,255,0.55);
       font-style: italic;
     }
 
@@ -1158,7 +1148,7 @@
       border: 1px solid rgba(45, 42, 38, 0.06);
     }
 
-    /* Tag Spy demo tag chips */
+    /* Tag Spy, demo tag chips */
     .tag-chips {
       display: flex;
       flex-wrap: wrap;
@@ -1181,7 +1171,7 @@
       background: transparent;
     }
 
-    /* Optimization Score grade bar */
+    /* Optimization Score, grade bar */
     .grade-bar {
       display: flex;
       align-items: center;
@@ -1209,7 +1199,7 @@
       background: var(--sage);
       color: white;
       border-color: var(--sage);
-      box-shadow: 0 2px 8px rgba(122, 158, 126, 0.35);
+      box-shadow: 0 2px 8px rgba(18, 161, 80, 0.35);
       transform: scale(1.1);
     }
 
@@ -1223,7 +1213,7 @@
       color: var(--sage);
     }
 
-    /* Smart Audit grade jump + checklist */
+    /* Smart Audit, grade jump + checklist */
     .audit-preview {
       text-align: center;
     }
@@ -1258,7 +1248,7 @@
       background: var(--sage-light);
       color: #15803d;
       border: 1px solid #86efac;
-      box-shadow: 0 2px 8px rgba(122, 158, 126, 0.3);
+      box-shadow: 0 2px 8px rgba(18, 161, 80, 0.3);
     }
 
     .audit-arrow {
@@ -1286,53 +1276,164 @@
       text-align: center;
     }
 
-    /* Deep guide */
+    /* Quick answer box (AEO) */
+    .hero-answer {
+      max-width: 640px;
+      margin: 24px auto 0;
+      padding: 20px 26px;
+      background: white;
+      border: 1px solid rgba(45, 42, 38, 0.1);
+      border-left: 4px solid var(--terracotta);
+      border-radius: 14px;
+      font-size: 1.08rem;
+      line-height: 1.7;
+      color: var(--charcoal);
+      text-align: left;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+    }
+
+    /* Deep guide, condensed */
     .guide {
       padding: 120px 24px;
       background: var(--cream);
     }
 
     .guide-inner {
-      max-width: 800px;
+      max-width: 940px;
       margin: 0 auto;
     }
 
-    .guide-inner h2 {
-      font-size: clamp(1.85rem, 3.6vw, 2.5rem);
-      margin-bottom: 16px;
-    }
-
     .guide-updated {
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       color: var(--warm-gray-light);
-      margin-bottom: 28px;
+      text-align: center;
+      margin-top: 10px;
     }
 
-    .guide-inner h3 {
-      font-size: 1.3rem;
-      margin: 44px 0 14px;
+    /* Stat / fact cards */
+    .stat-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin: 56px 0 64px;
     }
 
-    .guide-inner p {
+    .stat-card {
+      background: white;
+      border: 1px solid rgba(45, 42, 38, 0.08);
+      border-radius: 20px;
+      padding: 34px 28px;
+      text-align: center;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    }
+
+    .stat-num {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 3rem;
+      color: var(--terracotta);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .stat-num.text {
+      font-size: 2rem;
+    }
+
+    .stat-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .stat-card p {
       color: var(--warm-gray);
-      line-height: 1.8;
-      margin-bottom: 18px;
+      font-size: 0.92rem;
+      line-height: 1.6;
     }
 
-    .guide-inner ul {
-      margin: 0 0 20px 1.2rem;
+    /* Two-phase search flow */
+    .phase-flow {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin: 0 0 24px;
+    }
+
+    .phase-step {
+      flex: 1;
+      min-width: 240px;
+      background: white;
+      border: 1px solid rgba(45, 42, 38, 0.08);
+      border-radius: 16px;
+      padding: 26px 28px;
+    }
+
+    .phase-tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--terracotta);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .phase-step h4 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.15rem;
+      margin-bottom: 6px;
+    }
+
+    .phase-step p {
       color: var(--warm-gray);
-      line-height: 1.8;
+      font-size: 0.92rem;
+      line-height: 1.6;
     }
 
-    .guide-inner li {
-      margin-bottom: 10px;
+    .phase-arrow {
+      display: flex;
+      align-items: center;
+      color: var(--warm-gray-light);
+      font-size: 1.6rem;
     }
 
-    .guide-inner a {
+    .guide-callout {
+      background: var(--terracotta-light);
+      border-radius: 14px;
+      padding: 18px 26px;
+      color: var(--charcoal);
+      font-size: 0.98rem;
+      line-height: 1.6;
+      max-width: 760px;
+      margin: 0 auto 56px;
+      text-align: center;
+    }
+
+    .guide-sub {
+      text-align: center;
+      font-size: clamp(1.4rem, 3vw, 1.75rem);
+      margin-bottom: 32px;
+    }
+
+    .guide-link-row {
+      text-align: center;
+      color: var(--warm-gray);
+      font-size: 0.95rem;
+      margin-top: 40px;
+    }
+
+    .guide-link-row a {
       color: var(--terracotta);
     }
 
+    /* vs-table */
     .vs-table {
       width: 100%;
       border-collapse: collapse;
@@ -1380,6 +1481,17 @@
         padding: 80px 20px;
       }
 
+      .stat-cards {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        margin: 40px 0 48px;
+      }
+
+      .phase-arrow {
+        transform: rotate(90deg);
+        justify-content: center;
+      }
+
       .vs-table {
         font-size: 0.85rem;
       }
@@ -1387,6 +1499,11 @@
       .vs-table th,
       .vs-table td {
         padding: 12px 10px;
+      }
+
+      .hero-answer {
+        font-size: 1rem;
+        padding: 18px 20px;
       }
     }
 
@@ -1401,6 +1518,20 @@
       opacity: 1;
       transform: translateY(0);
     }
+
+    /* Dark navy hero treatment */
+    nav .logo { color: #ffffff; }
+    nav .nav-links a { color: rgba(255,255,255,0.72); }
+    nav .nav-links a:hover { color: #ffffff; }
+    .hero h1 { color: #ffffff; }
+    .hero h1 em { color: #3ad57f; }
+    .hero-subtitle { color: #aab3c5; }
+    .hero .waitlist-note, .hero .hero-note { color: #8b93a5; }
+    .hero-badge {
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(255,255,255,0.18);
+      color: #d7dde8;
+    }
   </style>
   <script src="/assets/attribution.js" defer></script>
 </head>
@@ -1410,7 +1541,7 @@
   <nav>
     <div class="nav-inner">
       <a href="../" class="logo">
-        <span class="logo-icon"><svg width="20" height="20" viewBox="0 0 128 128" style="display:block"><rect width="128" height="128" rx="20" fill="#A63A5C"/><circle cx="55" cy="55" r="31" fill="#ffffff"/><g transform="translate(55 55) rotate(-38)"><path d="M -16 -9 L 7 -9 A 6 6 0 0 1 13 -3 L 13 9 A 6 6 0 0 1 7 15 L -16 15 Z" fill="#A63A5C"/><circle cx="5" cy="-1.5" r="3.4" fill="#ffffff"/></g><rect x="80" y="80" width="34" height="13" rx="6.5" transform="rotate(45 80 80)" fill="#ffffff"/></svg></span>
+        <span class="logo-icon"><img src="../assets/mascot-white.png" alt="TagSpy" width="42" height="42" style="display:block"></span>
         <span>TagSpy</span>
       </a>
       <div class="nav-links">
@@ -1443,12 +1574,12 @@
     <div class="hero-content">
       <div class="hero-badge">
         <span class="hero-badge-dot"></span>
-        Now available: free Chrome extension
+        Now available, free Chrome extension
       </div>
 
       <h1>Etsy hidden tags, revealed.<br><em>See what every listing is really tagged with.</em></h1>
 
-      <p class="hero-answer" style="max-width:640px;margin:24px auto 0;padding:20px 26px;background:white;border:1px solid rgba(45,42,38,0.1);border-left:4px solid var(--terracotta);border-radius:14px;font-size:1.08rem;line-height:1.7;color:var(--charcoal);text-align:left;box-shadow:0 2px 12px rgba(0,0,0,0.04);">Every Etsy listing has 13 hidden tags that Etsy does not display publicly. To see them, install a free Chrome extension like TagSpy, open any Etsy listing, and click the icon. The related search terms and tags appear in a side panel. No account needed.</p>
+      <p class="hero-answer">Every Etsy listing has 13 hidden tags that Etsy does not display publicly. To see them, install a free Chrome extension like TagSpy, open any Etsy listing, and click the icon. The related search terms and tags appear in a side panel. No account needed.</p>
 
       <p class="hero-subtitle">
         Reverse-engineer what's ranking and fix your own tags in minutes, right on the listing page.
@@ -1457,7 +1588,7 @@
       <div style="margin-top: 32px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: center;">
         <a href="https://chromewebstore.google.com/detail/tagspy-hidden-etsy-tags-k/adkcnpgopfdaflmombdojmcnjgipibad" class="btn btn-primary" target="_blank" style="font-size: 1.1rem; padding: 16px 36px;">Add to Chrome for Free</a>
       </div>
-      <p class="waitlist-note">Tag Spy & Optimization Score free forever. Pro for $9.99/mo.</p>
+      <p class="waitlist-note">Tag Spy &amp; Optimization Score free forever. Pro for $9.99/mo.</p>
 
       <div class="hero-screenshot">
         <img src="../assets/screenshots/optimization.png" alt="TagSpy revealing hidden tags on an Etsy listing that are normally invisible" loading="eager">
@@ -1498,14 +1629,14 @@
     <div class="features-inner">
       <div class="section-header animate-in">
         <h2>See what's actually working right now</h2>
-        <p>Three tools that show you the real data, right inside Etsy, no tab switching or copy-pasting URLs.</p>
+        <p>Three tools that show you the real data, right inside Etsy, no tab switching.</p>
       </div>
 
       <div class="features-grid">
         <div class="feature-card animate-in">
           <div class="feature-icon">🔍</div>
           <h3>Tag Spy</h3>
-          <p>See the related searches Etsy associates with any listing. Browse a competitor's page and instantly see what search terms are driving traffic, and click any to copy.</p>
+          <p>See the related searches Etsy ties to any listing. Click any to copy.</p>
           <p class="feature-hint">Reverse-engineer what's already ranking in your niche.</p>
           <span class="feature-badge badge-free">Free Forever</span>
           <div class="feature-visual tag-chips" aria-hidden="true">
@@ -1521,7 +1652,7 @@
         <div class="feature-card animate-in">
           <div class="feature-icon">📝</div>
           <h3>Optimization Score</h3>
-          <p>Every listing gets an instant A–F grade showing how well its title and description are optimized for Etsy search. <strong>Even top sellers leave optimization on the table.</strong></p>
+          <p>Every listing gets an instant A–F grade for how well its title and description are tuned for search.</p>
           <p class="feature-hint">See exactly where each listing's copy can improve.</p>
           <span class="feature-badge badge-free">Free Forever</span>
           <div class="feature-visual grade-bar" aria-hidden="true">
@@ -1537,7 +1668,7 @@
         <div class="feature-card animate-in">
           <div class="feature-icon">✨</div>
           <h3>Smart Audit</h3>
-          <p>Get a full optimization report: rewritten title, 13 tailored tags, and a diagnosis of exactly what's hurting your rankings. Each suggestion includes reasoning so you learn as you go.</p>
+          <p>A full report: rewritten title, 13 tailored tags, and a diagnosis of what's hurting your rankings.</p>
           <p class="feature-hint">One audit can pay for itself with a single extra sale.</p>
           <span class="feature-badge badge-pro">Pro</span>
           <div class="feature-visual audit-preview" aria-hidden="true">
@@ -1558,108 +1689,90 @@
     </div>
   </section>
 
-  <!-- How It Works -->
-  <section class="how-it-works">
-    <div class="how-it-works-inner">
-      <div class="section-header animate-in">
-        <h2>How it works</h2>
-      </div>
-
-      <div class="steps">
-        <div class="step animate-in">
-          <div class="step-number">1</div>
-          <div class="step-content">
-            <h3>Install the extension</h3>
-            <p>Add TagSpy from the Chrome Web Store. Takes 10 seconds, no account needed.</p>
-          </div>
-        </div>
-
-        <div class="step animate-in">
-          <div class="step-number">2</div>
-          <div class="step-content">
-            <h3>Browse any Etsy listing</h3>
-            <p>Visit any listing page on Etsy and click the extension icon. A side panel opens right next to the listing, with no tab switching.</p>
-          </div>
-        </div>
-
-        <div class="step animate-in">
-          <div class="step-number">3</div>
-          <div class="step-content">
-            <h3>See your score, spy tags, and optimize</h3>
-            <p>Instantly see your SEO grade and related searches. With Pro, run a Smart Audit to get a rewritten title, 13 optimized tags, and a diagnosis of what's costing you sales.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Deep guide -->
+  <!-- Deep guide, condensed -->
   <section class="guide">
     <div class="guide-inner">
-      <div class="animate-in">
+      <div class="section-header animate-in" style="margin-bottom: 8px;">
         <h2>Etsy hidden tags, explained</h2>
-        <p class="guide-updated">Last updated: September 2026</p>
+        <p>The rules that decide whether your listing ever shows up in search.</p>
+      </div>
+      <p class="guide-updated animate-in">Last updated: September 2026</p>
 
-        <p>Every Etsy listing carries up to <strong>13 tags</strong>. Etsy uses those tags to decide which buyer searches your product should appear in, but it does not print them on the public listing page. They sit in the page's underlying data, which is why sellers call them hidden tags. A free Chrome extension like TagSpy reads that public page data and shows the related search terms and tags in a side panel while you browse, with no account and nothing to copy or paste.</p>
-
-        <p>Seeing a strong competitor's hidden tags tells you exactly which phrases Etsy's algorithm is already rewarding in your niche, so you can stop guessing and match your own listing to what buyers actually type.</p>
-
-        <h3>The tag rules that decide whether you rank</h3>
-        <ul>
-          <li><strong>13 tags per listing, 20 characters each.</strong> Every empty slot is a search query you are invisible for, so fill all 13 and use the full 20 characters where you can.</li>
-          <li><strong>Multi-word phrases beat single words.</strong> A tag like "handmade ceramic mug" matches specific buyer intent and far less competition than a broad single word like "mug."</li>
-          <li><strong>Exact-phrase matching matters.</strong> Etsy tries to match your whole tag phrase to the search query, so "ceramic coffee mug" as one tag outperforms separate "ceramic" and "coffee mug" tags.</li>
-          <li><strong>Tag order does not matter.</strong> Unlike your title, where placement carries weight, the order of your 13 tags has no effect on ranking.</li>
-          <li><strong>Tags and titles work together.</strong> When a keyword sits in both your title and a tag, it sends a stronger relevance signal.</li>
-          <li><strong>Plurals and misspellings are handled for you.</strong> Etsy accounts for common variations, so you do not need separate tags for "mug" and "mugs."</li>
-        </ul>
-
-        <h3>Why tags drive Etsy search</h3>
-        <p>Etsy search runs in two phases. During <strong>query matching</strong>, Etsy scans titles, tags, categories, and attributes to build a pool of listings that could answer a search. Your tags are one of the primary ways into that pool. During <strong>ranking</strong>, Etsy orders those matched listings by relevance, listing quality, recency, and other factors. If none of your tags match what a buyer types, your listing never enters the pool in the first place, no matter how good the product is.</p>
-
-        <p>For the full 13-tag strategy, including how to split your tags into high-volume, medium, and long-tail tiers, read the <a href="../blog/etsy-seo-tags-guide.html">complete guide to Etsy tags</a>. To reveal any listing's hidden tags while you research, add the <a href="https://chromewebstore.google.com/detail/tagspy-hidden-etsy-tags-k/adkcnpgopfdaflmombdojmcnjgipibad" target="_blank">free TagSpy extension</a>.</p>
-
-        <h3>What you can see, and what Etsy hides</h3>
-        <p>Etsy shows buyers a polished listing page, but the data that actually drives search stays out of sight. Here is what is visible on a normal listing versus what TagSpy surfaces for you.</p>
-        <div style="overflow-x: auto;">
-          <table class="vs-table">
-            <thead>
-              <tr>
-                <th>What you want to see</th>
-                <th>Public Etsy listing</th>
-                <th>With TagSpy</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>The listing's 13 tags</td>
-                <td class="no">Hidden</td>
-                <td class="yes">Revealed in a side panel</td>
-              </tr>
-              <tr>
-                <td>Related search terms the listing ranks for</td>
-                <td class="no">Not shown</td>
-                <td class="yes">Shown, click any to copy</td>
-              </tr>
-              <tr>
-                <td>How optimized the title and description are</td>
-                <td class="no">Not shown</td>
-                <td class="yes">Instant A to F score, free</td>
-              </tr>
-              <tr>
-                <td>Suggested rewritten title and 13 tags</td>
-                <td class="no">Not available</td>
-                <td class="yes">Smart Audit, with Pro</td>
-              </tr>
-              <tr>
-                <td>Account or sign-in required</td>
-                <td class="no">n/a</td>
-                <td class="yes">None to spy tags</td>
-              </tr>
-            </tbody>
-          </table>
+      <div class="stat-cards animate-in">
+        <div class="stat-card">
+          <div class="stat-num">13</div>
+          <h3>Tags per listing</h3>
+          <p>Etsy hides them from the public page. Every empty slot is a search you are invisible for.</p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">20</div>
+          <h3>Characters per tag</h3>
+          <p>Use the full width. Multi-word phrases like "handmade ceramic mug" beat broad single words.</p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num text">Exact</div>
+          <h3>Phrase matching</h3>
+          <p>Etsy matches your whole tag phrase, so "ceramic coffee mug" as one tag beats it split apart.</p>
         </div>
       </div>
+
+      <h3 class="guide-sub animate-in">Why tags decide if you rank</h3>
+      <div class="phase-flow animate-in">
+        <div class="phase-step">
+          <span class="phase-tag">Phase 1</span>
+          <h4>Query matching</h4>
+          <p>Etsy scans titles, tags, categories, and attributes to build a pool of listings that could answer the search. Your tags are a primary way in.</p>
+        </div>
+        <div class="phase-arrow">→</div>
+        <div class="phase-step">
+          <span class="phase-tag">Phase 2</span>
+          <h4>Ranking</h4>
+          <p>Etsy orders that matched pool by relevance, quality, and recency to decide who lands on top.</p>
+        </div>
+      </div>
+      <p class="guide-callout animate-in">Miss the match phase and your listing never enters the pool, no matter how good the product is.</p>
+
+      <h3 class="guide-sub animate-in">What you see vs what Etsy hides</h3>
+      <div class="animate-in" style="overflow-x: auto;">
+        <table class="vs-table">
+          <thead>
+            <tr>
+              <th>What you want to see</th>
+              <th>Public Etsy listing</th>
+              <th>With TagSpy</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>The listing's 13 tags</td>
+              <td class="no">Hidden</td>
+              <td class="yes">Revealed in a side panel</td>
+            </tr>
+            <tr>
+              <td>Related search terms it ranks for</td>
+              <td class="no">Not shown</td>
+              <td class="yes">Shown, click any to copy</td>
+            </tr>
+            <tr>
+              <td>How optimized the title and description are</td>
+              <td class="no">Not shown</td>
+              <td class="yes">Instant A to F score, free</td>
+            </tr>
+            <tr>
+              <td>Suggested rewritten title and 13 tags</td>
+              <td class="no">Not available</td>
+              <td class="yes">Smart Audit, with Pro</td>
+            </tr>
+            <tr>
+              <td>Account or sign-in required</td>
+              <td class="no">n/a</td>
+              <td class="yes">None to spy tags</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="guide-link-row animate-in">Want the full playbook? Read the <a href="../blog/etsy-seo-tags-guide.html">complete guide to Etsy tags</a>, or add the <a href="https://chromewebstore.google.com/detail/tagspy-hidden-etsy-tags-k/adkcnpgopfdaflmombdojmcnjgipibad" target="_blank">free TagSpy extension</a>.</p>
     </div>
   </section>
 
@@ -1723,13 +1836,10 @@
             </li>
             <li>
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-              Detailed SEO breakdown with tips
+              One-time audit packs from $4.99
             </li>
           </ul>
           <a href="https://chromewebstore.google.com/detail/tagspy-hidden-etsy-tags-k/adkcnpgopfdaflmombdojmcnjgipibad" class="btn btn-primary" target="_blank">Try Pro Free</a>
-          <div style="margin-top: 16px; padding: 14px 16px; background: linear-gradient(135deg, #fff8f5 0%, #fef3ec 100%); border: 1px solid rgba(194, 97, 58, 0.2); border-radius: 12px; text-align: center;">
-            <p style="font-size: 0.82rem; color: var(--warm-gray); line-height: 1.5; margin: 0;"><strong style="color: var(--terracotta);">Get 30 days free</strong>. Leave an honest review and <a href="mailto:hello@tagspy.app?subject=Early Adopter&body=Hi! I installed TagSpy and left a review. Here's my feedback: " style="color: var(--terracotta); text-decoration: underline; text-underline-offset: 2px;">email us</a></p>
-          </div>
         </div>
       </div>
 
@@ -1873,12 +1983,12 @@
   <!-- Final CTA -->
   <section class="final-cta">
     <div class="final-cta-inner animate-in">
-      <h2>Wrong tags. Wrong traffic. Wrong buyers.</h2>
-      <p>Bad tags attract browsers, not buyers. Your conversion rate drops, Etsy thinks your listing sucks, and you spiral down the rankings. It starts with fixing your tags to match buyer intent.</p>
+      <h2>Stop guessing at your tags.</h2>
+      <p>Reveal any listing's hidden tags, match what buyers actually search, and fix your own listings in minutes.</p>
       <div style="margin-top: 24px;">
-        <a href="https://chromewebstore.google.com/detail/tagspy-hidden-etsy-tags-k/adkcnpgopfdaflmombdojmcnjgipibad" class="btn btn-primary" target="_blank" style="font-size: 1.1rem; padding: 16px 36px;">Add to Chrome for Free →</a>
+        <a href="https://chromewebstore.google.com/detail/tagspy-hidden-etsy-tags-k/adkcnpgopfdaflmombdojmcnjgipibad" class="btn btn-primary" target="_blank" style="font-size: 1.1rem; padding: 16px 36px;">Add to Chrome for Free</a>
       </div>
-      <p style="font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-top: 12px;">Free forever for Tag Spy & Optimization Score. Pro for $9.99/mo.</p>
+      <p style="font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-top: 12px;">Free forever for Tag Spy &amp; Optimization Score. Pro for $9.99/mo.</p>
     </div>
   </section>
 
@@ -1886,23 +1996,27 @@
   <footer>
     <div class="footer-inner">
       <a href="../" class="footer-logo">
-        <span class="logo-icon"><svg width="20" height="20" viewBox="0 0 128 128" style="display:block"><rect width="128" height="128" rx="20" fill="#A63A5C"/><circle cx="55" cy="55" r="31" fill="#ffffff"/><g transform="translate(55 55) rotate(-38)"><path d="M -16 -9 L 7 -9 A 6 6 0 0 1 13 -3 L 13 9 A 6 6 0 0 1 7 15 L -16 15 Z" fill="#A63A5C"/><circle cx="5" cy="-1.5" r="3.4" fill="#ffffff"/></g><rect x="80" y="80" width="34" height="13" rx="6.5" transform="rotate(45 80 80)" fill="#ffffff"/></svg></span>
+        <span class="logo-icon"><img src="../assets/mascot-white.png" alt="TagSpy" width="42" height="42" style="display:block"></span>
         <span>TagSpy</span>
       </a>
       <div class="footer-links">
         <a href="../blog/index.html">Blog</a>
+        <a href="../erank-alternative/">eRank Alternative</a>
+        <a href="../marmalead-alternative/">Marmalead Alternative</a>
+        <a href="../everbee-alternative/">EverBee Alternative</a>
+        <a href="../alura-alternative/">Alura Alternative</a>
+        <a href="../sale-samurai-alternative/">Sale Samurai Alternative</a>
         <a href="../feedback/">Feedback</a>
         <a href="../privacy-policy.html">Privacy Policy</a>
         <a href="mailto:hello@tagspy.app">Contact</a>
       </div>
       <div class="footer-social">
-        <a href="https://www.youtube.com/@etsyedge" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+        <a href="https://www.youtube.com/@tagspy" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
         <a href="https://www.instagram.com/tagspy.app/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
         <a href="https://www.facebook.com/profile.php?id=61552761465919" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
         <a href="https://x.com/EtsyEdge" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
         <a href="https://www.pinterest.com/etsyedge/" target="_blank" rel="noopener" aria-label="Pinterest"><svg viewBox="0 0 24 24"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12.017 24c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641 0 12.017 0z"/></svg></a>
       </div>
-      <p style="width:100%;text-align:center;margin-top:32px;font-size:0.8rem;color:rgba(255,255,255,0.4);">Last updated: September 2026</p>
       <p class="footer-disclaimer">TagSpy is not affiliated with or endorsed by Etsy, Inc. "Etsy" is a trademark of Etsy, Inc.</p>
     </div>
   </footer>
