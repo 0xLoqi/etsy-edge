@@ -982,7 +982,7 @@
     .footer-links {
       display: flex;
       flex-wrap: wrap;
-      gap: 28px;
+      gap: 20px;
     }
 
     .footer-links a {
@@ -1542,6 +1542,41 @@
       border-color: rgba(255,255,255,0.18);
       color: #d7dde8;
     }
+    /* Hero screenshot marquee (matches homepage) */
+    .hero-marquee {
+      margin: 48px 0 0;
+      position: relative;
+      left: 50%;
+      width: 100vw;
+      transform: translateX(-50%);
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+    }
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: hero-marquee 46s linear infinite;
+    }
+    .hero-marquee:hover .marquee-track { animation-play-state: paused; }
+    .marquee-track .mq-card {
+      width: 470px;
+      height: auto;
+      margin-right: 26px;
+      border-radius: 16px;
+      flex: 0 0 auto;
+      box-shadow: 0 22px 50px rgba(22,27,46,0.16), 0 0 0 1px rgba(22,27,46,0.05);
+    }
+    @keyframes hero-marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .marquee-track { animation: none; }
+    }
+    @media (max-width: 640px) {
+      .marquee-track .mq-card { width: 320px; margin-right: 18px; }
+    }
   </style>
   <script src="/assets/attribution.js" defer></script>
 </head>
@@ -1587,9 +1622,7 @@
         Now available, free Chrome extension
       </div>
 
-      <h1>Etsy hidden tags, revealed.<br><em>See what every listing is really tagged with.</em></h1>
-
-      <p class="hero-answer">Every Etsy listing has 13 hidden tags that Etsy does not display publicly. To see them, install a free Chrome extension like TagSpy, open any Etsy listing, and click the icon. The related search terms and tags appear in a side panel. No account needed.</p>
+      <h1>Etsy hidden tags, revealed.<br><em>See what buyers really search.</em></h1>
 
       <p class="hero-subtitle">
         Reverse-engineer what's ranking and fix your own tags in minutes, right on the listing page.
@@ -1600,9 +1633,19 @@
       </div>
       <p class="waitlist-note">Tag Spy &amp; Optimization Score free forever. Pro for $9.99/mo.</p>
 
-      <div class="hero-screenshot">
-        <img src="../assets/screenshots/optimization.png" alt="TagSpy revealing hidden tags on an Etsy listing that are normally invisible" loading="eager">
-        <p class="hero-screenshot-caption">TagSpy side panel, live on any Etsy listing</p>
+      <div class="hero-marquee">
+        <div class="marquee-track">
+          <img class="mq-card" src="../assets/marquee/s1.png" alt="TagSpy instant SEO score on an Etsy listing" loading="eager">
+          <img class="mq-card" src="../assets/marquee/s2.png" alt="TagSpy revealing an Etsy listing's hidden tags">
+          <img class="mq-card" src="../assets/marquee/s3.png" alt="TagSpy optimizing an Etsy title">
+          <img class="mq-card" src="../assets/marquee/s4.png" alt="Sellers who use TagSpy">
+          <img class="mq-card" src="../assets/marquee/s5.png" alt="Add TagSpy to Chrome, free">
+          <img class="mq-card" src="../assets/marquee/s1.png" alt="" aria-hidden="true">
+          <img class="mq-card" src="../assets/marquee/s2.png" alt="" aria-hidden="true">
+          <img class="mq-card" src="../assets/marquee/s3.png" alt="" aria-hidden="true">
+          <img class="mq-card" src="../assets/marquee/s4.png" alt="" aria-hidden="true">
+          <img class="mq-card" src="../assets/marquee/s5.png" alt="" aria-hidden="true">
+        </div>
       </div>
     </div>
   </section>
@@ -1794,7 +1837,7 @@
         <p>Watch TagSpy optimize a real listing in under 60 seconds.</p>
       </div>
       <div class="video-wrapper animate-in">
-        <iframe src="https://www.youtube.com/embed/WBkxAuFs_Tg?rel=0&modestbranding=1" title="TagSpy Demo: See it in action" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        <iframe src="https://www.youtube.com/embed/m1yzj3qsvEM?rel=0&modestbranding=1" title="TagSpy Demo: See it in action" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
       </div>
     </div>
   </section>
@@ -2011,11 +2054,11 @@
       </a>
       <div class="footer-links">
         <a href="../blog/index.html">Blog</a>
-        <a href="../erank-alternative/">eRank Alternative</a>
-        <a href="../marmalead-alternative/">Marmalead Alternative</a>
-        <a href="../everbee-alternative/">EverBee Alternative</a>
-        <a href="../alura-alternative/">Alura Alternative</a>
-        <a href="../sale-samurai-alternative/">Sale Samurai Alternative</a>
+        <a href="../erank-alternative/">eRank</a>
+        <a href="../marmalead-alternative/">Marmalead</a>
+        <a href="../everbee-alternative/">EverBee</a>
+        <a href="../alura-alternative/">Alura</a>
+        <a href="../sale-samurai-alternative/">Sale Samurai</a>
         <a href="../feedback/">Feedback</a>
         <a href="../privacy-policy.html">Privacy Policy</a>
         <a href="mailto:hello@tagspy.app">Contact</a>
