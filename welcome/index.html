@@ -64,6 +64,7 @@
       text-decoration: none;
       padding: 14px 32px; border-radius: 10px;
       transition: background 0.15s;
+      white-space: nowrap;
     }
     .cta:hover { background: #8E2F4C; }
     .cta-note { margin-top: 12px; font-size: 13px; color: #9CA3AF; }
@@ -82,34 +83,34 @@
     <img class="logo" src="/assets/logo.png" alt="TagSpy" onerror="this.style.display='none'">
     <div class="installed">&#10003; TagSpy installed</div>
     <h1>You're all set</h1>
-    <p class="sub">TagSpy works right on Etsy. There's nothing to configure. Just open a listing and it appears.</p>
+    <p class="sub">TagSpy works right on Etsy. There's nothing to configure. Pin it, open it, and run your free audit.</p>
 
     <div class="steps">
       <div class="step">
         <div class="num">1</div>
         <div class="step-body">
-          <h3>Open any Etsy listing</h3>
-          <p>Yours or a competitor's. Any product page on etsy.com.</p>
+          <h3>Pin TagSpy to your toolbar</h3>
+          <p>Click the puzzle-piece icon at the top right of Chrome, then the pin next to TagSpy.</p>
         </div>
       </div>
       <div class="step">
         <div class="num">2</div>
         <div class="step-body">
-          <h3>See the hidden tags and SEO score</h3>
-          <p>TagSpy reveals all 13 tags and grades the listing A to F, automatically, on the page.</p>
+          <h3>Click the TagSpy icon on a listing</h3>
+          <p>Yours or a competitor's. The panel grades the listing A to F and shows the buyer keywords around it.</p>
         </div>
       </div>
       <div class="step">
         <div class="num">3</div>
         <div class="step-body">
-          <h3>Fix what's weak</h3>
-          <p>Each low score comes with a specific reason, so you know exactly what to change.</p>
+          <h3>Run your free audit</h3>
+          <p>Tap Run my free audit. Each weak spot comes with a specific reason, so you know exactly what to change.</p>
         </div>
       </div>
     </div>
 
-    <a class="cta" href="https://www.etsy.com/search?q=personalized+gift" target="_blank" rel="noopener" id="cta">Open Etsy and try it &rarr;</a>
-    <p class="cta-note">Click any listing on the page that opens. TagSpy appears on the right.</p>
+    <a class="cta" href="https://www.etsy.com/listing/1174969404" target="_blank" rel="noopener" id="cta">Open a sample listing &rarr;</a>
+    <p class="cta-note">Then click the TagSpy icon in your toolbar and tap Run my free audit.</p>
 
     <p class="free-line">
       <b>The Tag Spy and SEO Score are free, forever.</b> Pro ($9.99/mo) adds smart tag suggestions
@@ -145,6 +146,9 @@
 
       var cta = document.getElementById('cta');
       if (cta) {
+        // Same live sample pool as the extension (src/components/exampleListing.ts).
+        var ids = ['1174969404', '774456064', '1029463608', '1413455244', '1619780681', '569321603', '1193808036', '1644518641'];
+        cta.href = 'https://www.etsy.com/listing/' + ids[Math.floor(Math.random() * ids.length)];
         cta.addEventListener('click', function () {
           send({ event: 'welcome_cta', source: source, version: version });
         });
