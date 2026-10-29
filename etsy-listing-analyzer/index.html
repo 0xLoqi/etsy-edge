@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free Etsy Listing Analyzer, Score Your SEO in Seconds | TagSpy</title>
+  <title>Free Etsy Listing Analyzer &amp; Checker, No Signup | TagSpy</title>
   <meta name="description" content="Analyze any Etsy listing’s SEO in one click. This free listing analyzer scores your tags, title, and optimization, and shows you exactly what to fix.">
   <meta name="keywords" content="etsy listing analyzer, analyze etsy listing, etsy listing audit, etsy seo score, etsy listing checker, etsy seo analyzer">
   <link rel="canonical" href="https://tagspy.app/etsy-listing-analyzer/">
@@ -1624,8 +1624,40 @@
 
       <h1>The Etsy listing analyzer that<br><em>scores your SEO in seconds.</em></h1>
 
+      <!-- TagSpy free tool: Listing Grader -->
+      <link rel="stylesheet" href="/assets/tagspy-tools.css">
+      <div class="tst-card" data-tst-tool="grader">
+        <div class="tst-head">
+          <h2>Free Etsy Listing Grader</h2>
+          <span class="tst-pill">Free, no signup</span>
+        </div>
+        <form novalidate>
+          <div class="tst-field">
+            <div class="tst-label-row">
+              <label class="tst-label" for="tst-grader-title">Listing title <span class="tst-flag" data-tst="example-flag">Example</span></label>
+              <span class="tst-count" data-tst="title-count" aria-live="polite">0 / 140</span>
+            </div>
+            <input class="tst-input" id="tst-grader-title" data-tst="title" data-tst-example type="text" autocomplete="off" spellcheck="true" value="Personalized Leather Journal, Custom Engraved Notebook, Refillable A5 Travel Journal, Anniversary Gift for Him, Groomsmen Gift">
+          </div>
+          <div class="tst-field">
+            <div class="tst-label-row"><label class="tst-label" for="tst-grader-desc">Description <span class="tst-opt">(optional)</span></label></div>
+            <textarea class="tst-textarea" id="tst-grader-desc" data-tst="desc" data-tst-example rows="3" spellcheck="true">This personalized leather journal is hand cut from full grain leather and engraved with your name or initials. A custom engraved notebook that holds standard A5 refills, so it works as a travel journal, sketchbook or daily planner for years. Each journal is stitched by hand in our studio and ships in a gift box, ready for an anniversary gift or a groomsmen gift.</textarea>
+          </div>
+          <div class="tst-row">
+            <button type="submit" class="btn btn-primary">Grade listing</button>
+            <span class="tst-empty">Grades update as you type. Nothing leaves your browser.</span>
+          </div>
+        </form>
+        <div class="tst-result" data-tst="result" aria-live="polite"></div>
+        <div class="tst-foot">
+          <p>This page grades your title and description. The extension adds the keywords buyers search on Etsy and grades any listing as you browse.</p>
+          <a href="https://chromewebstore.google.com/detail/tagspy-hidden-etsy-tags-k/adkcnpgopfdaflmombdojmcnjgipibad" class="btn btn-primary" target="_blank">Add to Chrome for Free</a>
+        </div>
+      </div>
+      <!-- /TagSpy free tool -->
+
       <p class="hero-subtitle">
-        Paste any Etsy URL and get an instant SEO score. See how well the listing is optimized, which buyer keywords it's ranking for, and exactly what changes will move it up in Etsy search.
+        Paste your title and description and get an instant SEO score, with the exact changes that will move it up in Etsy search. The free extension grades any listing as you browse.
       </p>
 
       <div style="margin-top: 32px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: center;">
@@ -2059,5 +2091,6 @@
     });
   </script>
 
+  <script src="/assets/tagspy-tools.js" defer></script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free Etsy Title Generator, SEO-Optimized Titles for Your Listings | TagSpy</title>
+  <title>Free Etsy Title Generator &amp; Checker, No Signup | TagSpy</title>
   <meta name="description" content="Generate SEO-optimized Etsy titles based on what’s actually ranking. This free title generator uses real seller data to help you write titles that get found.">
   <meta name="keywords" content="etsy title generator, generate etsy title, etsy title ideas, etsy title optimizer, best etsy titles, etsy title maker">
   <link rel="canonical" href="https://tagspy.app/etsy-title-generator/">
@@ -1622,7 +1622,65 @@
         Now available, free Chrome extension
       </div>
 
-      <h1>The Etsy title generator<br><em>powered by real seller data.</em></h1>
+      <h1>The Etsy title generator<br><em>built for the 140-character limit.</em></h1>
+
+      <!-- TagSpy free tool: Title Generator + Checker -->
+      <link rel="stylesheet" href="/assets/tagspy-tools.css">
+      <div class="tst-card" data-tst-tool="title">
+        <div class="tst-head">
+          <h2>Free Etsy Title Generator &amp; Checker</h2>
+          <span class="tst-pill">Free, no signup</span>
+        </div>
+        <form novalidate>
+          <div class="tst-grid">
+            <div class="tst-field tst-span">
+              <div class="tst-label-row"><label class="tst-label" for="tst-t-product">Main product phrase <span class="tst-flag" data-tst="example-flag">Example</span></label></div>
+              <input class="tst-input" id="tst-t-product" data-tst="product" data-tst-example type="text" autocomplete="off" value="Ceramic Coffee Mug" required>
+            </div>
+            <div class="tst-field">
+              <div class="tst-label-row"><label class="tst-label" for="tst-t-material">Material <span class="tst-opt">(optional)</span></label></div>
+              <input class="tst-input" id="tst-t-material" data-tst="material" data-tst-example type="text" autocomplete="off" value="Stoneware">
+            </div>
+            <div class="tst-field">
+              <div class="tst-label-row"><label class="tst-label" for="tst-t-style">Style <span class="tst-opt">(optional)</span></label></div>
+              <input class="tst-input" id="tst-t-style" data-tst="style" data-tst-example type="text" autocomplete="off" value="Minimalist">
+            </div>
+            <div class="tst-field">
+              <div class="tst-label-row"><label class="tst-label" for="tst-t-recipient">Recipient <span class="tst-opt">(optional)</span></label></div>
+              <input class="tst-input" id="tst-t-recipient" data-tst="recipient" data-tst-example type="text" autocomplete="off" value="Dad">
+            </div>
+            <div class="tst-field">
+              <div class="tst-label-row"><label class="tst-label" for="tst-t-occasion">Occasion <span class="tst-opt">(optional)</span></label></div>
+              <input class="tst-input" id="tst-t-occasion" data-tst="occasion" data-tst-example type="text" autocomplete="off" value="Father's Day">
+            </div>
+            <div class="tst-field tst-span">
+              <div class="tst-label-row"><label class="tst-label" for="tst-t-size">Size or color <span class="tst-opt">(optional)</span></label></div>
+              <input class="tst-input" id="tst-t-size" data-tst="sizeColor" data-tst-example type="text" autocomplete="off" value="12 oz Blue">
+            </div>
+          </div>
+          <div class="tst-row">
+            <button type="submit" class="btn btn-primary">Generate titles</button>
+            <span class="tst-empty">Updates as you type. Nothing leaves your browser.</span>
+          </div>
+        </form>
+        <div class="tst-result" data-tst="result" aria-live="polite"></div>
+        <span class="tst-status" data-tst="status" role="status" aria-live="polite"></span>
+
+        <hr class="tst-divider">
+        <div class="tst-field">
+          <div class="tst-label-row">
+            <label class="tst-label" for="tst-t-own">Check my own title</label>
+            <span class="tst-count" data-tst="own-count">0 / 140</span>
+          </div>
+          <input class="tst-input" id="tst-t-own" data-tst="own" type="text" autocomplete="off" placeholder="Paste your Etsy title">
+          <ul class="tst-checks" data-tst="own-checks" aria-live="polite"></ul>
+        </div>
+        <div class="tst-foot">
+          <p>These titles use only the words you enter. The extension shows the keywords buyers search on Etsy, so you can work the right phrases in.</p>
+          <a href="https://chromewebstore.google.com/detail/tagspy-hidden-etsy-tags-k/adkcnpgopfdaflmombdojmcnjgipibad" class="btn btn-primary" target="_blank">Add to Chrome for Free</a>
+        </div>
+      </div>
+      <!-- /TagSpy free tool -->
 
       <p class="hero-subtitle">
         Your Etsy title is the #1 factor in search ranking. See what titles top sellers use, which keywords they front-load, and generate titles that match what buyers actually search for.
@@ -2059,5 +2117,6 @@
     });
   </script>
 
+  <script src="/assets/tagspy-tools.js" defer></script>
 </body>
 </html>

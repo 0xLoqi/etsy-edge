@@ -185,6 +185,18 @@
 
       <p>The Etsy title character limit is <strong>140 characters</strong>. That is the maximum length Etsy allows for any listing title. But hitting exactly 140 is not the goal -- using those characters strategically is. The sweet spot for most listings falls between 100 and 140 characters: long enough to include meaningful keyword variations, short enough to avoid sounding like gibberish.</p>
 
+      <!-- TagSpy free tool: title counter -->
+      <link rel="stylesheet" href="/assets/tagspy-tools.css">
+      <div class="tst-card tst-inline not-prose" data-tst-tool="counter">
+        <div class="tst-label-row">
+          <label class="tst-label" for="tst-counter-title">Count your title</label>
+          <span class="tst-count" data-tst="count" aria-live="polite">0 / 140</span>
+        </div>
+        <input class="tst-input" id="tst-counter-title" data-tst="title" type="text" autocomplete="off" placeholder="Paste your Etsy title">
+        <p class="tst-note"><span data-tst="note" aria-live="polite"></span> For front-loading, filler, and repeat checks, use the free <a href="../etsy-title-generator/">Etsy title checker</a>.</p>
+      </div>
+      <!-- /TagSpy free tool -->
+
       <h2>Why 140 Characters Matters</h2>
 
       <p>Most sellers underuse their titles. The average Etsy listing title is around 60-80 characters, which means sellers are leaving half their title space -- and half their keyword potential -- on the table.</p>
@@ -266,5 +278,6 @@
     </div>
   </footer>
 
+  <script src="/assets/tagspy-tools.js" defer></script>
 </body>
 </html>

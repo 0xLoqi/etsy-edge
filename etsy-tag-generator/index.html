@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free Etsy Tag Generator, Find High-Traffic Tags for Your Listings | TagSpy</title>
+  <title>Free Etsy Tag Generator &amp; Checker, No Signup | TagSpy</title>
   <meta name="description" content="Stop guessing your Etsy tags. This free Etsy tag generator shows you the buyer keywords top listings rank for, so you can generate winning tags based on real data.">
   <meta name="keywords" content="etsy tag generator, generate etsy tags, etsy tag ideas, etsy tag suggestions, best etsy tags, etsy tag finder">
   <link rel="canonical" href="https://tagspy.app/etsy-tag-generator/">
@@ -1622,7 +1622,68 @@
         Now available, free Chrome extension
       </div>
 
-      <h1>The Etsy tag generator<br><em>built on real seller data.</em></h1>
+      <h1>The Etsy tag generator<br><em>built for Etsy's 13-tag limit.</em></h1>
+
+      <!-- TagSpy free tool: Tag Generator + Checker -->
+      <link rel="stylesheet" href="/assets/tagspy-tools.css">
+      <div class="tst-card" data-tst-tool="tags">
+        <div class="tst-head">
+          <h2>Free Etsy Tag Generator &amp; Checker</h2>
+          <span class="tst-pill">Free, no signup</span>
+        </div>
+        <div class="tst-tabs" role="tablist" aria-label="Tag tool mode">
+          <button type="button" class="tst-tab" role="tab" id="tst-tab-gen" aria-selected="true" aria-controls="tst-panel-gen">Generate tags</button>
+          <button type="button" class="tst-tab" role="tab" id="tst-tab-check" aria-selected="false" aria-controls="tst-panel-check" tabindex="-1">Check my tags</button>
+        </div>
+
+        <div id="tst-panel-gen" role="tabpanel" aria-labelledby="tst-tab-gen">
+          <form data-tst-form="gen" novalidate>
+            <div class="tst-field">
+              <div class="tst-label-row"><label class="tst-label" for="tst-g-title">Listing title <span class="tst-flag" data-tst="example-flag">Example</span></label></div>
+              <input class="tst-input" id="tst-g-title" data-tst="title" data-tst-example type="text" autocomplete="off" value="Handmade Ceramic Coffee Mug | Wheel Thrown Stoneware Tea Cup | Housewarming Gift for Coffee Lover">
+            </div>
+            <div class="tst-field">
+              <div class="tst-label-row"><label class="tst-label" for="tst-g-desc">Description <span class="tst-opt">(optional)</span></label></div>
+              <textarea class="tst-textarea" id="tst-g-desc" data-tst="desc" data-tst-example rows="2" placeholder="Paste the first few sentences of your description"></textarea>
+            </div>
+            <div class="tst-row">
+              <button type="submit" class="btn btn-primary">Generate tags</button>
+              <span class="tst-empty">Updates as you type. Nothing leaves your browser.</span>
+            </div>
+          </form>
+          <div class="tst-result">
+            <div class="tst-row tst-row-between" style="margin-bottom:12px">
+              <span class="tst-summary" style="margin:0"><span data-tst="counter" aria-live="polite">0 of 13</span> tags, 20 characters max each</span>
+              <button type="button" class="tst-btn tst-btn-ghost" data-tst="copy-all">Copy all</button>
+            </div>
+            <div data-tst="result" aria-live="polite"></div>
+          </div>
+          <span class="tst-status" data-tst="status" role="status" aria-live="polite"></span>
+        </div>
+
+        <div id="tst-panel-check" role="tabpanel" aria-labelledby="tst-tab-check" hidden>
+          <form data-tst-form="check" novalidate>
+            <div class="tst-field">
+              <div class="tst-label-row"><label class="tst-label" for="tst-c-tags">Your tags <span class="tst-opt">(comma separated)</span></label></div>
+              <textarea class="tst-textarea" id="tst-c-tags" data-tst="check-tags" rows="3" placeholder="coffee mug, ceramic mug, gift for coffee lover"></textarea>
+            </div>
+            <div class="tst-field">
+              <div class="tst-label-row"><label class="tst-label" for="tst-c-title">Listing title <span class="tst-opt">(optional, finds tags that only repeat it)</span></label></div>
+              <input class="tst-input" id="tst-c-title" data-tst="check-title" type="text" autocomplete="off">
+            </div>
+            <div class="tst-row">
+              <button type="submit" class="btn btn-primary">Check tags</button>
+            </div>
+          </form>
+          <div class="tst-result" data-tst="check-result" aria-live="polite"></div>
+        </div>
+
+        <div class="tst-foot">
+          <p>These tags come from your own words. The extension shows the keywords buyers search on Etsy, so you can pick tags that match real searches.</p>
+          <a href="https://chromewebstore.google.com/detail/tagspy-hidden-etsy-tags-k/adkcnpgopfdaflmombdojmcnjgipibad" class="btn btn-primary" target="_blank">Add to Chrome for Free</a>
+        </div>
+      </div>
+      <!-- /TagSpy free tool -->
 
       <p class="hero-subtitle">
         Most tag generators pull from a keyword database. TagSpy shows you what's already working, the exact buyer keywords top-selling listings in your niche rank for, so you can build tags that match.
@@ -2059,5 +2120,6 @@
     });
   </script>
 
+  <script src="/assets/tagspy-tools.js" defer></script>
 </body>
 </html>
